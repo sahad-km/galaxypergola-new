@@ -76,20 +76,20 @@ export const statsData: StatItem[] = [
     label: "Projects Completed",
     description: "Custom pergolas, canopies, and blinds installed nationwide.",
   },
-  // {
-  //   id: "satisfaction",
-  //   value: 100,
-  //   suffix: "%",
-  //   label: "Kiwi Owned & Operated",
-  //   description: "Engineered locally for local wind zones and climate demands.",
-  // },
-  // {
-  //   id: "warranty",
-  //   value: 10,
-  //   suffix: "-Year",
-  //   label: "Structural Warranty",
-  //   description: "Backed by premium marine-grade aluminium and master building standards.",
-  // },
+  {
+    id: "satisfaction",
+    value: 100,
+    suffix: "%",
+    label: "Kiwi Owned & Operated",
+    description: "Engineered locally for local wind zones and climate demands.",
+  },
+  {
+    id: "warranty",
+    value: 10,
+    suffix: "-Year",
+    label: "Structural Warranty",
+    description: "Backed by premium marine-grade aluminium and master building standards.",
+  },
 ];
 
 export const servicesData: ServiceItem[] = [

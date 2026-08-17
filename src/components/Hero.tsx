@@ -35,7 +35,7 @@ export default function Hero() {
           poster="/images/hero-bg.png"
           className="w-full h-full object-cover"
         >
-          <source src="/videos/hero-loop.mp4" type="video/mp4" />
+          <source src="/videos/hero-video.mp4" type="video/mp4" />
         </video>
         {/* Animated Dark Overlay */}
         <motion.div

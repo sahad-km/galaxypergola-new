@@ -19,6 +19,11 @@ export const metadata: Metadata = {
   title: "Cluster Outdoor Solutions | Premium Pergolas, Canopies & Blinds NZ",
   description: "New Zealand's premium custom-engineered outdoor pergolas, motorized louvre systems, fixed canopies, carports, and Ziptrak outdoor blinds. Custom built for NZ weather.",
   keywords: ["Pergolas NZ", "Louvre Pergola Auckland", "Outdoor Blinds Christchurch", "Cantilever Carports", "Ziptrak Blinds New Zealand", "Patio Canopies"],
+  icons: {
+    icon: "/logo-icon.png",
+    shortcut: "/logo-icon.png",
+    apple: "/logo-icon.png",
+  },
   openGraph: {
     title: "Cluster Outdoor Solutions | Premium Pergolas, Canopies & Blinds NZ",
     description: "Premium custom-engineered outdoor living structures designed for New Zealand conditions.",
