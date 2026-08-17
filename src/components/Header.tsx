@@ -55,13 +55,13 @@ export default function Header() {
             ))}
 
             {/* Phone Pill Button */}
-            <a
+            {/* <a
               href="tel:062621147"
               className="flex items-center space-x-2 px-5 py-2 bg-primary hover:bg-primary-hover text-white text-sm font-semibold rounded-full transition-colors shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
               <Phone size={18} weight="fill" />
               <span>06 262 1147</span>
-            </a>
+            </a> */}
 
             {/* Email Pill Button */}
             <a

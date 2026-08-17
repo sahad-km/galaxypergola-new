@@ -23,11 +23,40 @@ export interface ProductItem {
   fullDescription?: string;
   features: string[];
   specifications?: Record<string, string>;
-  swatches: { name: string; hex: string }[];
+  swatches: { name: string; hex: string; ral?: string }[];
   image: string;
   gallery?: string[];
   tags: string[];
   sourceUrl?: string;
+  // Extended fields for rich product detail view
+  priceRange?: string;
+  trustBadges?: string[];
+  typeOptions?: string[];
+  sizeOptions?: string[];
+  colorOptions?: { name: string; hex: string; ral?: string }[];
+  contentSections?: {
+    id: string;
+    title: string;
+    subtitle?: string;
+    description: string;
+    image?: string;
+    highlightBadges?: string[];
+  }[];
+  optionalAddons?: string[];
+  installationSteps?: {
+    step: string;
+    title: string;
+    description: string;
+  }[];
+  performanceCards?: {
+    title: string;
+    description: string;
+    icon: string;
+  }[];
+  faqs?: {
+    question: string;
+    answer: string;
+  }[];
 }
 
 export const categoryLabels: Record<string, string> = {
@@ -39,6 +68,14 @@ export const categoryLabels: Record<string, string> = {
   shutter: 'Outdoor Shutter',
   sunroom: 'Sunroom',
 };
+
+export const activeRegions = [
+  "Taranaki Region (Local Base)",
+  "Whanganui Region (Mobile Consultations)",
+  "Manawatu & Palmerston North",
+  "Waikato & King Country",
+  "Wellington & Lower North Island",
+];
 
 export function getCategoryLabel(category: string): string {
   if (!category) return '';
@@ -113,28 +150,28 @@ export const servicesData: ServiceItem[] = [
     title: "Luxury Pergolas",
     description: "Premium aluminium framing systems designed for open-air flexibility or full structural shelter.",
     icon: "Sun",
-    features: ["Heavy-duty frames", "Integrated gutter systems", "Custom colors", "Architectural styling"],
+    features: ["Motorised louvres", "Integrated LED lighting", "Hidden drainage", "Wind-rated up to 170 km/h"],
   },
   {
     id: "canopies",
     title: "Architectural Canopies",
-    description: "Fixed roof structures featuring polycarbonate or glass infills to let light in while keeping the elements out.",
-    icon: "CloudRain",
-    features: ["99% UV filtering", "Impact resistant roofs", "NZ weather rated", "Seamless wall attaches"],
+    description: "Fixed curved or straight poly-carbonate & glass roofing for continuous UV protection.",
+    icon: "ShieldCheck",
+    features: ["99.9% UV filter", "Hail-proof 2mm sheet", "Heavy-duty alloy posts", "Custom pitch angles"],
   },
   {
     id: "carports",
-    title: "Designer Carports",
-    description: "Modern cantilevered and free-standing protective structures designed to shelter vehicles, boats, and RVs.",
+    title: "Engineered Carports",
+    description: "High-clearance arched or straight-roof shelters protecting vehicles from hail and UV damage.",
     icon: "Car",
-    features: ["Minimalist posts", "Anti-condensation lining", "High wind-zone engineered", "Robust steel anchors"],
+    features: ["High clearance arches", "Heavy snow capacity", "Rust-free alloy frame", "NZ wind zone certified"],
   },
   {
     id: "blinds",
-    title: "Outdoor Blinds",
-    description: "State-of-the-art track-guided Ziptrak systems for instant protection against wind, rain, insects, and sun glare.",
+    title: "Ziptrak® Outdoor Blinds",
+    description: "Track-guided zero-gap side channel blind systems for total wind & insect protection.",
     icon: "Sliders",
-    features: ["Zero-gap side tracks", "Manual or motorized", "Marine-grade PVC or Mesh", "Lock-down bottom bars"],
+    features: ["Zero side gap lock", "No zips or ropes", "Sunscreen mesh / PVC", "Manual or motorised"],
   },
   {
     id: "design",
@@ -157,77 +194,345 @@ export const productsData: ProductItem[] = [
     id: "deluxe-louvre",
     name: "Deluxe Louvre",
     category: "louvre",
-    tagline: "Motorised Luxury Opening Roof System with Dual-Tone LED Lighting",
+    tagline: "Premium Comfort for Outdoor Living. Remote Control, Motorised Blades. Dual-Tone LED Ambience.",
     description: "Discover the Deluxe Louvre Roof with motorised aluminium louvres, integrated internal drainage, dual-tone LED ambience, and custom installation across New Zealand.",
     fullDescription: "The Deluxe Louvre Roof represents the pinnacle of outdoor luxury and climate control. Featuring precision-engineered motorised aluminium blades that rotate up to 120 degrees at the touch of a button, you can effortlessly adjust sunlight, shade, or ventilation. Built with heavy-duty marine grade T6 aluminium extrusion and an integrated internal gutter system, rainwater is efficiently routed inside internal post channels to keep your patio completely dry even during heavy Kiwi downpours.",
+    priceRange: "$9,450.00 – $25,200.00",
+    trustBadges: [
+      "10 yr Manufacturer Warranty",
+      "2 yr Built Warranty",
+      "0% Deposit On Finance",
+    ],
+    typeOptions: ["Wall Mounted", "Freestanding"],
+    sizeOptions: ["3x3m", "3x4m", "4x3m", "4x4m", "5x3m", "5x4m", "6x3m", "6x4m"],
+    colorOptions: [
+      { name: "Matt Black (RAL9005)", hex: "#1A1A1A", ral: "RAL9005" },
+      { name: "Matt Grey (RAL7016)", hex: "#383E42", ral: "RAL7016" },
+      { name: "Matt White (RAL9016)", hex: "#F5F5F5", ral: "RAL9016" },
+    ],
     features: [
       "Motorised remote control blade operation",
       "Dual-tone warm & cool integrated LED lighting",
       "Hidden internal post drainage system",
-      "Marine-grade 6005 T6 powder-coated aluminium",
+      "Marine-grade 6063-T6 powder-coated aluminium",
       "Automated rain sensor technology auto-closes on downpours",
-      "High wind-zone rated for NZ coastal conditions",
+      "High wind-zone rated for NZ coastal conditions (140–170 km/h)",
     ],
     specifications: {
-      "Roof Type": "Motorised Opening Louvre Slat",
-      "Frame Material": "Extruded Marine-Grade T6 Aluminium",
-      "Wind Rating": "Up to 170 km/h (NZ Extra High Wind Zone)",
-      "Drainage": "Hidden Internal Perimeter Gutter System",
-      "Lighting": "Dual-Tone (Warm White / Cool Daylight) Blade LEDs",
-      "Control System": "RF Remote Control & Tuya Smart App Integration",
-      "Warranty": "10-Year Structural Warranty & 2-Year Motor Warranty",
+      "Control Options": "Motorised (Remote Control)",
+      "Transformer": "Inbuilt transformer",
+      "Louvre Motor": "IP67 waterproof",
+      "Tuya App": "Yes",
+      "Rain Sensor": "Yes",
+      "Material": "6063-T6 aluminium alloy",
+      "Colour Options": "Black, Grey, White",
+      "Customised Colour": "Yes",
+      "Weight": "40kg/m²",
+      "Wind Rate": "140–170 km/hr",
+      "Snow Load": "160–170kg/m² (53–56cm)",
+      "Tilt Range": "0–120°",
+      "Blade Light": "Warm yellow or Cool White",
+      "Gutter Beam Light": "RGB, separate remote system",
+      "Louvre Blade": "200/30/2.2mm",
+      "Gutter Beam": "202/250/3.8mm",
+      "Post": "150/150/3mm",
+      "Telescopic Range": "No",
+      "Manufacturer Warranty": "10 Years",
+      "Built Warranty": "2 Years",
     },
     swatches: [
-      { name: "Matte Charcoal", hex: "#2D2E30" },
-      { name: "Slate Gray", hex: "#5A5D64" },
-      { name: "Bronze", hex: "#4D3F37" },
-      { name: "Arctic White", hex: "#F3F4F6" },
+      { name: "Matt Black (RAL9005)", hex: "#1A1A1A" },
+      { name: "Matt Grey (RAL7016)", hex: "#383E42" },
+      { name: "Matt White (RAL9016)", hex: "#F5F5F5" },
     ],
     image: "/images/product-louvre.png",
     gallery: [
       "/images/product-louvre.png",
       "/images/about-hero.png",
       "/images/about-install.png",
+      "/images/hero-bg.png",
+      "/images/product-canopy.png",
     ],
-    tags: ["Motorised", "Deluxe Series", "Dual-Tone LEDs", "Rain Sensor"],
+    tags: ["Motorised", "Deluxe Series", "Dual-Tone LEDs", "Rain Sensor", "IP67 Waterproof"],
     sourceUrl: "https://bworth.co.nz/product/deluxe-louvre/",
+    optionalAddons: [
+      "Down Light on Gutter",
+      "Post Light",
+      "Inside Light",
+      "Outside Light",
+      "2x Bluetooth Speakers",
+      "Sockets",
+      "RGB Gutter Beam Light",
+      "Rain Sensor",
+      "Infrared Heater",
+      "Fan",
+      "Sliding Glass Door",
+      "Window Shutter",
+      "Outdoor Blinds",
+    ],
+    contentSections: [
+      {
+        id: "intro-overview",
+        title: "Deluxe Louvre: Your Key to Perfect Outdoor Living",
+        subtitle: "Remote Control, Motorised Blades & Dual-Tone LED Ambience",
+        description: `Your outdoor space should follow your lead. With our rotatable louvre roof, you control sun, shade, airflow, or rain protection in seconds. The image shows four precise settings:
+
+0° – Fully Sealed for Rain: Creates a watertight barrier to keep your space dry during unexpected showers.
+15°–30° – Soft Sunlight: Slight tilt brings in gentle morning light while cutting glare — ideal for breakfast or reading.
+90° – Maximum Airflow: Fully open for clear sky views, natural ventilation, and fresh breezes.
+120° – Angled Shade: Past vertical to block harsh rays while keeping the space bright.
+
+Instant comfort, any weather — like a remote control for the sky.`,
+        image: "/images/Deluxe-Louvre/1.webp",
+      },
+      {
+        id: "ip67-waterproof",
+        title: "Built to Last – IP67 Waterproof",
+        description: "Our motors are mounted inside the beam, minimizing the risk of water ingress and enhancing durability. Rated IP67, the Freestanding Deluxe Louvre is fully protected against dust and can withstand heavy rain or even temporary immersion. Whether facing summer downpours or breezy poolside conditions, your structure stays strong, reliable, and low-maintenance.",
+        image: "/images/Deluxe-Louvre/2.webp",
+      },
+      {
+        id: "rgb-lighting",
+        title: "RGB Gutter Beam Lights – Ambiance on Demand",
+        description: "Transform your outdoor evenings with integrated RGB Gutter Beam Lights that blend practicality with a touch of magic. Choose from 7vibrant combinations of colors to set the perfect mood—whether it’s a vibrant party glow, a calming twilight hue, or a warm, inviting dinner ambiance. With lighting at your fingertips, your pergola becomes more than just shade; it becomes an unforgettable experience, beautifully illuminated every night.",
+        image: "/images/Deluxe-Louvre/3.webp",
+      },
+      {
+        id: "centre-post-flexibility",
+        title: "Freestanding with Flexible Centre Post Placement",
+        description: "Design your outdoor space without limits. Combining refined aesthetics with precision engineering, the Freestanding Deluxe Louvre lets you shape layouts that fit your lifestyle and maximize open areas. Its adjustable centre post can be repositioned to work seamlessly around furniture, pathways, or landscaping — all while maintaining strength and stability. This flexibility ensures your louvre structure adapts to you, not the other way around.",
+        image: "/images/Deluxe-Louvre/4.webp",
+      },
+      {
+        id: "side-post-adjustment",
+        title: "Freestanding with Flexible Side Post Adjustment",
+        description: "The Freestanding Deluxe Louvre is designed to adapt beautifully to your layout. For wide patios, pool decks, or entertaining areas, side posts can shift up to 1 metre with tripod support — giving you broader coverage while staying structurally strong. In more compact settings, they can still move up to 40 cm without support, letting you fine-tune alignment for a clean, balanced look.",
+        image: "/images/Deluxe-Louvre/5.webp",
+      },
+    ],
+    installationSteps: [
+      { step: "1", title: "Enquire", description: "Begin your journey with a simple enquiry. Whether you're just exploring ideas or ready to build, our team is here to listen, answer your questions, and guide you through the possibilities. Share your needs and preferences, and we’ll help you take the first step toward transforming your outdoor space." },
+      { step: "2", title: "Site Visit", description: "We’ll arrange a convenient time to visit your site and assess the location. This step is crucial for understanding the space, sun angles, wind exposure, and other key factors that influence the design and functionality of your louvre system." },
+      { step: "3", title: "Design & Feasibility", description: "Our experts will develop a custom design that suits your home and lifestyle. We’ll evaluate structural requirements, spatial compatibility, and council guidelines (if applicable) to ensure your project is both stylish and achievable." },
+      { step: "4", title: "Planning & Costing", description: "With your design finalised, we’ll provide a detailed proposal outlining timelines, materials, and pricing. You’ll receive clear and transparent costing, so you know exactly what to expect—no surprises, just smart planning." },
+      { step: "5", title: "The Build", description: "Once approved, our experienced installation team gets to work. We pride ourselves on quality craftsmanship and efficient project management. Every component is installed with precision to deliver a durable, functional, and beautiful result." },
+      { step: "6", title: "Project Completion", description: "After final checks and walk-throughs, your louvre system is ready to enjoy. We ensure everything is finished to perfection and leave the site clean and tidy. Your dream outdoor living space is now a reality—built to last and ready for all seasons." },
+    ],
+    performanceCards: [
+      {
+        title: "All-Weather Design",
+        description: "Rated for 140–170 km/hr wind speeds and heavy snow loads. Engineered for New Zealand's variable climate — high UV, wind, and unexpected downpours. Built tough, built to last decades.",
+        icon: "CloudRain"
+      },
+      {
+        title: "Architectural Aesthetics",
+        description: "Clean extruded aluminium profiles (6005 grade, powder-coated) and architectural-grade design make our louvre systems as beautiful as any interior feature.",
+        icon: "Buildings"
+      },
+      {
+        title: "Custom-Fitted to Measure",
+        description: "Every outdoor structure is precision-manufactured to your exact site dimensions. No off-the-shelf compromise — ever. Four installation styles to suit any property.",
+        icon: "Ruler"
+      },
+      {
+        title: "Smart Technology",
+        description: "Remote and Tuya app control as standard. IP67 waterproof motorisation. Auto-close rain sensors. RGB LED gutter lighting with separate remote. Blade lighting in warm yellow or cool white.",
+        icon: "DeviceMobile"
+      },
+      {
+        title: "Integrated Drainage",
+        description: "Patented gutter-beam system channels rainwater off the louvres, down through hollow columns and away from your patio. No exposed pipes, no leaks — perfectly dry underneath.",
+        icon: "Drop"
+      },
+      {
+        title: "Warranty & Support",
+        description: "10-year manufacturer warranty and 2-year built warranty. 0% deposit and interest-free finance plans available. Local service teams and genuine replacement parts nationally.",
+        icon: "Headset"
+      },
+    ],
+    faqs: [
+      {
+        question: "What colour options and customisations are available for the Deluxe Louvre?",
+        answer: "Standard finishes include Matt Black (RAL9005), Matt Grey (RAL7016), and Matt White (RAL9016). Custom powder coat finishes matching the full Dulux architectural color range are also available upon request.",
+      },
+      {
+        question: "How weather resistant is the Deluxe Louvre system?",
+        answer: "The Deluxe Louvre is engineered specifically for New Zealand weather conditions. It features a wind speed rating of 140–170 km/hr (Extra High NZ Wind Zone) and a snow load capacity of 160–170kg/m² (53–56cm snow depth). When closed, 100% weather-sealed louvres keep your outdoor area completely dry.",
+      },
+      {
+        question: "What lighting and entertainment upgrades can be added?",
+        answer: "You can configure dual-tone (warm yellow & cool white) blade LEDs, perimeter RGB gutter beam lights with 7 color modes, integrated Bluetooth speakers, outdoor power sockets, infrared heaters, fans, and Ziptrak drop-down side blinds.",
+      },
+      {
+        question: "Is the Deluxe Louvre compatible with smart home control?",
+        answer: "Yes! The Deluxe Louvre system features built-in Tuya Smart app integration, allowing control from your smartphone or tablet, in addition to the RF handheld remote control and automatic rain sensors.",
+      },
+      {
+        question: "How does the internal drainage system function?",
+        answer: "Rainwater flowing across closed louvres is captured by an internal perimeter gutter beam. The water is routed through internal downspout channels concealed inside the posts, discharging discreetly at ground level.",
+      },
+      {
+        question: "What installation configurations are supported?",
+        answer: "We support Freestanding Single Bay, Freestanding Double Bay, Wall-Mounted Single Bay, Wall-Mounted Double Bay, and custom fascia/soffit integrated structures.",
+      },
+    ],
   },
   {
     id: "classic-louvre",
     name: "Classic Louvre",
     category: "louvre",
-    tagline: "Timeless All-Weather Motorised Louvre Architecture",
-    description: "Experience the Classic Louvre Roof with durable aluminium louvres, adjustable shade, complete weather protection, and custom installation across New Zealand.",
-    fullDescription: "The Classic Louvre Roof is engineered for enduring style and practical everyday outdoor living. Designed specifically for New Zealand's variable climate, it combines sleek structural aesthetics with reliable motorised blade adjustment. Whether shielding your deck from harsh summer UV rays or providing shelter from sudden rainfall, the Classic Louvre offers a seamless transition between open sky and solid cover.",
+    tagline: "Timeless Outdoor Comfort. Motorised Control with Warm & Cool Blade LEDs. Built for Every Season.",
+    description: "Classic Louvre brings timeless outdoor comfort with effortless motorised blade adjustment and remote control operation. Integrated warm and cool white blade LEDs create a refined atmosphere for evening relaxation and entertaining.",
+    fullDescription: "The Classic Louvre system delivers superior outdoor living with motorised blade control, integrated warm and cool white blade lighting, and heavy-duty 6063-T6 aluminium construction. Built for long-lasting durability across New Zealand's variable climate.",
+    trustBadges: [
+      "10 yr Manufacturer Warranty",
+      "2 yr Built Warranty",
+      "0% Deposit On Finance",
+    ],
     features: [
-      "Smooth motorised remote blade rotation",
-      "Warm & cool dimmable LED blade illumination",
-      "Integrated perimeter guttering with internal downspouts",
-      "Architectural powder-coated finish",
-      "Low maintenance corrosion-resistant frame",
-      "Custom sized to fit any deck or patio dimension",
+      "Motorised remote control blade operation",
+      "Integrated warm & cool white blade LEDs",
+      "Freestanding or wall-mounted installation options",
+      "Heavy-duty 6063-T6 marine-grade aluminium alloy",
+      "Architectural powder-coated weather-resistant finish",
+      "Integrated gutter-beam drainage system",
     ],
     specifications: {
-      "Roof Type": "Motorised Adjustable Aluminium Louvre",
-      "Frame Material": "High-Strength Powder-Coated Aluminium",
-      "Wind Rating": "Engineered for NZ Standard & High Wind Zones",
-      "Drainage": "Perimeter Gutter Channel System",
-      "Lighting": "Integrated Warm & Cool LED Strip Accent",
-      "Control": "Handheld Remote & Wall Switch Compatible",
-      "Warranty": "10-Year Frame Warranty",
+      "Control Options": "Motorised (Remote Control)",
+      "Transformer": "External Transformer",
+      "Tuya App": "No",
+      "Material": "6063-T6 aluminium alloy",
+      "Colour Options": "Black, Grey, White",
+      "Customised Colour": "Yes",
+      "Tilt Range": "0–120°",
+      "Blade Light": "Warm yellow or Cool White",
+      "Gutter Beam Light": "No",
+      "Louvre Blade": "140/30/1.5mm",
+      "Gutter Beam": "150/120/3mm",
+      "Post": "120/120/3mm",
+      "Telescopic Range": "No",
+      "Manufacturer Warranty": "10 Years",
+      "Built Warranty": "2 Years",
     },
     swatches: [
-      { name: "Matte Charcoal", hex: "#2D2E30" },
-      { name: "Slate Gray", hex: "#5A5D64" },
-      { name: "Arctic White", hex: "#F3F4F6" },
+      { name: "Matt Black", hex: "#1A1A1A" },
+      { name: "Matt Grey", hex: "#383E42" },
+      { name: "Matt White", hex: "#F5F5F5" },
     ],
-    image: "/images/product-louvre.png",
+    image: "/images/product-classic-louvre.png",
     gallery: [
+      "/images/product-classic-louvre.png",
       "/images/product-louvre.png",
-      "/images/about-hero.png",
+      "/images/product-canopy.png",
+      "/images/hero-bg.png",
+      "/images/about-install.png",
     ],
-    tags: ["Classic Series", "Warm/Cool LEDs", "All-Season"],
+    tags: ["Classic Series", "Motorised", "Warm/Cool LEDs", "6063-T6 Alloy"],
     sourceUrl: "https://bworth.co.nz/product/classic-louvre/",
+    optionalAddons: [
+      "Infrared Heater",
+      "Sliding Glass Door",
+      "Window Shutter",
+      "Outdoor Blinds",
+    ],
+    contentSections: [
+      {
+        id: "freestanding-installation",
+        title: "Freestanding Installation",
+        description: "Classic Louvre can be installed as a freestanding unit—perfect for open areas like gardens, lawns, or poolside decks. With its robust post system and stylish roof structure, it defines a new space entirely on its own, giving you flexible placement and complete independence from building walls.",
+        image: "/images/Classic-Louvre/1.webp",
+      },
+      {
+        id: "wall-mounted-installation",
+        title: "Wall Mounted Installation",
+        description: "Extend your indoor living space outwards with a seamless wall-mounted setup. Anchored directly to your home's exterior fascia or wall, wall-mounted installation creates a natural, sheltered patio transition perfect for outdoor dining and entertaining.",
+        image: "/images/Classic-Louvre/2.webp",
+      },
+      {
+        id: "integrated-ambient-lighting",
+        title: "Integrated Ambient Lighting",
+        description: "Illuminate your outdoor evenings with precision-integrated LED strips built directly into the louvre blades. Switch effortlessly between warm yellow and cool white lighting modes using the exact same handheld wireless remote control.",
+        image: "/images/Classic-Louvre/3.webp",
+      },
+      {
+        id: "strong-aluminium-construction",
+        title: "Strong Aluminium Construction",
+        description: "Engineered with high-tensile 6063-T6 marine-grade aluminium alloy profiles and architectural powder coating. Corrosion-resistant and salt-air durable, ensuring decades of reliable performance across New Zealand's coastal environments.",
+        image: "/images/Classic-Louvre/4.webp",
+      },
+      {
+        id: "all-season-stability",
+        title: "All-Season Stability",
+        description: "Built with reinforced internal framing and heavy-duty ground anchoring to withstand strong winds and adverse weather conditions. Classic Louvre keeps your outdoor area protected, stable, and comfortable all year round.",
+        image: "/images/Classic-Louvre/5.webp",
+      },
+    ],
+    installationSteps: [
+      { step: "1", title: "Enquire", description: "Begin your journey with a simple enquiry. Whether you're just exploring ideas or ready to build, our team is here to listen, answer your questions, and guide you through the possibilities. Share your needs and preferences, and we’ll help you take the first step toward transforming your outdoor space." },
+      { step: "2", title: "Site Visit", description: "We’ll arrange a convenient time to visit your site and assess the location. This step is crucial for understanding the space, sun angles, wind exposure, and other key factors that influence the design and functionality of your louvre system." },
+      { step: "3", title: "Design & Feasibility", description: "Our experts will develop a custom design that suits your home and lifestyle. We’ll evaluate structural requirements, spatial compatibility, and council guidelines (if applicable) to ensure your project is both stylish and achievable." },
+      { step: "4", title: "Planning & Costing", description: "With your design finalised, we’ll provide a detailed proposal outlining timelines, materials, and pricing. You’ll receive clear and transparent costing, so you know exactly what to expect—no surprises, just smart planning." },
+      { step: "5", title: "The Build", description: "Once approved, our experienced installation team gets to work. We pride ourselves on quality craftsmanship and efficient project management. Every component is installed with precision to deliver a durable, functional, and beautiful result." },
+      { step: "6", title: "Project Completion", description: "After final checks and walk-throughs, your louvre system is ready to enjoy. We ensure everything is finished to perfection and leave the site clean and tidy. Your dream outdoor living space is now a reality—built to last and ready for all seasons." },
+    ],
+    performanceCards: [
+      {
+        title: "All-Weather Design",
+        description: "Rated for 140–170 km/hr wind speeds and heavy snow loads. Engineered for New Zealand's variable climate — high UV, wind, and unexpected downpours. Built tough, built to last decades.",
+        icon: "CloudRain"
+      },
+      {
+        title: "Architectural Aesthetics",
+        description: "Clean extruded aluminium profiles (6005 grade, powder-coated) and architectural-grade design make our louvre systems as beautiful as any interior feature.",
+        icon: "Buildings"
+      },
+      {
+        title: "Custom-Fitted to Measure",
+        description: "Every outdoor structure is precision-manufactured to your exact site dimensions. No off-the-shelf compromise — ever. Four installation styles to suit any property.",
+        icon: "Ruler"
+      },
+      {
+        title: "Smart Technology",
+        description: "Remote and Tuya app control as standard. IP67 waterproof motorisation. Auto-close rain sensors. RGB LED gutter lighting with separate remote. Blade lighting in warm yellow or cool white.",
+        icon: "DeviceMobile"
+      },
+      {
+        title: "Integrated Drainage",
+        description: "Patented gutter-beam system channels rainwater off the louvres, down through hollow columns and away from your patio. No exposed pipes, no leaks — perfectly dry underneath.",
+        icon: "Drop"
+      },
+      {
+        title: "Warranty & Support",
+        description: "10-year manufacturer warranty and 2-year built warranty. 0% deposit and interest-free finance plans available. Local service teams and genuine replacement parts nationally.",
+        icon: "Headset"
+      },
+    ],
+    faqs: [
+      {
+        question: "What maintenance is required for the Classic Louvre?",
+        answer: "Maintenance is simple and low. We recommend rinsing the aluminium frame and louvre blades with clean water every few months to remove dust or salt residue. The internal drainage channels should be kept clear of leaves.",
+      },
+      {
+        question: "What is the difference between Freestanding and Wall-Mounted installation?",
+        answer: "Freestanding units are completely self-supporting with 4 or more posts, allowing placement anywhere in your yard or poolside. Wall-mounted units attach directly to your house fascia on one side, requiring fewer posts and creating a seamless patio extension.",
+      },
+      {
+        question: "Is lighting included with the Classic Louvre?",
+        answer: "Yes, integrated blade LED lighting is included as standard. You can select between warm yellow and cool white illumination, controlled conveniently via the wireless remote.",
+      },
+      {
+        question: "Can I customize the color of my Classic Louvre?",
+        answer: "Yes! While standard colors include Matt Black, Matt Grey, and Matt White, custom RAL powder-coated colors can be requested to match your home's exterior palette.",
+      },
+      {
+        question: "Is the Classic Louvre roof retractable?",
+        answer: "No, the louvre blades rotate up to 120° for sun and airflow control, but they do not retract or slide open completely. For a fully retractable roof system, explore our specialized canopy range.",
+      },
+      {
+        question: "Does the Classic Louvre support Tuya smart app control?",
+        answer: "No, the Classic Louvre operates exclusively via handheld RF remote control. If you require Tuya smart app integration, rain sensors, or RGB gutter lighting, we recommend the Deluxe Louvre.",
+      },
+    ],
   },
   {
     id: "pergo-vue",
@@ -461,114 +766,410 @@ export const productsData: ProductItem[] = [
     id: "arch-carport",
     name: "Arch Carport",
     category: "carport",
-    tagline: "High-Clearance Engineered Arched Vehicle Protection",
-    description: "Stunning arched carport structure providing spacious outdoor vehicle shelter, 2mm poly-carbonate roofing, and wind engineering rated for NZ conditions.",
-    fullDescription: "The Arch Carport combines architectural elegance with maximum structural strength. The curved arch roof profile provides extra head clearance for SUVs, utility vehicles, boats, or campervans while naturally shedding water, leaves, and debris. Built with micro powder-coated heavy-duty alloy frames and 2mm UV-blocking polycarbonate roofing, it resists sun damage, heavy hail impact, and intense wind speeds.",
+    tagline: "Modern Protection for Your Vehicles. Designed for durability, style, and everyday convenience.",
+    description: "Spacious arched canopy carport structure providing high overhead clearance, 2mm UV-blocking polycarbonate roofing, and NZ wind-rated aluminium alloy framing.",
+    fullDescription: "The Arch Carport combines curved architectural elegance with maximum structural clearance for SUVs, utility vehicles, boats, and caravans. Engineered with 6063-T6 marine-grade aluminium alloy framing and 2mm impact-resistant polycarbonate roofing, it provides 100% weather shelter, 99.9% UV filtration, and natural rain and leaf deflection.",
+    trustBadges: [
+      "10 yr Sheet Warranty",
+      "5 yr Frame Warranty",
+      "2 yr Built Warranty",
+    ],
     features: [
-      "High clearance arched roof profile for large vehicles & RVs",
-      "2mm solid polycarbonate roof protecting against hail & UV",
-      "Heavy-duty micro powder-coated structural framing",
-      "Engineered specifically for NZ High Wind Zones",
-      "Integrated guttering for clean rainwater drainage",
+      "Curved arched roof canopy for extra overhead vehicle clearance",
+      "2mm solid polycarbonate roof sheets block 99.9% UV rays & hail",
+      "High-tensile 6063-T6 marine-grade powder-coated aluminium frame",
+      "Engineered for NZ wind zones up to 120 km/hr",
+      "Concealed internal guttering and downpipe drainage system",
     ],
     specifications: {
-      "Structure": "Cantilevered / Post Arch Frame",
-      "Roof Material": "2mm Solid Polycarbonate",
-      "Wind Rating": "NZ Wind Zone Engineered (Up to 160 km/h)",
-      "Coating": "Micro Powder Coat Finish",
-      "Warranty": "10-Year Structural Warranty",
+      "Structure": "Curved Arch Canopy (Cantilevered or Post-Mounted)",
+      "Roof Sheet": "2mm Solid Polycarbonate (6 Tint Options)",
+      "Frame Material": "6063-T6 Marine-Grade Aluminium Alloy",
+      "UV Blocking": "99.9% Solar Heat & UV Barrier",
+      "Wind Rating": "NZ Wind Zone Tested (Up to 120 km/h)",
+      "Warranty": "10-Yr Sheet / 5-Yr Frame / 2-Yr Workmanship",
     },
     swatches: [
-      { name: "Matte Charcoal", hex: "#2D2E30" },
-      { name: "Arctic White", hex: "#F3F4F6" },
+      { name: "Light Grey Tint", hex: "#7D848C" },
+      { name: "Dark Grey Tint", hex: "#3A3D42" },
+      { name: "Light Brown Tint", hex: "#7E6B5A" },
+      { name: "Sapphire Blue Tint", hex: "#2B5278" },
+      { name: "Clear Sheet", hex: "#E8EEF5" },
+      { name: "Matte Clear Sheet", hex: "#D4DCE6" },
     ],
     image: "/images/product-carport.png",
     gallery: [
       "/images/product-carport.png",
-      "/images/about-hero.png",
+      "/images/product-canopy.png",
+      "/images/product-louvre.png",
+      "/images/hero-bg.png",
+      "/images/about-install.png",
     ],
-    tags: ["Arch Carport", "High Clearance", "Hail Protection", "NZ Wind Rated"],
+    tags: ["Arch Carport", "Curved Canopy", "99.9% UV Block", "120 km/h Wind Rated"],
     sourceUrl: "https://bworth.co.nz/product/carport/",
+    contentSections: [
+      {
+        id: "intro-overview",
+        title: "Arch Carport: Your Key to Perfect Outdoor Living",
+        subtitle: "Modern Vehicle Protection & Curved Architectural Style",
+        description: "Designed for durability, style, and everyday convenience. Our Arch Carport system combines high-strength 6063-T6 marine-grade aluminium alloy framing with 2mm impact-resistant polycarbonate roofing to shield your cars, SUVs, boats, or caravans from harsh New Zealand weather.",
+        image: "/images/product-carport.png",
+      },
+      {
+        id: "tint-options",
+        title: "The Ultimate Carport Solution: 6 Polycarbonate Tint Options",
+        subtitle: "Light Transmission & Solar Heat Control",
+        description: "Tailor your shading and glare levels with 6 UV-protected polycarbonate sheet colors: Light Grey, Dark Grey, and Light Brown (for glare reduction and solar heat block) or Sapphire Blue, Clear, and Matte Clear (for maximum natural sky illumination). All options provide 99.9% UV filtration.",
+        image: "/images/product-canopy.png",
+      },
+      {
+        id: "structural-styles",
+        title: "Versatile Structural Styles: Arch, Straight & Cantilever",
+        subtitle: "Flexible Driveway & Patio Mounting",
+        description: "Choose the structural configuration that matches your property architecture: Arch (curved canopy for maximum vertical head clearance), Straight (clean modern flat-pitch), or Cantilever (side/back-pull post design for unobstructed vehicle door opening access).",
+        image: "/images/product-louvre.png",
+      },
+      {
+        id: "nz-weather-shield",
+        title: "Engineered for NZ Winds & Severe Weather Protection",
+        subtitle: "Wind Rated Up To 120 km/hr",
+        description: "Engineered specifically for New Zealand wind zones and coastal salt air. Solid 2mm polycarbonate sheet roofing blocks damaging hail, falling branches, and bird droppings while protecting vehicle paintwork from solar heat breakdown.",
+        image: "/images/hero-bg.png",
+      },
+      {
+        id: "guttering-finish",
+        title: "Integrated Guttering & Micro Powder-Coated Finish",
+        subtitle: "Architectural Grade Construction",
+        description: "Built with internal perimeter gutters and concealed downpipes to channel rainwater safely off your driveway. Finished with durable architectural micro powder-coating available in 5 standard colors or custom Dulux RAL powder-coat matches.",
+        image: "/images/about-install.png",
+      },
+    ],
+    installationSteps: [
+      { step: "1", title: "Enquire", description: "Begin your journey with a simple enquiry. Share your vehicle shelter requirements and site details with our local team." },
+      { step: "2", title: "Site Visit", description: "We'll arrange a convenient time to visit your site and assess the location, measuring driveway dimensions, ground surface, and wind exposure." },
+      { step: "3", title: "Design & Feasibility", description: "Our experts develop a custom carport design that suits your property layout, structural requirements, and vehicle clearance needs." },
+      { step: "4", title: "Planning & Costing", description: "Receive a transparent proposal outlining timelines, materials, and pricing with clear zero-surprise project costing." },
+      { step: "5", title: "The Build", description: "Our experienced installation team erects the structural aluminium posts, frames, and precision-fitted polycarbonate roof sheets." },
+      { step: "6", title: "Project Completion", description: "After final quality checks and site cleanup, your carport is ready to deliver year-round vehicle protection." },
+    ],
+    performanceCards: [
+      {
+        title: "All-Weather Protection",
+        description: "Rated for 120 km/hr NZ wind speeds and heavy downpours. Keeps vehicles dry, cool, and shielded from environmental damage.",
+        icon: "CloudRain",
+      },
+      {
+        title: "Architectural Aesthetics",
+        description: "Clean extruded aluminium profiles (A6063 grade, powder-coated) and elegant curved arch rooflines complement modern home architecture.",
+        icon: "Buildings",
+      },
+      {
+        title: "Custom-Fitted to Measure",
+        description: "Every carport is custom manufactured to your exact driveway dimensions and height clearance requirements. No compromises.",
+        icon: "Ruler",
+      },
+      {
+        title: "99.9% UV & Hail Barrier",
+        description: "2mm solid impact-resistant polycarbonate roof sheets filter out 99.9% of harmful solar UV radiation while deflecting heavy hail.",
+        icon: "Sun",
+      },
+      {
+        title: "Integrated Drainage",
+        description: "Concealed perimeter guttering channels rainwater off the canopy and down through posts, preventing driveway flooding.",
+        icon: "Drop",
+      },
+      {
+        title: "3-Tier Warranty & Support",
+        description: "10-year polycarbonate sheet warranty, 5-year structural frame warranty, and 2-year built/workmanship warranty. Interest-free finance available.",
+        icon: "Headset",
+      },
+    ],
+    faqs: [
+      {
+        question: "Do you offer free onsite measurement and quotes?",
+        answer: "Yes! We arrange free onsite consultations and measures across active service regions to assess your driveway layout, sun exposure, and structural mounting requirements.",
+      },
+      {
+        question: "What wind speeds are the carports rated for?",
+        answer: "Our carport range is engineered and tested for New Zealand wind conditions up to 120 km/hr.",
+      },
+      {
+        question: "What warranty is provided with the carport?",
+        answer: "We offer a comprehensive 3-tier warranty: 10-year warranty on polycarbonate roof sheets, 5-year warranty on the structural aluminium frame, and 2-year built/workmanship warranty.",
+      },
+      {
+        question: "What roof sheet material is used?",
+        answer: "We use 2mm high-impact solid polycarbonate sheets with 99.9% UV filtration that blocks solar heat and prevents vehicle paintwork breakdown.",
+      },
+      {
+        question: "What material is used for the frame structure?",
+        answer: "Frames are constructed from high-tensile 6063-T6 marine-grade aluminium alloy with architectural powder-coating to ensure long-lasting, rust-free durability.",
+      },
+    ],
   },
   {
     id: "straight-carport",
     name: "Straight Carport",
     category: "carport",
-    tagline: "Modern Minimalist Flat-Pitch Vehicle Shelter",
-    description: "Sleek straight roof carport designed for modern driveways. Protects cars, boats, and property from UV degradation, rain, and severe hail damage.",
-    fullDescription: "The Straight Carport delivers a clean, modern aesthetic that aligns with contemporary home architecture. Featuring a subtle sloped straight roof, heavy-duty posts, and 2mm polycarbonate roofing, it shelters your vehicle investment from harsh Kiwi weather, leaf staining, and paint-damaging UV solar radiation.",
+    tagline: "Modern Protection for Your Vehicles. Designed for durability, style, and everyday convenience.",
+    description: "Sleek straight sloped canopy carport protecting cars, boats, and property from UV solar heat, heavy rain, and severe hail damage.",
+    fullDescription: "The Straight Carport delivers a clean, modern aesthetic that aligns with contemporary home architecture. Featuring a subtle sloped straight roof pitch, heavy-duty posts, and 2mm polycarbonate roofing, it shelters your vehicle investment from harsh Kiwi weather, leaf staining, and paint-damaging UV solar radiation.",
+    trustBadges: [
+      "10 yr Sheet Warranty",
+      "5 yr Frame Warranty",
+      "2 yr Built Warranty",
+    ],
     features: [
-      "Clean straight-line minimalist architectural design",
-      "2mm solid polycarbonate roof with 99.9% UV filter",
-      "Resists hail, falling debris, and heavy downpours",
-      "Micro powder-coated frame available in custom colors",
-      "Freestanding or wall-attached driveway mounting",
+      "Clean straight-line minimalist architectural roof pitch",
+      "2mm solid polycarbonate roof sheets block 99.9% UV rays & hail",
+      "High-tensile 6063-T6 marine-grade powder-coated aluminium frame",
+      "Engineered for NZ wind zones up to 120 km/hr",
+      "Concealed internal guttering and downpipe drainage system",
     ],
     specifications: {
-      "Structure": "Straight Roof Cantilever or Post-Mounted",
-      "Roof Material": "2mm Solid Polycarbonate",
-      "UV Blocking": "99.9%",
-      "Wind Rating": "NZ High Wind Zone Tested",
-      "Warranty": "10-Year Structural Guarantee",
+      "Structure": "Straight Sloped Canopy (Cantilevered or Post-Mounted)",
+      "Roof Sheet": "2mm Solid Polycarbonate (6 Tint Options)",
+      "Frame Material": "6063-T6 Marine-Grade Aluminium Alloy",
+      "UV Blocking": "99.9% Solar Heat & UV Barrier",
+      "Wind Rating": "NZ Wind Zone Tested (Up to 120 km/h)",
+      "Warranty": "10-Yr Sheet / 5-Yr Frame / 2-Yr Workmanship",
     },
     swatches: [
-      { name: "Matte Charcoal", hex: "#2D2E30" },
-      { name: "Arctic White", hex: "#F3F4F6" },
+      { name: "Light Grey Tint", hex: "#7D848C" },
+      { name: "Dark Grey Tint", hex: "#3A3D42" },
+      { name: "Light Brown Tint", hex: "#7E6B5A" },
+      { name: "Sapphire Blue Tint", hex: "#2B5278" },
+      { name: "Clear Sheet", hex: "#E8EEF5" },
+      { name: "Matte Clear Sheet", hex: "#D4DCE6" },
     ],
     image: "/images/product-carport.png",
     gallery: [
       "/images/product-carport.png",
+      "/images/product-canopy.png",
+      "/images/product-louvre.png",
+      "/images/hero-bg.png",
+      "/images/about-install.png",
     ],
-    tags: ["Straight Carport", "Minimalist", "99.9% UV Block", "NZ Wind Rated"],
+    tags: ["Straight Carport", "Minimalist", "99.9% UV Block", "120 km/h Wind Rated"],
     sourceUrl: "https://bworth.co.nz/product/carport/",
+    contentSections: [
+      {
+        id: "intro-overview",
+        title: "Straight Carport: Your Key to Perfect Outdoor Living",
+        subtitle: "Modern Vehicle Protection & Minimalist Architecture",
+        description: "Designed for durability, style, and everyday convenience. Our Straight Carport system combines high-strength 6063-T6 marine-grade aluminium alloy framing with 2mm impact-resistant polycarbonate roofing to shield your cars, SUVs, boats, or caravans from harsh New Zealand weather.",
+        image: "/images/product-carport.png",
+      },
+      {
+        id: "tint-options",
+        title: "The Ultimate Carport Solution: 6 Polycarbonate Tint Options",
+        subtitle: "Light Transmission & Solar Heat Control",
+        description: "Tailor your shading and glare levels with 6 UV-protected polycarbonate sheet colors: Light Grey, Dark Grey, and Light Brown (for glare reduction and solar heat block) or Sapphire Blue, Clear, and Matte Clear (for maximum natural sky illumination). All options provide 99.9% UV filtration.",
+        image: "/images/product-canopy.png",
+      },
+      {
+        id: "structural-styles",
+        title: "Versatile Structural Styles: Straight, Arch & Cantilever",
+        subtitle: "Flexible Driveway & Patio Mounting",
+        description: "Choose the structural configuration that matches your property architecture: Straight (clean modern flat-pitch), Arch (curved canopy for maximum vertical head clearance), or Cantilever (side/back-pull post design for unobstructed vehicle door opening access).",
+        image: "/images/product-louvre.png",
+      },
+      {
+        id: "nz-weather-shield",
+        title: "Engineered for NZ Winds & Severe Weather Protection",
+        subtitle: "Wind Rated Up To 120 km/hr",
+        description: "Engineered specifically for New Zealand wind zones and coastal salt air. Solid 2mm polycarbonate sheet roofing blocks damaging hail, falling branches, and bird droppings while protecting vehicle paintwork from solar heat breakdown.",
+        image: "/images/hero-bg.png",
+      },
+      {
+        id: "guttering-finish",
+        title: "Integrated Guttering & Micro Powder-Coated Finish",
+        subtitle: "Architectural Grade Construction",
+        description: "Built with internal perimeter gutters and concealed downpipes to channel rainwater safely off your driveway. Finished with durable architectural micro powder-coating available in 5 standard colors or custom Dulux RAL powder-coat matches.",
+        image: "/images/about-install.png",
+      },
+    ],
+    installationSteps: [
+      { step: "1", title: "Enquire", description: "Begin your journey with a simple enquiry. Share your vehicle shelter requirements and site details with our local team." },
+      { step: "2", title: "Site Visit", description: "We'll arrange a convenient time to visit your site and assess the location, measuring driveway dimensions, ground surface, and wind exposure." },
+      { step: "3", title: "Design & Feasibility", description: "Our experts develop a custom carport design that suits your property layout, structural requirements, and vehicle clearance needs." },
+      { step: "4", title: "Planning & Costing", description: "Receive a transparent proposal outlining timelines, materials, and pricing with clear zero-surprise project costing." },
+      { step: "5", title: "The Build", description: "Our experienced installation team erects the structural aluminium posts, frames, and precision-fitted polycarbonate roof sheets." },
+      { step: "6", title: "Project Completion", description: "After final quality checks and site cleanup, your carport is ready to deliver year-round vehicle protection." },
+    ],
+    performanceCards: [
+      {
+        title: "All-Weather Protection",
+        description: "Rated for 120 km/hr NZ wind speeds and heavy downpours. Keeps vehicles dry, cool, and shielded from environmental damage.",
+        icon: "CloudRain",
+      },
+      {
+        title: "Architectural Aesthetics",
+        description: "Clean extruded aluminium profiles (A6063 grade, powder-coated) and sleek minimalist straight rooflines complement modern home architecture.",
+        icon: "Buildings",
+      },
+      {
+        title: "Custom-Fitted to Measure",
+        description: "Every carport is custom manufactured to your exact driveway dimensions and height clearance requirements. No compromises.",
+        icon: "Ruler",
+      },
+      {
+        title: "99.9% UV & Hail Barrier",
+        description: "2mm solid impact-resistant polycarbonate roof sheets filter out 99.9% of harmful solar UV radiation while deflecting heavy hail.",
+        icon: "Sun",
+      },
+      {
+        title: "Integrated Drainage",
+        description: "Concealed perimeter guttering channels rainwater off the canopy and down through posts, preventing driveway flooding.",
+        icon: "Drop",
+      },
+      {
+        title: "3-Tier Warranty & Support",
+        description: "10-year polycarbonate sheet warranty, 5-year structural frame warranty, and 2-year built/workmanship warranty. Interest-free finance available.",
+        icon: "Headset",
+      },
+    ],
+    faqs: [
+      {
+        question: "Do you offer free onsite measurement and quotes?",
+        answer: "Yes! We arrange free onsite consultations and measures across active service regions to assess your driveway layout, sun exposure, and structural mounting requirements.",
+      },
+      {
+        question: "What wind speeds are the carports rated for?",
+        answer: "Our carport range is engineered and tested for New Zealand wind conditions up to 120 km/hr.",
+      },
+      {
+        question: "What warranty is provided with the carport?",
+        answer: "We offer a comprehensive 3-tier warranty: 10-year warranty on polycarbonate roof sheets, 5-year warranty on the structural aluminium frame, and 2-year built/workmanship warranty.",
+      },
+      {
+        question: "What roof sheet material is used?",
+        answer: "We use 2mm high-impact solid polycarbonate sheets with 99.9% UV filtration that blocks solar heat and prevents vehicle paintwork breakdown.",
+      },
+      {
+        question: "What material is used for the frame structure?",
+        answer: "Frames are constructed from high-tensile 6063-T6 marine-grade aluminium alloy with architectural powder-coating to ensure long-lasting, rust-free durability.",
+      },
+    ],
   },
   {
     id: "outdoor-shutter",
     name: "Outdoor Shutter",
     category: "shutter",
-    tagline: "Heavy-Duty Aluminium Louvre Privacy & Wind Buffer Shutters",
+    tagline: "Privacy, Protection, and Style Combined. Create a more comfortable outdoor environment.",
     description: "Architectural aluminium louvre shutters engineered for deck privacy, wind buffering, airflow control, and security across balconies and patios.",
     fullDescription: "Bworth Outdoor Aluminium Shutters offer superior control over privacy, light, and airflow. Featuring operable or fixed louvre blades mounted within heavy-duty powder-coated frames, these shutters act as an effective wind break on exposed decks and balconies while maintaining a stylish, modern exterior facade.",
+    trustBadges: [
+      "10 yr Manufacturer Warranty",
+      "2 yr Built Warranty",
+      "0% Deposit On Finance",
+    ],
     features: [
       "Operable louvre blades with smooth manual control",
       "Marine-grade powder-coated T6 aluminium construction",
       "Wind-lock safety latches for high wind resilience",
       "Provides privacy, shade, and rain deflection",
-      "Available in sliding, bifold, or fixed panel configurations",
+      "Available in sliding, bifold, swing, or fixed panel configurations",
     ],
     specifications: {
       "Blade Type": "Operable or Fixed Aluminium Louvre",
-      "Configurations": "Sliding, Bifold, Hinged, or Fixed",
+      "Configurations": "Sliding, Bifold, Swing, or Fixed",
       "Frame Finish": "Marine-Grade Powder Coat",
       "Wind Rating": "High Wind Resistance with Safety Locks",
-      "Warranty": "10-Year Material Guarantee",
+      "Warranty": "10-Year Manufacturer Warranty",
     },
     swatches: [
-      { name: "Matte Charcoal", hex: "#2D2E30" },
-      { name: "Slate Gray", hex: "#5A5D64" },
-      { name: "Arctic White", hex: "#F3F4F6" },
+      { name: "Matt White (RAL9016)", hex: "#F5F5F5", ral: "RAL9016" },
+      { name: "Matt Grey (RAL7016)", hex: "#383E42", ral: "RAL7016" },
+      { name: "Matt Black (RAL9005)", hex: "#1A1A1A", ral: "RAL9005" },
+      { name: "Teak Woodgrain", hex: "#7E5233" },
     ],
     image: "/images/product-louvre.png",
     gallery: [
       "/images/product-louvre.png",
       "/images/about-install.png",
+      "/images/about-hero.png",
+      "/images/hero-bg.png",
+      "/images/product-canopy.png",
     ],
-    tags: ["Aluminium Shutter", "Privacy Control", "Wind Barrier", "Bifold/Sliding"],
+    tags: ["Outdoor Shutter", "Privacy Control", "Wind Barrier", "Bifold/Sliding"],
     sourceUrl: "https://bworth.co.nz/product/outdoor-shutter/",
+    contentSections: [
+      {
+        id: "color-options",
+        title: "Premium Color Options",
+        subtitle: "UV & Fade-Resistant Powder Coating",
+        description: "Choose from 4 architectural finishes: RAL9016 Matt White, RAL7016 Matt Grey, RAL9005 Matt Black, plus realistic Teak Woodgrain. All finishes feature heavy-duty powder coating that resists UV fading, salt spray, and corrosion.",
+        image: "/images/Outdoor-Shutter/1.webp",
+      },
+      {
+        id: "installation-formats",
+        title: "Versatile Installation Formats",
+        subtitle: "4 Opening Mechanisms for Any Layout",
+        description: "Available in 4 versatile configurations to fit your space: Fixed (permanent privacy screening), Sliding (smooth horizontal gliding panels), Bi-folding (stacks away to maximize wide views), and Swing (classic hinged shutter panels).",
+        image: "/images/Outdoor-Shutter/2.webp",
+      },
+    ],
+    installationSteps: [
+      { step: "1", title: "Enquire", description: "Begin your journey with a simple enquiry. Share your privacy and shading requirements with our local team." },
+      { step: "2", title: "Site Visit", description: "We'll arrange a convenient time to visit your site and assess the location, measuring patio, balcony, or deck dimensions and wind exposure." },
+      { step: "3", title: "Design & Feasibility", description: "Our experts develop a custom shutter design that suits your property aesthetics, mounting points, and panel opening format." },
+      { step: "4", title: "Planning & Costing", description: "Receive a transparent proposal outlining timelines, materials, and pricing with clear zero-surprise project costing." },
+      { step: "5", title: "The Build", description: "Our experienced installation team mounts the structural tracks, hinges, and precision aluminium shutter panels." },
+      { step: "6", title: "Project Completion", description: "After final quality checks and site cleanup, your outdoor shutter system is ready to provide privacy and protection." },
+    ],
+    performanceCards: [
+      {
+        title: "All-Weather Design",
+        description: "Engineered for New Zealand's variable climate — high UV, coastal wind, and rain. Built tough to last decades.",
+        icon: "CloudRain",
+      },
+      {
+        title: "Architectural Aesthetics",
+        description: "Clean extruded aluminium profiles and architectural powder coating make our shutter systems a sleek extension of your home.",
+        icon: "Buildings",
+      },
+      {
+        title: "Custom-Fitted to Measure",
+        description: "Every outdoor shutter panel is precision-manufactured to your exact site dimensions. 4 installation styles available.",
+        icon: "Ruler",
+      },
+      {
+        title: "Privacy & Wind Barrier",
+        description: "Operable louvre blades and safety wind-locks block unwanted breezes and curious eyes while maintaining gentle airflow.",
+        icon: "ShieldCheck",
+      },
+      {
+        title: "Low Maintenance",
+        description: "Corrosion-resistant marine-grade aluminium alloy with powder coating requires no repainting, staining, or ongoing rust prevention.",
+        icon: "Drop",
+      },
+      {
+        title: "Warranty & Support",
+        description: "10-year manufacturer warranty and 2-year built warranty. 0% deposit and interest-free finance plans available.",
+        icon: "Headset",
+      },
+    ],
+    faqs: [],
   },
   {
     id: "sunroom",
     name: "Sunroom",
     category: "sunroom",
-    tagline: "Fully Enclosed Double-Glazed Insulated Outdoor Living Extension",
+    tagline: "A Bright Outdoor Escape. Enjoy comfort, warmth, and natural light throughout the year.",
     description: "Fully enclosed 365-day sunroom featuring double-glazed glass sliding doors, thermal insulated roof panels, and complete weather-sealed protection.",
     fullDescription: "Transform your outdoor space into a true year-round living area with the Bworth All-Weather Sunroom. Combining structural aluminium framing, double-glazed sliding glass doors, and insulated thermal roof panels, this fully enclosed extension retains warmth during winter while allowing breezy open-air ventilation during summer.",
+    trustBadges: [
+      "10 yr Manufacturer Warranty",
+      "2 yr Built Warranty",
+      "0% Deposit On Finance",
+    ],
     features: [
       "Double-glazed safety glass sliding & bifold doors",
-      "Insulated composite roof panels prevent heat transfer",
-      "100% weather-sealed enclosure built for all seasons",
+      "Insulated composite roof panels prevent thermal transfer",
+      "100% weather-sealed enclosure built for all 4 seasons",
       "Integrated LED lighting & concealed electrical channels",
-      "Seamless connection to existing home wall joinery",
+      "Seamless architectural connection to existing home wall joinery",
     ],
     specifications: {
       "Enclosure": "Double-Glazed Sliding Glass & Solid Frame",
@@ -578,16 +1179,77 @@ export const productsData: ProductItem[] = [
       "Warranty": "10-Year Comprehensive Warranty",
     },
     swatches: [
-      { name: "Matte Charcoal", hex: "#2D2E30" },
-      { name: "Arctic White", hex: "#F3F4F6" },
+      { name: "Matt Black (RAL9005)", hex: "#1A1A1A", ral: "RAL9005" },
+      { name: "Matt Grey (RAL7016)", hex: "#383E42", ral: "RAL7016" },
+      { name: "Matt White (RAL9016)", hex: "#F5F5F5", ral: "RAL9016" },
     ],
     image: "/images/about-install.png",
     gallery: [
       "/images/about-install.png",
       "/images/about-hero.png",
+      "/images/hero-bg.png",
+      "/images/product-canopy.png",
+      "/images/product-louvre.png",
     ],
-    tags: ["All-Weather Room", "Enclosed Sunroom", "Double Glazed", "Thermal Roof"],
+    tags: ["All-Weather Sunroom", "Enclosed Sunroom", "Double Glazed", "Thermal Roof"],
     sourceUrl: "https://bworth.co.nz/product/sunroom/",
+    contentSections: [
+      {
+        id: "board-division-framing",
+        title: "Sunroom Board Division & Framing",
+        subtitle: "Technical Structural Engineering Specs",
+        description: "Engineered for maximum structural stability and rainwater drainage. Layouts wider than 3m include reinforced support columns; main structural beams are spaced 800–1100mm; sub-beams maintain glass panels under 1.5m²; and a 5–10cm front-to-rear slope is engineered into flat pitched roof designs.",
+        image: "/images/Sunroom/1.webp",
+      },
+      {
+        id: "roof-styles",
+        title: "Custom Sunroom Roof Styles",
+        subtitle: "5 Architectural Roof Options",
+        description: "Select from 5 distinct architectural roof styles: Flat & Pitched (budget-friendly design), Curved (European styling with gentle end returns), Triangular (grand ceiling height and optimal rainwater shedding), Diamond (high-end architectural feature), and Combined (mixed shapes for large custom layouts).",
+        image: "/images/Sunroom/2.webp",
+      },
+    ],
+    installationSteps: [
+      { step: "1", title: "Enquire", description: "Begin your journey with a simple enquiry. Share your sunroom extension ideas and site preferences with our local team." },
+      { step: "2", title: "Site Visit", description: "We'll arrange a convenient time to visit your site and assess the location, measuring building joinery attachment points, sun angles, and wind exposure." },
+      { step: "3", title: "Design & Feasibility", description: "Our experts develop a custom sunroom design that suits your home architecture, roof style, and council guideline requirements." },
+      { step: "4", title: "Planning & Costing", description: "Receive a detailed proposal outlining timelines, materials, and pricing with clear transparent project costing." },
+      { step: "5", title: "The Build", description: "Our experienced installation team erects the structural aluminium posts, thermal roof panels, and double-glazed glass sliding doors." },
+      { step: "6", title: "Project Completion", description: "After final quality checks and site cleanup, your year-round sunroom living space is ready to enjoy." },
+    ],
+    performanceCards: [
+      {
+        title: "All-Weather Design",
+        description: "Rated for 140–170 km/hr wind speeds and heavy downpours. Keeps your sunroom room temperature comfortable in all seasons.",
+        icon: "CloudRain",
+      },
+      {
+        title: "Architectural Aesthetics",
+        description: "Clean extruded aluminium profiles (A6063 grade, powder-coated) and double-glazed glass panels make your sunroom a natural extension of your home.",
+        icon: "Buildings",
+      },
+      {
+        title: "Custom-Fitted to Measure",
+        description: "Every sunroom is custom manufactured to your exact property dimensions and roof style preference. No off-the-shelf compromises.",
+        icon: "Ruler",
+      },
+      {
+        title: "Thermal & UV Insulation",
+        description: "Double-glazed safety glass and insulated composite roof panels keep warmth inside during winter and block harsh solar heat during summer.",
+        icon: "Sun",
+      },
+      {
+        title: "Integrated Drainage",
+        description: "Engineered 5–10cm roof slope and concealed perimeter gutters discharge rainwater quickly away from house joinery.",
+        icon: "Drop",
+      },
+      {
+        title: "Warranty & Support",
+        description: "10-year comprehensive warranty and 2-year built warranty. 0% deposit and interest-free finance plans available.",
+        icon: "Headset",
+      },
+    ],
+    faqs: [],
   },
 ];
 

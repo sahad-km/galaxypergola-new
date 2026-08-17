@@ -1,12 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   ShieldCheck,
   CaretRight,
+  CaretDown,
   Sparkle,
   ArrowLeft,
   Phone,
@@ -16,9 +17,20 @@ import {
   FileText,
   Sliders,
   Ruler,
-  Wind
+  Wind,
+  Check,
+  X,
+  Sun,
+  CloudRain,
+  Drop,
+  CornersOut,
+  MagnifyingGlassPlus,
+  Info,
+  Buildings,
+  DeviceMobile,
+  Headset
 } from '@phosphor-icons/react';
-import { ProductItem, getCategoryLabel } from '@/data/siteData';
+import { ProductItem, getCategoryLabel, activeRegions } from '@/data/siteData';
 
 interface ProductDetailClientProps {
   product: ProductItem;
@@ -31,9 +43,28 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
     ? product.gallery
     : [product.image];
   const [selectedImage, setSelectedImage] = useState(galleryImages[0]);
+  const [lightboxImage, setLightboxImage] = useState<string | null>(null);
 
-  // Color Swatch state
-  const [activeSwatch, setActiveSwatch] = useState(product.swatches[0]?.name || '');
+  // Quote Modal state
+  const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
+
+  // Configurable options state
+  const [selectedType, setSelectedType] = useState<string>(
+    product.typeOptions && product.typeOptions.length > 0 ? product.typeOptions[0] : 'Wall Mounted'
+  );
+  const [selectedSize, setSelectedSize] = useState<string>(
+    product.sizeOptions && product.sizeOptions.length > 0 ? product.sizeOptions[0] : '3x3m'
+  );
+  const [selectedColor, setSelectedColor] = useState<string>(
+    product.colorOptions && product.colorOptions.length > 0
+      ? product.colorOptions[0].name
+      : product.swatches && product.swatches.length > 0
+        ? product.swatches[0].name
+        : 'Matt Black (RAL9005)'
+  );
+
+  // FAQ Accordion active state
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
 
   // Form submission state
   const [submitted, setSubmitted] = useState(false);
@@ -41,9 +72,17 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
     name: '',
     email: '',
     phone: '',
-    region: 'Auckland',
-    message: `Hi, I would like to request a quote and free site measure for the ${product.name}.`,
+    region: activeRegions[0],
+    message: '',
   });
+
+  // Keep form message auto-synced with configured options
+  useEffect(() => {
+    setFormData((prev) => ({
+      ...prev,
+      message: `Hi, I would like to request a quote and free site measure for the ${product.name}.\n\nConfiguration:\n- Type: ${selectedType}\n- Size: ${selectedSize}\n- Finish: ${selectedColor}`,
+    }));
+  }, [product.name, selectedType, selectedSize, selectedColor]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,11 +94,18 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
     .concat(allProducts.filter((p) => p.id !== product.id))
     .slice(0, 3);
 
+  const defaultTrustBadges = [
+    '10 yr Manufacturer Warranty',
+    '2 yr Built Warranty',
+    '0% Deposit On Finance',
+  ];
+  const trustBadges = product.trustBadges || defaultTrustBadges;
+
   return (
     <div className="max-w-7xl mx-auto px-6">
 
       {/* Breadcrumb Navigation */}
-      <nav aria-label="Breadcrumb" className="flex items-center text-xs text-neutral-gray mb-8 gap-2 flex-wrap">
+      <nav aria-label="Breadcrumb" className="flex items-center text-xs text-neutral-gray mb-6 gap-2 flex-wrap">
         <Link href="/" className="hover:text-primary transition-colors">
           Home
         </Link>
@@ -93,23 +139,35 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
         </Link>
       </div>
 
-      {/* Product Hero Section (Image & Overview) */}
+      {/* Hero Section: Gallery & Configurator */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-16">
 
-        {/* Left Column: Gallery & Images */}
+        {/* Left Column: Image Gallery Viewer */}
         <div className="lg:col-span-7 space-y-4">
-          <div className="relative aspect-[16/10] bg-white rounded-3xl overflow-hidden shadow-xl border border-neutral-100/90">
-            {/* Tag Badges */}
-            <div className="absolute top-4 left-4 z-10 flex gap-2 flex-wrap">
-              {product.tags.map((tag) => (
+          <div className="relative aspect-[16/10] bg-white rounded-3xl overflow-hidden shadow-xl border border-neutral-100/90 group">
+            {/* Category Tag & Badges */}
+            <div className="absolute top-4 left-4 z-10 flex gap-2 flex-wrap max-w-[85%]">
+              {/* <span className="px-3 py-1 bg-primary text-white rounded-full text-[10px] font-extrabold uppercase tracking-widest shadow-md">
+                {getCategoryLabel(product.category)}
+              </span> */}
+              {product.tags.slice(0, 3).map((tag) => (
                 <span
                   key={tag}
-                  className="px-3 py-1 bg-black/50 backdrop-blur-md text-white rounded-full text-[10px] font-bold uppercase tracking-wider border border-white/10"
+                  className="px-3 py-1 bg-black/60 backdrop-blur-md text-white rounded-full text-[10px] font-bold uppercase tracking-wider border border-white/10"
                 >
                   {tag}
                 </span>
               ))}
             </div>
+
+            {/* Expand Lightbox Button */}
+            <button
+              onClick={() => setLightboxImage(selectedImage)}
+              className="absolute top-4 right-4 z-10 p-2.5 bg-black/50 hover:bg-black/80 backdrop-blur-md text-white rounded-full transition-all shadow-md"
+              title="Zoom image"
+            >
+              <MagnifyingGlassPlus size={18} weight="bold" />
+            </button>
 
             <Image
               src={selectedImage}
@@ -121,66 +179,133 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
             />
           </div>
 
-          {/* Thumbnails list */}
+          {/* Gallery Thumbnail Selector */}
           {galleryImages.length > 1 && (
-            <div className="flex gap-4 overflow-x-auto pb-2">
+            <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none">
               {galleryImages.map((img, idx) => (
                 <button
                   key={idx}
                   onClick={() => setSelectedImage(img)}
                   className={`relative w-24 h-20 rounded-2xl overflow-hidden border-2 transition-all flex-shrink-0 ${selectedImage === img
-                    ? 'border-primary shadow-md'
-                    : 'border-transparent opacity-70 hover:opacity-100'
+                    ? 'border-primary ring-2 ring-primary/20 shadow-md scale-102'
+                    : 'border-transparent opacity-75 hover:opacity-100'
                     }`}
                 >
-                  <Image src={img} alt={`${product.name} view ${idx + 1}`} fill className="object-cover" />
+                  <Image src={img} alt={`${product.name} thumbnail ${idx + 1}`} fill className="object-cover" />
                 </button>
               ))}
             </div>
           )}
+
+          {/* Trust Badges Row (Numbers Standout, No Icons) */}
+          <div className="grid grid-cols-3 gap-3 pt-3">
+            {trustBadges.map((badge, idx) => {
+              const parts = badge.match(/^(\d+\s*(?:yr|%)?)\s*(.*)$/i);
+              const stat = parts ? parts[1] : '';
+              const label = parts ? parts[2] : badge;
+              return (
+                <div
+                  key={idx}
+                  className="p-3.5 bg-white rounded-2xl border border-neutral-100 shadow-sm flex flex-col justify-center text-center sm:text-left"
+                >
+                  <span className="text-xl sm:text-2xl font-black text-primary leading-none mb-1">
+                    {stat || badge}
+                  </span>
+                  <span className="text-[10px] sm:text-[11px] font-bold text-neutral-charcoal leading-tight">
+                    {label}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
         </div>
 
-        {/* Right Column: Product Core Details */}
+        {/* Right Column: Product Details & Configurable Options */}
         <div className="lg:col-span-5 flex flex-col justify-between space-y-6">
           <div>
-            <div className="flex items-center gap-3 mb-3">
-              <span className="text-[10px] font-extrabold tracking-widest text-primary bg-primary-cream px-3 py-1 rounded-full uppercase">
-                {getCategoryLabel(product.category)}
-              </span>
+            <div className="flex justify-between items-start mb-2 gap-4">
+              <h1 className="text-3xl sm:text-4xl font-extrabold text-neutral-black leading-tight">
+                {product.name}
+              </h1>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-neutral-black leading-tight mb-3">
-              {product.name}
-            </h1>
-
-            {product.tagline && (
-              <p className="text-sm font-bold text-primary mb-4 leading-relaxed">
-                {product.tagline}
+            {/* {product.tagline && (
+              <p className="text-xs font-bold text-primary mb-4 leading-relaxed bg-primary-cream px-3.5 py-2 rounded-xl border border-primary/10">
+                "{product.tagline}"
               </p>
-            )}
+            )} */}
 
-            <p className="text-sm text-neutral-gray leading-relaxed mb-6">
+            <p className="text-xs text-neutral-gray leading-relaxed mb-6">
               {product.fullDescription || product.description}
             </p>
 
-            {/* Color Swatches Selector */}
-            {product.swatches && product.swatches.length > 0 && (
-              <div className="mb-6 p-4 bg-white rounded-2xl border border-neutral-100 shadow-sm">
-                <span className="text-[11px] font-bold uppercase tracking-widest text-neutral-400 block mb-3">
-                  Available Finishes: <span className="text-neutral-charcoal">{activeSwatch}</span>
-                </span>
-                <div className="flex gap-3 flex-wrap">
-                  {product.swatches.map((swatch) => (
+            {/* Configurable Option 1: Installation Type */}
+            {product.typeOptions && product.typeOptions.length > 0 && (
+              <div className="mb-5">
+                <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-400 mb-2">
+                  Installation Type: <span className="text-neutral-black">{selectedType}</span>
+                </label>
+                <div className="grid grid-cols-2 gap-2.5">
+                  {product.typeOptions.map((typeOption) => (
+                    <button
+                      key={typeOption}
+                      type="button"
+                      onClick={() => setSelectedType(typeOption)}
+                      className={`py-3 px-4 rounded-2xl border text-xs font-bold transition-all text-center ${selectedType === typeOption
+                        ? 'border-primary bg-primary text-white shadow-md shadow-primary/20'
+                        : 'border-neutral-200 bg-white text-neutral-charcoal hover:border-neutral-300'
+                        }`}
+                    >
+                      {typeOption}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Configurable Option 2: Size Dimensions (Matching Active Style) */}
+            {product.sizeOptions && product.sizeOptions.length > 0 && (
+              <div className="mb-5">
+                <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-400 mb-2">
+                  Select Size Dimensions: <span className="text-neutral-black">{selectedSize}</span>
+                </label>
+                <div className="grid grid-cols-4 gap-2">
+                  {product.sizeOptions.map((sz) => (
+                    <button
+                      key={sz}
+                      type="button"
+                      onClick={() => setSelectedSize(sz)}
+                      className={`py-2.5 rounded-xl border text-xs font-extrabold transition-all text-center ${selectedSize === sz
+                        ? 'border-primary bg-primary text-white shadow-md shadow-primary/20'
+                        : 'border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50'
+                        }`}
+                    >
+                      {sz}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Configurable Option 3: Architectural Color Finish */}
+            {product.colorOptions && product.colorOptions.length > 0 && (
+              <div className="mb-6">
+                <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-400 mb-2">
+                  Architectural Finish: <span className="text-neutral-black">{selectedColor}</span>
+                </label>
+                <div className="flex gap-2.5 flex-wrap">
+                  {product.colorOptions.map((swatch) => (
                     <button
                       key={swatch.name}
-                      onClick={() => setActiveSwatch(swatch.name)}
-                      className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-semibold transition-all ${activeSwatch === swatch.name
-                          ? 'border-primary bg-primary/5 text-neutral-black shadow-sm'
-                          : 'border-neutral-200 bg-neutral-50 text-neutral-600 hover:bg-neutral-100'
+                      type="button"
+                      onClick={() => setSelectedColor(swatch.name)}
+                      className={`flex items-center gap-2 px-3.5 py-2 rounded-xl border text-xs font-semibold transition-all ${selectedColor === swatch.name
+                        ? 'border-primary bg-primary/5 text-neutral-black ring-2 ring-primary/20 shadow-sm'
+                        : 'border-neutral-200 bg-white text-neutral-600 hover:bg-neutral-50'
                         }`}
                     >
                       <span
-                        className="w-4 h-4 rounded-full border border-black/10 flex-shrink-0"
+                        className="w-4 h-4 rounded-full border border-black/15 shadow-inner"
                         style={{ backgroundColor: swatch.hex }}
                       />
                       <span>{swatch.name}</span>
@@ -190,181 +315,555 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
               </div>
             )}
 
-            {/* Feature Bullet Points */}
-            <div className="space-y-3 mb-8">
-              <h3 className="text-xs font-extrabold uppercase tracking-wider text-neutral-black mb-2">
-                Key Performance Features
-              </h3>
-              <div className="grid grid-cols-1 gap-2.5">
+            {/* Bullet Features summary */}
+            {/* <div className="space-y-2 mb-6 p-4 bg-white rounded-2xl border border-neutral-100">
+              <span className="text-[10px] font-extrabold uppercase tracking-widest text-neutral-400 block mb-2">
+                Standard Included Features
+              </span>
+              <div className="grid grid-cols-1 gap-2">
                 {product.features.map((feat) => (
-                  <div key={feat} className="flex items-start text-xs font-medium text-neutral-charcoal">
-                    <ShieldCheck size={18} className="text-primary mr-2 flex-shrink-0 mt-0.5" />
+                  <div key={feat} className="flex items-center text-xs font-semibold text-neutral-charcoal">
+                    <CheckCircle size={15} className="text-primary mr-2 flex-shrink-0" weight="fill" />
                     <span>{feat}</span>
                   </div>
                 ))}
               </div>
-            </div>
+            </div> */}
           </div>
 
-          {/* Quick CTA Button Scroll to Quote Form */}
-          <div className="pt-4 border-t border-neutral-200/60 flex flex-col sm:flex-row gap-4">
-            <a
-              href="#quote-form"
-              className="flex-1 py-4 bg-neutral-black text-white text-xs font-bold tracking-widest uppercase rounded-full hover:bg-primary transition-all duration-300 text-center shadow-md hover:shadow-lg"
+          {/* Action CTAs */}
+          <div className="pt-4 border-t border-neutral-200/60 flex flex-col sm:flex-row gap-3">
+            <button
+              type="button"
+              onClick={() => setIsQuoteModalOpen(true)}
+              className="flex-1 py-4 bg-neutral-black text-white text-xs font-bold tracking-widest uppercase rounded-full hover:bg-primary transition-all duration-300 text-center shadow-lg hover:shadow-xl cursor-pointer"
             >
-              Get Free Site Measure & Quote
-            </a>
+              {product.typeOptions && product.typeOptions.length > 0
+                ? "Get Free Site Measure & Quote"
+                : "Book Now for Free Quote"}
+            </button>
             <a
               href="tel:062621147"
-              className="px-6 py-4 bg-white text-neutral-black border border-neutral-200 text-xs font-bold tracking-wider uppercase rounded-full hover:bg-neutral-50 transition-all duration-300 text-center flex items-center justify-center gap-2"
+              className="px-6 py-4 bg-white text-neutral-black border border-neutral-200 text-xs font-bold tracking-wider uppercase rounded-full hover:bg-neutral-50 transition-all duration-300 text-center flex items-center justify-center gap-2 shadow-sm"
             >
-              <Phone size={16} className="text-primary" />
+              <Phone size={16} className="text-primary" weight="fill" />
               <span>06 262 1147</span>
             </a>
           </div>
-
         </div>
 
       </div>
 
+      {/* Key to Perfect Outdoor Living / Content Sections */}
+      {product.contentSections && product.contentSections.length > 0 && (() => {
+        const sections = product.contentSections;
+        const isOdd = sections.length % 2 !== 0;
+        const firstSection = isOdd ? sections[0] : null;
+        const gridSections = isOdd ? sections.slice(1) : sections;
+
+        return (
+          <div className="mb-20 space-y-12">
+            {/* Main Section Header */}
+            <div className="text-center max-w-3xl mx-auto">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-neutral-black leading-tight mb-4">
+                {product.name}: <span className="font-extrabold text-primary">Your Key to Perfect Outdoor Living</span>
+              </h2>
+              <p className="text-neutral-gray text-xs sm:text-sm leading-relaxed max-w-2xl mx-auto">
+                {sections[0].description}
+              </p>
+            </div>
+
+            {/* If odd count: First Card is Full Width */}
+            {isOdd && firstSection && (
+              <div className="bg-white rounded-3xl p-8 sm:p-12 border border-neutral-100 shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-hidden">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+                  {/* Left Column: Image */}
+                  <div className="lg:col-span-6 relative flex flex-col items-center justify-center">
+                    <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-neutral-50 p-4 border border-neutral-100/90 flex items-center justify-center">
+                      <Image
+                        src={firstSection.image || product.image}
+                        alt={`${firstSection.title} Structure`}
+                        fill
+                        className="object-contain p-4"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Right Column: Title & Description */}
+                  <div className="lg:col-span-6 space-y-4">
+                    {/* {firstSection.subtitle && (
+                      <span className="text-[10px] font-extrabold tracking-widest text-primary uppercase block">
+                        {firstSection.subtitle}
+                      </span>
+                    )} */}
+                    <h3 className="text-2xl sm:text-3xl font-extrabold text-neutral-black leading-tight">
+                      {firstSection.title}
+                    </h3>
+                    <p className="text-xs text-neutral-gray leading-relaxed whitespace-pre-line">
+                      {firstSection.description}
+                    </p>
+
+                    {firstSection.highlightBadges && firstSection.highlightBadges.length > 0 && (
+                      <div className="flex gap-2 flex-wrap pt-2">
+                        {firstSection.highlightBadges.map((badge) => (
+                          <span
+                            key={badge}
+                            className="px-3 py-1 bg-neutral-50 text-neutral-charcoal rounded-full text-[10px] font-bold border border-neutral-200/80"
+                          >
+                            ✓ {badge}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* 50/50 Grid for remaining cards (if odd) or all cards (if even) */}
+            {gridSections.length > 0 && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {gridSections.map((sec) => (
+                  <div
+                    key={sec.id}
+                    className="bg-white rounded-3xl p-8 border border-neutral-100 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
+                  >
+                    <div>
+                      {sec.image && (
+                        <div className="relative aspect-[16/10] rounded-2xl overflow-hidden mb-6 bg-neutral-50 p-3 border border-neutral-100/90 flex items-center justify-center">
+                          <Image src={sec.image} alt={sec.title} fill className="object-contain p-2" />
+                        </div>
+                      )}
+                      {/* {sec.subtitle && (
+                        <span className="text-[10px] font-extrabold tracking-widest text-primary uppercase block mb-1">
+                          {sec.subtitle}
+                        </span>
+                      )} */}
+                      <h3 className="text-xl sm:text-2xl font-extrabold text-neutral-black mb-3 leading-tight">
+                        {sec.title}
+                      </h3>
+                      <p className="text-xs text-neutral-gray leading-relaxed mb-4 whitespace-pre-line">
+                        {sec.description}
+                      </p>
+                    </div>
+
+                    {sec.highlightBadges && sec.highlightBadges.length > 0 && (
+                      <div className="flex gap-2 flex-wrap pt-4 border-t border-neutral-100">
+                        {sec.highlightBadges.map((badge) => (
+                          <span
+                            key={badge}
+                            className="px-3 py-1 bg-neutral-50 text-neutral-charcoal rounded-full text-[10px] font-bold border border-neutral-200/80"
+                          >
+                            ✓ {badge}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        );
+      })()}
+
+      {/* Lightbox Product Gallery Grid */}
+      <div className="mb-20">
+        <div className="text-center max-w-2xl mx-auto mb-10">
+          <span className="text-xs font-extrabold tracking-widest text-primary uppercase mb-2 block">
+            Installation Inspiration
+          </span>
+          <h2 className="text-3xl font-extrabold text-neutral-black">
+            Photo Gallery & Real Projects
+          </h2>
+          <p className="text-xs text-neutral-gray mt-2">
+            Click any image to expand full-screen view
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+          {galleryImages.map((img, idx) => (
+            <button
+              key={idx}
+              onClick={() => setLightboxImage(img)}
+              className="group relative aspect-[4/3] rounded-3xl overflow-hidden bg-neutral-100 border border-neutral-100 shadow-md hover:shadow-xl transition-all text-left"
+            >
+              <Image
+                src={img}
+                alt={`${product.name} project photo ${idx + 1}`}
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-700"
+              />
+              <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white gap-2 text-xs font-bold">
+                <MagnifyingGlassPlus size={24} />
+                <span>Expand View</span>
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Lightbox Full Screen Modal */}
+      <AnimatePresence>
+        {lightboxImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setLightboxImage(null)}
+            className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 cursor-pointer"
+          >
+            <button
+              onClick={() => setLightboxImage(null)}
+              className="absolute top-6 right-6 p-3 bg-white/10 text-white rounded-full hover:bg-white/20 transition-all"
+            >
+              <X size={24} weight="bold" />
+            </button>
+            <div className="relative max-w-5xl w-full max-h-[85vh] aspect-[16/10] rounded-3xl overflow-hidden shadow-2xl">
+              <Image
+                src={lightboxImage}
+                alt={`${product.name} zoomed gallery image`}
+                fill
+                className="object-contain"
+              />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Technical Specifications Section */}
       {product.specifications && Object.keys(product.specifications).length > 0 && (
-        <div className="mb-16 bg-white rounded-3xl p-8 sm:p-10 border border-neutral-100 shadow-md">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
-              <Sliders size={22} />
+        <div className="mb-20 bg-white rounded-3xl p-8 sm:p-12 border border-neutral-100 shadow-xl">
+          <div className="flex items-center gap-3 mb-8">
+            <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
+              <Sliders size={24} weight="bold" />
             </div>
             <div>
-              <h2 className="text-2xl font-extrabold text-neutral-black">Technical Specifications</h2>
-              <p className="text-xs text-neutral-gray">Engineered specifically for New Zealand wind zones & climate demands</p>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-neutral-black">Technical Specifications</h2>
+              <p className="text-xs text-neutral-gray">Comprehensive engineering parameters and material schedules</p>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {Object.entries(product.specifications).map(([key, value]) => (
-              <div key={key} className="flex justify-between items-center p-4 bg-cream-bg/60 rounded-2xl border border-neutral-100">
+              <div
+                key={key}
+                className="flex justify-between items-center p-4 bg-cream-bg/60 rounded-2xl border border-neutral-100/90 hover:border-primary/20 transition-colors"
+              >
                 <span className="text-xs font-bold text-neutral-charcoal">{key}</span>
-                <span className="text-xs font-semibold text-primary text-right">{value}</span>
+                <span className="text-xs font-extrabold text-primary text-right pl-4">{value}</span>
               </div>
             ))}
           </div>
         </div>
       )}
 
-      {/* Quote Enquiry Form Section */}
-      <div id="quote-form" className="mb-20 bg-neutral-black text-white rounded-3xl p-8 sm:p-12 shadow-2xl relative overflow-hidden">
-        <div className="max-w-2xl">
-          <span className="text-xs font-extrabold tracking-widest text-primary uppercase mb-2 block">
-            Direct Product Enquiry
-          </span>
-          <h2 className="text-3xl font-extrabold text-white mb-3">
-            Request a Free Measure & Quote for {product.name}
-          </h2>
-          <p className="text-xs text-neutral-300 leading-relaxed mb-8">
-            Our local installation specialists will consult on your site dimensions, structural requirements, and custom finishes with zero obligation.
-          </p>
+      {/* Optional Add-ons Feature Showcase Section (Tick badge indicates availability) */}
+      {product.optionalAddons && product.optionalAddons.length > 0 && (
+        <div className="mb-20 bg-neutral-900 text-white rounded-3xl p-8 sm:p-12 shadow-2xl relative overflow-hidden">
+          <div className="max-w-3xl mb-8">
+            <span className="text-xs font-extrabold tracking-widest text-primary uppercase mb-2 block">
+              Available Upgrades
+            </span>
+            <h2 className="text-3xl font-extrabold text-white">
+              Optional Upgrades & Add-ons
+            </h2>
+            <p className="text-xs text-neutral-300 mt-2">
+              Enhance your structure with any of these available custom features.
+            </p>
+          </div>
 
-          {submitted ? (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="bg-white/10 backdrop-blur-md border border-white/20 p-8 rounded-2xl text-center space-y-4"
-            >
-              <CheckCircle size={48} className="text-primary mx-auto" />
-              <h3 className="text-xl font-bold text-white">Thank You for Your Enquiry!</h3>
-              <p className="text-xs text-neutral-200">
-                We have received your quote request for the <strong>{product.name}</strong>. A local NZ specialist will get back to you within 24 hours.
-              </p>
-            </motion.div>
-          ) : (
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-wider text-neutral-400 mb-1.5">
-                    Your Name *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    placeholder="e.g. Sarah Jenkins"
-                    className="w-full px-4 py-3 bg-white/10 text-white placeholder-neutral-500 rounded-xl border border-white/15 focus:outline-none focus:border-primary text-xs"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-wider text-neutral-400 mb-1.5">
-                    Phone Number *
-                  </label>
-                  <input
-                    type="tel"
-                    required
-                    value={formData.phone}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    placeholder="e.g. 021 123 4567"
-                    className="w-full px-4 py-3 bg-white/10 text-white placeholder-neutral-500 rounded-xl border border-white/15 focus:outline-none focus:border-primary text-xs"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-wider text-neutral-400 mb-1.5">
-                    Email Address *
-                  </label>
-                  <input
-                    type="email"
-                    required
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    placeholder="e.g. sarah@example.co.nz"
-                    className="w-full px-4 py-3 bg-white/10 text-white placeholder-neutral-500 rounded-xl border border-white/15 focus:outline-none focus:border-primary text-xs"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-wider text-neutral-400 mb-1.5">
-                    Region Location
-                  </label>
-                  <select
-                    value={formData.region}
-                    onChange={(e) => setFormData({ ...formData, region: e.target.value })}
-                    className="w-full px-4 py-3 bg-neutral-900 text-white rounded-xl border border-white/15 focus:outline-none focus:border-primary text-xs"
-                  >
-                    <option value="Taranaki">Taranaki / New Plymouth</option>
-                    <option value="Auckland">Auckland</option>
-                    <option value="Waikato">Waikato / Hamilton</option>
-                    <option value="Bay of Plenty">Bay of Plenty / Tauranga</option>
-                    <option value="Manawatu">Manawatu / Whanganui</option>
-                    <option value="Wellington">Wellington & Lower North Island</option>
-                    <option value="South Island">South Island Region</option>
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-[10px] font-bold uppercase tracking-wider text-neutral-400 mb-1.5">
-                  Project Notes & Preferred Finish ({activeSwatch})
-                </label>
-                <textarea
-                  rows={3}
-                  value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  className="w-full px-4 py-3 bg-white/10 text-white placeholder-neutral-500 rounded-xl border border-white/15 focus:outline-none focus:border-primary text-xs"
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="w-full py-4 bg-primary text-white font-extrabold text-xs uppercase tracking-widest rounded-full hover:bg-primary/90 transition-all shadow-lg"
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+            {product.optionalAddons.map((addon) => (
+              <div
+                key={addon}
+                className="flex items-center gap-3 p-4 rounded-2xl bg-white/5 border border-white/10 text-white"
               >
-                Send Free Quote Request
-              </button>
-            </form>
-          )}
+                <CheckCircle size={20} className="text-primary flex-shrink-0" weight="fill" />
+                <span className="text-xs font-bold">{addon}</span>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
+
+      {/* 6-Step Installation Process Flow */}
+      {(product.installationSteps || []).length > 0 && (
+        <div className="mb-20">
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <span className="text-xs font-extrabold tracking-widest text-primary uppercase mb-2 block">
+              Seamless Project Execution
+            </span>
+            <h2 className="text-3xl font-extrabold text-neutral-black">
+              Our 6-Step Installation Process
+            </h2>
+            <p className="text-xs text-neutral-gray mt-2">
+              From initial enquiry to final structural sign-off
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {(product.installationSteps || []).map((item) => (
+              <div
+                key={item.step}
+                className="bg-white rounded-3xl p-6 border border-neutral-100 shadow-md relative flex flex-col justify-between"
+              >
+                <div>
+                  <div className="w-10 h-10 rounded-2xl bg-primary text-white font-extrabold text-sm flex items-center justify-center mb-4 shadow-md shadow-primary/20">
+                    0{item.step}
+                  </div>
+                  <h3 className="text-base font-extrabold text-neutral-black mb-2">{item.title}</h3>
+                  <p className="text-xs text-neutral-gray leading-relaxed">{item.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Engineered for Performance (6 Feature Cards) */}
+      {(product.performanceCards || []).length > 0 && (
+        <div className="mb-20 bg-cream-bg rounded-3xl p-8 sm:p-12 border border-neutral-200/60">
+          <div className="text-center max-w-2xl mx-auto mb-10">
+            <span className="text-xs font-extrabold tracking-widest text-primary uppercase mb-2 block">
+              Built for New Zealand Conditions
+            </span>
+            <h2 className="text-3xl font-extrabold text-neutral-black">
+              Engineered for Performance
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {(product.performanceCards || []).map((card) => {
+              const getIcon = (iconName: string) => {
+                switch (iconName) {
+                  case 'CloudRain':
+                    return <CloudRain size={22} weight="fill" />;
+                  case 'Buildings':
+                    return <Buildings size={22} weight="fill" />;
+                  case 'Ruler':
+                    return <Ruler size={22} weight="fill" />;
+                  case 'DeviceMobile':
+                    return <DeviceMobile size={22} weight="fill" />;
+                  case 'Drop':
+                    return <Drop size={22} weight="fill" />;
+                  case 'Headset':
+                    return <Headset size={22} weight="fill" />;
+                  default:
+                    return <ShieldCheck size={22} weight="fill" />;
+                }
+              };
+
+              return (
+                <div key={card.title} className="bg-white p-6 rounded-2xl border border-neutral-100 shadow-sm hover:shadow-md transition-shadow">
+                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary mb-3">
+                    {getIcon(card.icon)}
+                  </div>
+                  <h3 className="text-sm font-extrabold text-neutral-black mb-1.5">{card.title}</h3>
+                  <p className="text-xs text-neutral-gray leading-relaxed">{card.description}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* FAQ Accordion Section */}
+      {(product.faqs || []).length > 0 && (
+        <div className="mb-20 max-w-4xl mx-auto">
+          <div className="text-center mb-10">
+            <span className="text-xs font-extrabold tracking-widest text-primary uppercase mb-2 block">
+              Got Questions?
+            </span>
+            <h2 className="text-3xl font-extrabold text-neutral-black">
+              Frequently Asked Questions
+            </h2>
+          </div>
+
+          <div className="space-y-4">
+            {(product.faqs || []).map((faq, idx) => {
+              const isOpen = openFaqIndex === idx;
+              return (
+                <div
+                  key={idx}
+                  className="bg-white rounded-2xl border border-neutral-100 shadow-sm overflow-hidden"
+                >
+                  <button
+                    onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
+                    className="w-full p-6 text-left flex justify-between items-center gap-4 focus:outline-none"
+                  >
+                    <span className="text-sm font-extrabold text-neutral-black">{faq.question}</span>
+                    <CaretDown
+                      size={18}
+                      className={`text-primary transition-transform duration-300 flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`}
+                    />
+                  </button>
+                  <AnimatePresence>
+                    {isOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="px-6 pb-6 text-xs text-neutral-gray leading-relaxed border-t border-neutral-100/60 pt-4"
+                      >
+                        {faq.answer}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Quote Enquiry Form Overlay Modal */}
+      <AnimatePresence>
+        {isQuoteModalOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4"
+            onClick={() => setIsQuoteModalOpen(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.95, opacity: 0, y: 20 }}
+              transition={{ duration: 0.2 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-neutral-900 text-white rounded-3xl p-6 sm:p-10 max-w-2xl w-full max-h-[90vh] overflow-y-auto relative shadow-2xl border border-white/10"
+            >
+              {/* Close Modal Button */}
+              <button
+                onClick={() => setIsQuoteModalOpen(false)}
+                className="absolute top-5 right-5 p-2.5 bg-white/10 text-white rounded-full hover:bg-white/20 transition-all cursor-pointer"
+                aria-label="Close modal"
+              >
+                <X size={20} weight="bold" />
+              </button>
+
+              <div className="max-w-2xl">
+                <span className="text-[10px] font-extrabold tracking-widest text-primary uppercase mb-1.5 block">
+                  Free Site Measure & Quote
+                </span>
+                <h2 className="text-2xl sm:text-3xl font-extrabold text-white mb-2">
+                  Request a Free Measure & Quote for {product.name}
+                </h2>
+                <p className="text-xs text-neutral-300 leading-relaxed mb-6">
+                  Our local installation specialists will consult on your site dimensions, structural requirements, and custom finishes with zero obligation.
+                </p>
+
+                {submitted ? (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="bg-white/10 backdrop-blur-md border border-white/20 p-8 rounded-2xl text-center space-y-4 my-6"
+                  >
+                    <CheckCircle size={48} className="text-primary mx-auto" />
+                    <h3 className="text-xl font-bold text-white">Thank You for Your Enquiry!</h3>
+                    <p className="text-xs text-neutral-200">
+                      We have received your quote request for the <strong>{product.name}</strong> ({selectedSize}, {selectedType}, {selectedColor}). A local NZ specialist will get back to you within 24 hours.
+                    </p>
+                    <button
+                      onClick={() => setIsQuoteModalOpen(false)}
+                      className="px-6 py-2.5 bg-primary text-white text-xs font-bold rounded-full hover:bg-primary/90 transition-all mt-4 cursor-pointer"
+                    >
+                      Close Window
+                    </button>
+                  </motion.div>
+                ) : (
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-[10px] font-bold uppercase tracking-wider text-neutral-400 mb-1.5">
+                          Your Name *
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={formData.name}
+                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                          placeholder="e.g. Sarah Jenkins"
+                          className="w-full px-4 py-3 bg-white/10 text-white placeholder-neutral-500 rounded-xl border border-white/15 focus:outline-none focus:border-primary text-xs"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-[10px] font-bold uppercase tracking-wider text-neutral-400 mb-1.5">
+                          Phone Number *
+                        </label>
+                        <input
+                          type="tel"
+                          required
+                          value={formData.phone}
+                          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                          placeholder="e.g. 021 123 4567"
+                          className="w-full px-4 py-3 bg-white/10 text-white placeholder-neutral-500 rounded-xl border border-white/15 focus:outline-none focus:border-primary text-xs"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-[10px] font-bold uppercase tracking-wider text-neutral-400 mb-1.5">
+                          Email Address *
+                        </label>
+                        <input
+                          type="email"
+                          required
+                          value={formData.email}
+                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                          placeholder="e.g. sarah@example.co.nz"
+                          className="w-full px-4 py-3 bg-white/10 text-white placeholder-neutral-500 rounded-xl border border-white/15 focus:outline-none focus:border-primary text-xs"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-[10px] font-bold uppercase tracking-wider text-neutral-400 mb-1.5">
+                          Location / Active Region *
+                        </label>
+                        <select
+                          value={formData.region}
+                          onChange={(e) => setFormData({ ...formData, region: e.target.value })}
+                          className="w-full px-4 py-3 bg-neutral-900 text-white rounded-xl border border-white/15 focus:outline-none focus:border-primary text-xs"
+                        >
+                          {activeRegions.map((reg) => (
+                            <option key={reg} value={reg}>
+                              {reg}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-[10px] font-bold uppercase tracking-wider text-neutral-400 mb-1.5">
+                        Project Notes & Configuration Summary
+                      </label>
+                      <textarea
+                        rows={4}
+                        value={formData.message}
+                        onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                        className="w-full px-4 py-3 bg-white/10 text-white placeholder-neutral-500 rounded-xl border border-white/15 focus:outline-none focus:border-primary text-xs font-mono"
+                      />
+                    </div>
+
+                    <button
+                      type="submit"
+                      className="w-full py-4 bg-primary text-white font-extrabold text-xs uppercase tracking-widest rounded-full hover:bg-primary/90 transition-all shadow-lg cursor-pointer"
+                    >
+                      Send Free Quote Request
+                    </button>
+                  </form>
+                )}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Related Products Section */}
       {relatedProducts.length > 0 && (
