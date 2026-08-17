@@ -92,8 +92,8 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Bottom Bar: Full Width Brand Color Navigation Row */}
-        <div className="w-full bg-primary border-t border-primary-hover">
+        {/* Bottom Bar: Full Width Brand Color Navigation Row (Hidden on mobile as it's in drawer) */}
+        <div className="hidden sm:block w-full bg-primary border-t border-primary-hover">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <nav className="flex items-center justify-between overflow-x-auto py-2.5 scrollbar-none whitespace-nowrap gap-4 sm:gap-6 text-white text-sm font-medium">
               {categoryLinks.map((cat) => (
@@ -133,9 +133,9 @@ export default function Header() {
                 <Image
                   src="/logo-full.png"
                   alt="Cluster Logo"
-                  width={150}
-                  height={50}
-                  className="h-10 w-auto object-contain"
+                  width={200}
+                  height={80}
+                  className="h-14 w-auto object-contain"
                 />
                 <button
                   onClick={() => setMobileMenuOpen(false)}

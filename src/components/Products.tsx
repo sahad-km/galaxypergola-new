@@ -19,7 +19,7 @@ const categories = [
 
 export default function Products() {
   const [activeCategory, setActiveCategory] = useState('all');
-  
+
   // Track selected swatches per product by product ID
   const [selectedSwatches, setSelectedSwatches] = useState<Record<string, string>>({
     'apex-louvre': 'Matte Charcoal',
@@ -40,9 +40,9 @@ export default function Products() {
     : productsData.filter((p) => p.category === activeCategory);
 
   return (
-    <section id="products" className="py-24 bg-cream-bg/40 relative">
+    <section id="products" className="py-24 bg-cream-bg/100 relative">
       <div className="max-w-7xl mx-auto px-6">
-        
+
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
           <div className="max-w-xl">
@@ -63,11 +63,10 @@ export default function Products() {
               <button
                 key={cat.id}
                 onClick={() => setActiveCategory(cat.id)}
-                className={`px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 relative ${
-                  activeCategory === cat.id
+                className={`px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 relative ${activeCategory === cat.id
                     ? 'text-white'
                     : 'bg-white hover:bg-neutral-50 text-neutral-charcoal border border-neutral-200'
-                }`}
+                  }`}
               >
                 {activeCategory === cat.id && (
                   <motion.span
@@ -83,7 +82,7 @@ export default function Products() {
         </div>
 
         {/* Products Grid */}
-        <motion.div 
+        <motion.div
           layout
           className="grid grid-cols-1 md:grid-cols-2 gap-10"
         >
@@ -100,7 +99,7 @@ export default function Products() {
               >
                 {/* Product Image Area */}
                 <div className="relative aspect-[16/10] overflow-hidden group bg-neutral-100">
-                  
+
                   {/* Floating Weather Icon Badge */}
                   <div className="absolute top-4 left-4 z-10 flex gap-1.5 flex-wrap">
                     {product.tags.map((tag) => (
@@ -120,7 +119,7 @@ export default function Products() {
                     className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                     sizes="(max-w-768px) 100vw, 50vw"
                   />
-                  
+
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
                 </div>
 
@@ -165,11 +164,10 @@ export default function Products() {
                             <button
                               key={swatch.name}
                               onClick={() => handleSwatchSelect(product.id, swatch.name)}
-                              className={`w-6 h-6 rounded-full border transition-all duration-300 ${
-                                currentActive === swatch.name
+                              className={`w-6 h-6 rounded-full border transition-all duration-300 ${currentActive === swatch.name
                                   ? 'border-primary scale-110 shadow-sm'
                                   : 'border-neutral-200 hover:scale-105'
-                              }`}
+                                }`}
                               style={{ backgroundColor: swatch.hex }}
                               aria-label={`Select ${swatch.name} color swatch`}
                             />

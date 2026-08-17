@@ -1,12 +1,12 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { 
-  ChatCircleText, 
-  MapPin, 
-  PencilRuler, 
-  Receipt, 
-  Hammer, 
+import {
+  ChatCircleText,
+  MapPin,
+  PencilRuler,
+  Receipt,
+  Hammer,
   CheckCircle,
   CloudRain,
   Buildings,
@@ -43,9 +43,9 @@ const getPerformanceIcon = (iconName: string) => {
 
 export default function Process() {
   return (
-    <section id="process" className="py-24 bg-cream-bg/40 relative overflow-hidden">
+    <section id="process" className="py-24 bg-cream-bg/100 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
-        
+
         {/* Section 1: HOW IT WORKS - Installation Process */}
         <div className="mb-24">
           <div className="max-w-3xl mb-14">

@@ -6,32 +6,27 @@ import { ArrowDown } from '@phosphor-icons/react';
 
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
-  
-  // Connect scroll progression to Y offset for image parallax
+
+  // Connect scroll progression to opacity & content offset transforms
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end start'],
   });
 
-  // Background shifts 30% of the scroll speed downwards for a subtle depth effect
-  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
   // Overlay darkens slightly as user scrolls down
-  const overlayOpacity = useTransform(scrollYProgress, [0, 1], [0.4, 0.7]);
-  // Content fades out as user scrolls down
-  const contentY = useTransform(scrollYProgress, [0, 1], ['0px', '150px']);
+  const overlayOpacity = useTransform(scrollYProgress, [0, 1], [0.4, 0.8]);
+  // Content fades out and translates upwards as user scrolls
+  const contentY = useTransform(scrollYProgress, [0, 1], ['0px', '-100px']);
   const contentOpacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
 
   return (
     <section
       id="home"
       ref={containerRef}
-      className="relative w-full h-screen overflow-hidden flex items-center justify-center bg-neutral-black"
+      className="relative w-full h-screen bg-neutral-black"
     >
-      {/* Parallax Background Video */}
-      <motion.div
-        style={{ y: bgY }}
-        className="absolute inset-0 w-full h-[120%] z-0 pointer-events-none"
-      >
+      {/* Fixed Background Video: 100% stationary, does not scroll or move at all */}
+      <div className="fixed top-0 left-0 w-full h-screen z-0 pointer-events-none overflow-hidden">
         <video
           autoPlay
           loop
@@ -42,15 +37,14 @@ export default function Hero() {
         >
           <source src="/videos/hero-loop.mp4" type="video/mp4" />
         </video>
-      </motion.div>
+        {/* Animated Dark Overlay */}
+        <motion.div
+          style={{ opacity: overlayOpacity }}
+          className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/50 to-neutral-black/90 z-10 pointer-events-none"
+        />
+      </div>
 
-      {/* Animated Dark Overlay */}
-      <motion.div
-        style={{ opacity: overlayOpacity }}
-        className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/50 to-neutral-black/90 z-10 pointer-events-none"
-      />
-
-      {/* Hero Content */}
+      {/* Hero Content: Scrolls up naturally over the fixed video */}
       <motion.div
         style={{ y: contentY, opacity: contentOpacity }}
         className="relative z-20 max-w-5xl mx-auto px-6 text-center text-white flex flex-col items-center justify-center h-full pt-28 sm:pt-32"
@@ -107,7 +101,7 @@ export default function Hero() {
           className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer z-20"
         >
           <a href="#about" aria-label="Scroll down to About section" className="flex flex-col items-center">
-            <span className="text-xs uppercase tracking-widest text-neutral-400 font-semibold mb-1 opacity-70">
+            <span className="text-xs uppercase tracking-widest text-white-400 font-semibold mb-1 opacity-70">
               Discover More
             </span>
             <motion.div
