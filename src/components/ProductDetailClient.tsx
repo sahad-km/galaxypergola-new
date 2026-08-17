@@ -4,21 +4,21 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { 
-  ShieldCheck, 
-  CaretRight, 
-  Sparkle, 
-  ArrowLeft, 
-  Phone, 
-  Envelope, 
-  CheckCircle, 
-  Globe, 
+import {
+  ShieldCheck,
+  CaretRight,
+  Sparkle,
+  ArrowLeft,
+  Phone,
+  Envelope,
+  CheckCircle,
+  Globe,
   FileText,
   Sliders,
   Ruler,
   Wind
 } from '@phosphor-icons/react';
-import { ProductItem } from '@/data/siteData';
+import { ProductItem, getCategoryLabel } from '@/data/siteData';
 
 interface ProductDetailClientProps {
   product: ProductItem;
@@ -27,8 +27,8 @@ interface ProductDetailClientProps {
 
 export default function ProductDetailClient({ product, allProducts }: ProductDetailClientProps) {
   // Gallery active image state
-  const galleryImages = product.gallery && product.gallery.length > 0 
-    ? product.gallery 
+  const galleryImages = product.gallery && product.gallery.length > 0
+    ? product.gallery
     : [product.image];
   const [selectedImage, setSelectedImage] = useState(galleryImages[0]);
 
@@ -59,7 +59,7 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
     <div className="max-w-7xl mx-auto px-6">
 
       {/* Breadcrumb Navigation */}
-      <nav aria-label="Breadcrumb" className="flex items-center text-xs text-neutral-gray mb-8 gap-2">
+      <nav aria-label="Breadcrumb" className="flex items-center text-xs text-neutral-gray mb-8 gap-2 flex-wrap">
         <Link href="/" className="hover:text-primary transition-colors">
           Home
         </Link>
@@ -68,23 +68,34 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
           Products
         </Link>
         <CaretRight size={12} className="text-neutral-400" />
-        <span className="font-bold text-neutral-black capitalize">{product.name}</span>
+        {product.category && (
+          <>
+            <Link
+              href={`/products?category=${product.category}`}
+              className="hover:text-primary transition-colors font-medium"
+            >
+              {getCategoryLabel(product.category)}
+            </Link>
+            <CaretRight size={12} className="text-neutral-400" />
+          </>
+        )}
+        <span className="font-bold text-neutral-black">{product.name}</span>
       </nav>
 
       {/* Back to Products Link */}
       <div className="mb-8">
         <Link
-          href="/products"
+          href={product.category ? `/products?category=${product.category}` : '/products'}
           className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-neutral-charcoal hover:text-primary transition-colors"
         >
           <ArrowLeft size={16} />
-          <span>Back to All Products</span>
+          <span>Back to {product.category ? getCategoryLabel(product.category) : 'All Products'}</span>
         </Link>
       </div>
 
       {/* Product Hero Section (Image & Overview) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-16">
-        
+
         {/* Left Column: Gallery & Images */}
         <div className="lg:col-span-7 space-y-4">
           <div className="relative aspect-[16/10] bg-white rounded-3xl overflow-hidden shadow-xl border border-neutral-100/90">
@@ -117,11 +128,10 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
                 <button
                   key={idx}
                   onClick={() => setSelectedImage(img)}
-                  className={`relative w-24 h-20 rounded-2xl overflow-hidden border-2 transition-all flex-shrink-0 ${
-                    selectedImage === img
-                      ? 'border-primary scale-105 shadow-md'
-                      : 'border-transparent opacity-70 hover:opacity-100'
-                  }`}
+                  className={`relative w-24 h-20 rounded-2xl overflow-hidden border-2 transition-all flex-shrink-0 ${selectedImage === img
+                    ? 'border-primary shadow-md'
+                    : 'border-transparent opacity-70 hover:opacity-100'
+                    }`}
                 >
                   <Image src={img} alt={`${product.name} view ${idx + 1}`} fill className="object-cover" />
                 </button>
@@ -135,19 +145,8 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
           <div>
             <div className="flex items-center gap-3 mb-3">
               <span className="text-[10px] font-extrabold tracking-widest text-primary bg-primary-cream px-3 py-1 rounded-full uppercase">
-                {product.category}
+                {getCategoryLabel(product.category)}
               </span>
-              {product.sourceUrl && (
-                <a
-                  href={product.sourceUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-[10px] font-bold text-neutral-400 hover:text-primary transition-colors"
-                >
-                  <Globe size={12} />
-                  <span>Reference Specs</span>
-                </a>
-              )}
             </div>
 
             <h1 className="text-3xl sm:text-4xl font-extrabold text-neutral-black leading-tight mb-3">
@@ -175,11 +174,10 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
                     <button
                       key={swatch.name}
                       onClick={() => setActiveSwatch(swatch.name)}
-                      className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-semibold transition-all ${
-                        activeSwatch === swatch.name
+                      className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-semibold transition-all ${activeSwatch === swatch.name
                           ? 'border-primary bg-primary/5 text-neutral-black shadow-sm'
                           : 'border-neutral-200 bg-neutral-50 text-neutral-600 hover:bg-neutral-100'
-                      }`}
+                        }`}
                     >
                       <span
                         className="w-4 h-4 rounded-full border border-black/10 flex-shrink-0"

@@ -13,13 +13,13 @@ const topPills = [
 ];
 
 const categoryLinks = [
-  { name: 'Louvre', href: '/products/deluxe-louvre' },
-  { name: 'Pergola', href: '/products/pergo-vue' },
-  { name: 'Canopy', href: '/products/straight-canopy' },
-  { name: 'Outdoor Blinds', href: '/products/ziptrak-blinds' },
-  { name: 'Carport', href: '/products/arch-carport' },
-  { name: 'Outdoor Shutter', href: '/products/outdoor-shutter' },
-  { name: 'Sunroom', href: '/products/sunroom' },
+  { name: 'Louvre', href: '/products?category=louvre' },
+  { name: 'Pergola', href: '/products?category=pergola' },
+  { name: 'Canopy', href: '/products?category=canopy' },
+  { name: 'Outdoor Blinds', href: '/products?category=blinds' },
+  { name: 'Carport', href: '/products?category=carport' },
+  { name: 'Outdoor Shutter', href: '/products?category=shutter' },
+  { name: 'Sunroom', href: '/products?category=sunroom' },
 ];
 
 export default function Header() {
@@ -173,14 +173,14 @@ export default function Header() {
                 <p className="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-4">Product Categories</p>
                 <nav className="flex flex-col space-y-3">
                   {categoryLinks.map((link) => (
-                    <a
+                    <Link
                       key={link.name}
                       href={link.href}
                       onClick={() => setMobileMenuOpen(false)}
                       className="text-base font-semibold text-neutral-800 hover:text-primary transition-colors"
                     >
                       {link.name}
-                    </a>
+                    </Link>
                   ))}
                 </nav>
               </div>

@@ -47,7 +47,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
   return (
     <div className="flex flex-col min-h-screen bg-cream-bg">
       <Header />
-      <main className="flex-grow pt-24 pb-20">
+      <main className="flex-grow pt-42 pb-20">
         <ProductDetailClient product={product} allProducts={productsData} />
       </main>
       <Footer />

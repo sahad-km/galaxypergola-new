@@ -30,6 +30,21 @@ export interface ProductItem {
   sourceUrl?: string;
 }
 
+export const categoryLabels: Record<string, string> = {
+  louvre: 'Louvre',
+  pergola: 'Pergola',
+  canopy: 'Canopy',
+  blinds: 'Outdoor Blinds',
+  carport: 'Carport',
+  shutter: 'Outdoor Shutter',
+  sunroom: 'Sunroom',
+};
+
+export function getCategoryLabel(category: string): string {
+  if (!category) return '';
+  return categoryLabels[category.toLowerCase()] || (category.charAt(0).toUpperCase() + category.slice(1));
+}
+
 export interface ProcessItem {
   step: string;
   title: string;
