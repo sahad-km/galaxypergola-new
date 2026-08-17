@@ -10,13 +10,13 @@ import {
 import { contactDetailsData } from '@/data/siteData';
 
 const footerNavLinks = [
-  { name: 'Home', href: '#home' },
-  { name: 'About Us', href: '#about' },
-  { name: 'Services', href: '#services' },
-  { name: 'Products', href: '#products' },
-  { name: 'Our Process', href: '#process' },
-  { name: 'Testimonials', href: '#testimonials' },
-  { name: 'Contact Us', href: '#contact' },
+  { name: 'Home', href: '/' },
+  { name: 'About Us', href: '/#about' },
+  { name: 'Services', href: '/#services' },
+  { name: 'Products Catalog', href: '/products' },
+  { name: 'Our Process', href: '/#process' },
+  { name: 'Testimonials', href: '/#testimonials' },
+  { name: 'Contact Us', href: '/#contact' },
 ];
 
 export default function Footer() {

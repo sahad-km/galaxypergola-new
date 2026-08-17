@@ -2,8 +2,9 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Shield, Sparkle, Wind, Sun } from '@phosphor-icons/react';
+import { Shield, ArrowRight } from '@phosphor-icons/react';
 import { productsData } from '@/data/siteData';
 
 const categories = [
@@ -127,8 +128,10 @@ export default function Products() {
                 <div className="p-8 flex-1 flex flex-col justify-between">
                   <div>
                     <div className="flex justify-between items-start mb-4 gap-4">
-                      <h3 className="text-2xl font-extrabold text-neutral-black">
-                        {product.name}
+                      <h3 className="text-2xl font-extrabold text-neutral-black hover:text-primary transition-colors">
+                        <Link href={`/products/${product.id}`}>
+                          {product.name}
+                        </Link>
                       </h3>
                       <span className="text-[10px] font-extrabold tracking-widest text-primary bg-primary-cream px-3 py-1 rounded-full uppercase">
                         {product.category}
@@ -176,13 +179,22 @@ export default function Products() {
                       </div>
                     </div>
 
-                    {/* CTA Button */}
-                    <a
-                      href="#contact"
-                      className="px-6 py-3 bg-neutral-black text-white text-xs font-bold tracking-wider uppercase rounded-full hover:bg-primary transition-all duration-300 text-center"
-                    >
-                      Get Quote Info
-                    </a>
+                    {/* CTA Buttons */}
+                    <div className="flex items-center gap-2">
+                      <Link
+                        href={`/products/${product.id}`}
+                        className="px-5 py-3 bg-neutral-black text-white text-xs font-bold tracking-wider uppercase rounded-full hover:bg-primary transition-all duration-300 text-center flex items-center gap-1.5"
+                      >
+                        <span>View Details</span>
+                        <ArrowRight size={14} />
+                      </Link>
+                      <a
+                        href="#contact"
+                        className="px-4 py-3 bg-neutral-100 text-neutral-charcoal text-xs font-bold tracking-wider uppercase rounded-full hover:bg-neutral-200 transition-all duration-300 text-center"
+                      >
+                        Quote
+                      </a>
+                    </div>
                   </div>
                 </div>
 

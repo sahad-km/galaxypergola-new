@@ -2,23 +2,24 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { List, X, Phone, EnvelopeSimple } from '@phosphor-icons/react';
 
 const topPills = [
-  { name: 'About', href: '#about' },
-  { name: 'Contact', href: '#contact' },
-  { name: 'Compare Louver', href: '#products' },
+  { name: 'About', href: '/#about' },
+  { name: 'Contact', href: '/#contact' },
+  { name: 'All Products', href: '/products' },
 ];
 
 const categoryLinks = [
-  { name: 'Louvre', href: '#products' },
-  { name: 'Pergola', href: '#products' },
-  { name: 'Canopy', href: '#products' },
-  { name: 'Outdoor Blinds', href: '#products' },
-  { name: 'Carport', href: '#products' },
-  { name: 'Outdoor Shutter', href: '#products' },
-  { name: 'Sunroom', href: '#products' },
+  { name: 'Louvre', href: '/products/deluxe-louvre' },
+  { name: 'Pergola', href: '/products/pergo-vue' },
+  { name: 'Canopy', href: '/products/straight-canopy' },
+  { name: 'Outdoor Blinds', href: '/products/ziptrak-blinds' },
+  { name: 'Carport', href: '/products/arch-carport' },
+  { name: 'Outdoor Shutter', href: '/products/outdoor-shutter' },
+  { name: 'Sunroom', href: '/products/sunroom' },
 ];
 
 export default function Header() {
@@ -30,7 +31,7 @@ export default function Header() {
         {/* Top Bar: Logo & Pill Action Buttons */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
           {/* Logo */}
-          <a href="#home" className="flex items-center outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-md">
+          <Link href="/" className="flex items-center outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-md">
             <Image
               src="/logo-full.png"
               alt="Cluster Outdoor Solutions Logo"
@@ -39,7 +40,7 @@ export default function Header() {
               className="h-12 sm:h-14 md:h-16 w-auto object-contain transition-transform duration-200 hover:scale-102"
               priority
             />
-          </a>
+          </Link>
 
           {/* Desktop Right Pill Actions */}
           <div className="hidden lg:flex items-center space-x-2.5">
@@ -97,13 +98,13 @@ export default function Header() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <nav className="flex items-center justify-between overflow-x-auto py-2.5 scrollbar-none whitespace-nowrap gap-4 sm:gap-6 text-white text-sm font-medium">
               {categoryLinks.map((cat) => (
-                <a
+                <Link
                   key={cat.name}
                   href={cat.href}
                   className="hover:opacity-85 transition-opacity duration-150 px-1 py-0.5"
                 >
                   {cat.name}
-                </a>
+                </Link>
               ))}
             </nav>
           </div>
