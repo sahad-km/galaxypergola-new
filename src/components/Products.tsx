@@ -8,10 +8,13 @@ import { productsData } from '@/data/siteData';
 
 const categories = [
   { id: 'all', name: 'All Products' },
-  { id: 'pergolas', name: 'Louvre Pergolas' },
-  { id: 'canopies', name: 'Fixed Canopies' },
-  { id: 'blinds', name: 'Comfort Blinds' },
-  { id: 'carports', name: 'Carports' },
+  { id: 'louvre', name: 'Louvre' },
+  { id: 'pergola', name: 'Pergola' },
+  { id: 'canopy', name: 'Canopy' },
+  { id: 'blinds', name: 'Outdoor Blinds' },
+  { id: 'carport', name: 'Carport' },
+  { id: 'shutter', name: 'Outdoor Shutter' },
+  { id: 'sunroom', name: 'Sunroom' },
 ];
 
 export default function Products() {
@@ -153,22 +156,25 @@ export default function Products() {
                     {/* Swatches selector */}
                     <div>
                       <span className="text-[10px] font-bold uppercase tracking-widest text-neutral-400 block mb-2">
-                        Finish: <span className="text-neutral-charcoal">{selectedSwatches[product.id]}</span>
+                        Finish: <span className="text-neutral-charcoal">{selectedSwatches[product.id] || product.swatches[0]?.name}</span>
                       </span>
                       <div className="flex gap-2">
-                        {product.swatches.map((swatch) => (
-                          <button
-                            key={swatch.name}
-                            onClick={() => handleSwatchSelect(product.id, swatch.name)}
-                            className={`w-6 h-6 rounded-full border transition-all duration-300 ${
-                              selectedSwatches[product.id] === swatch.name
-                                ? 'border-primary scale-110 shadow-sm'
-                                : 'border-neutral-200 hover:scale-105'
-                            }`}
-                            style={{ backgroundColor: swatch.hex }}
-                            aria-label={`Select ${swatch.name} color swatch`}
-                          />
-                        ))}
+                        {product.swatches.map((swatch) => {
+                          const currentActive = selectedSwatches[product.id] || product.swatches[0]?.name;
+                          return (
+                            <button
+                              key={swatch.name}
+                              onClick={() => handleSwatchSelect(product.id, swatch.name)}
+                              className={`w-6 h-6 rounded-full border transition-all duration-300 ${
+                                currentActive === swatch.name
+                                  ? 'border-primary scale-110 shadow-sm'
+                                  : 'border-neutral-200 hover:scale-105'
+                              }`}
+                              style={{ backgroundColor: swatch.hex }}
+                              aria-label={`Select ${swatch.name} color swatch`}
+                            />
+                          );
+                        })}
                       </div>
                     </div>
 

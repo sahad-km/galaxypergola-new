@@ -8,7 +8,8 @@ import {
   Car, 
   Sliders, 
   Compass, 
-  Wrench, 
+  Wrench,
+  House, 
   ArrowRight,
   Drop,
   Sparkle
@@ -24,6 +25,7 @@ const getServiceIcon = (iconName: string) => {
     case 'Sliders': return <Sliders size={32} weight="duotone" className="text-primary" />;
     case 'Compass': return <Compass size={32} weight="duotone" className="text-primary" />;
     case 'Wrench': return <Wrench size={32} weight="duotone" className="text-primary" />;
+    case 'House': return <House size={32} weight="duotone" className="text-primary" />;
     default: return <Sun size={32} weight="duotone" className="text-primary" />;
   }
 };

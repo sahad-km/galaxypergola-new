@@ -2,18 +2,24 @@
 
 :root {
   /* Brand Color Palette */
-  --color-primary: #865A33;
+  /* --color-primary: #865A33;
   --color-primary-hover: #6E4928;
   --color-primary-light: #C29A72;
-  --color-primary-cream: #F5EFEB;
-  
+  --color-primary-cream: #F5EFEB; */
+
+  --color-primary: #334155;
+  --color-primary-hover: #1E293B;
+  --color-primary-light: #64748B;
+  --color-primary-cream: #F1F5F9;
+
+
   /* Neutrals */
   --color-neutral-white: #ffffff;
   --color-neutral-cream: #F7F5F2;
   --color-neutral-gray: #706F6C;
   --color-neutral-charcoal: #1D1C1B;
   --color-neutral-black: #0F0E0D;
-  
+
   /* Semantic Variables */
   --background: var(--color-neutral-white);
   --foreground: var(--color-neutral-charcoal);
@@ -26,22 +32,22 @@
   --color-primary-hover: var(--color-primary-hover);
   --color-primary-light: var(--color-primary-light);
   --color-primary-cream: var(--color-primary-cream);
-  
+
   --color-cream-bg: var(--color-neutral-cream);
   --color-charcoal: var(--color-neutral-charcoal);
   --color-off-black: var(--color-neutral-black);
-  
+
   /* Neutral Color Palette mapping for Tailwind v4 utility classes */
   --color-neutral-black: var(--color-neutral-black);
   --color-neutral-charcoal: var(--color-neutral-charcoal);
   --color-neutral-gray: var(--color-neutral-gray);
   --color-neutral-cream: var(--color-neutral-cream);
   --color-neutral-white: var(--color-neutral-white);
-  
+
   /* Typography */
   --font-sans: var(--font-inter), system-ui, -apple-system, sans-serif;
   --font-display: var(--font-outfit), sans-serif;
-  
+
   /* Custom Animations */
   --animate-fade-in-up: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   --animate-pulse-slow: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
@@ -52,6 +58,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -60,7 +67,8 @@
 
 /* Base resets & layouts */
 html {
-  scroll-behavior: auto; /* Disabled for Lenis to handle smoothly */
+  scroll-behavior: auto;
+  /* Disabled for Lenis to handle smoothly */
 }
 
 body {
@@ -70,7 +78,12 @@ body {
   overflow-x: hidden;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-display);
   font-weight: 700;
   letter-spacing: -0.02em;

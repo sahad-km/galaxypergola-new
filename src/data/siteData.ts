@@ -32,6 +32,13 @@ export interface ProcessItem {
   icon: string; // Phosphor icon key name
 }
 
+export interface PerformanceItem {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+}
+
 export interface TestimonialItem {
   id: string;
   name: string;
@@ -52,32 +59,32 @@ export interface ContactDetails {
 export const statsData: StatItem[] = [
   {
     id: "years",
-    value: 15,
+    value: 10,
     suffix: "+",
     label: "Years of Craftsmanship",
     description: "Designing weather-resistant structures for NZ environments.",
   },
   {
     id: "projects",
-    value: 2500,
+    value: 1000,
     suffix: "+",
     label: "Projects Completed",
     description: "Custom pergolas, canopies, and blinds installed nationwide.",
   },
-  {
-    id: "satisfaction",
-    value: 100,
-    suffix: "%",
-    label: "Kiwi Owned & Operated",
-    description: "Engineered locally for local wind zones and climate demands.",
-  },
-  {
-    id: "warranty",
-    value: 10,
-    suffix: "-Year",
-    label: "Structural Warranty",
-    description: "Backed by premium marine-grade aluminium and master building standards.",
-  },
+  // {
+  //   id: "satisfaction",
+  //   value: 100,
+  //   suffix: "%",
+  //   label: "Kiwi Owned & Operated",
+  //   description: "Engineered locally for local wind zones and climate demands.",
+  // },
+  // {
+  //   id: "warranty",
+  //   value: 10,
+  //   suffix: "-Year",
+  //   label: "Structural Warranty",
+  //   description: "Backed by premium marine-grade aluminium and master building standards.",
+  // },
 ];
 
 export const servicesData: ServiceItem[] = [
@@ -93,7 +100,7 @@ export const servicesData: ServiceItem[] = [
     title: "Architectural Canopies",
     description: "Fixed roof structures featuring polycarbonate or glass infills to let light in while keeping the elements out.",
     icon: "CloudRain",
-    features: ["99% UV filtering", "Impact resistant roofs", "Auckland to Queenstown ratings", "Seamless wall attaches"],
+    features: ["99% UV filtering", "Impact resistant roofs", "NZ weather rated", "Seamless wall attaches"],
   },
   {
     id: "carports",
@@ -117,118 +124,371 @@ export const servicesData: ServiceItem[] = [
     features: ["3D rendering previews", "Council approval support", "Custom span engineering", "Precision site measures"],
   },
   {
-    id: "maintenance",
-    title: "Care & Maintenance",
-    description: "Professional cleaning, powder-coat restoration, electrical diagnostics, and motor tuning for existing installations.",
-    icon: "Wrench",
-    features: ["Annual safety checks", "Motor synchronization", "Powder-coat cleaning", "Gutter clearing"],
+    id: "sunrooms",
+    title: "All-Weather Sunrooms",
+    description: "Fully enclosed glass & insulated outdoor rooms for 365-day seamless indoor-outdoor living.",
+    icon: "House",
+    features: ["Double-glazed doors", "Thermal roof panels", "100% weather-sealed", "Integrated lighting & power"],
   },
 ];
 
 export const productsData: ProductItem[] = [
   {
-    id: "apex-louvre",
-    name: "Apex Louvre Pergola",
-    category: "pergolas",
-    description: "Our signature motorized louvre roof system. With the press of a button, adjust the double-walled blades for complete sunlight control or full rain shelter. Features smart wind and rain sensors that close the louvres automatically when it starts to drizzle.",
+    id: "deluxe-louvre",
+    name: "Deluxe Louvre",
+    category: "louvre",
+    description: "Premium Comfort for Outdoor Living. Remote Control, Motorised Blades. Dual-Tone LED Ambience.",
     features: [
-      "Double-walled structural louvres",
-      "Hidden internal post drainage",
-      "Smart rain sensors & motorization",
-      "Dimmable built-in LED lighting",
+      "Remote control operation",
+      "Motorised blades",
+      "Dual-tone LED ambience",
+      "Hidden internal drainage",
     ],
     swatches: [
       { name: "Matte Charcoal", hex: "#2D2E30" },
       { name: "Slate Gray", hex: "#5A5D64" },
-      { name: "Bronze Bronze", hex: "#4D3F37" },
+      { name: "Bronze", hex: "#4D3F37" },
       { name: "Arctic White", hex: "#F3F4F6" },
     ],
     image: "/images/product-louvre.png",
-    tags: ["Motorized", "Best Seller", "Smart Home Ready", "AS/NZS Tested"],
+    tags: ["Motorised", "Deluxe Series", "Dual-Tone LEDs"],
   },
   {
-    id: "horizon-canopy",
-    name: "Horizon Fixed Canopy",
-    category: "canopies",
-    description: "An elegant, architectural fixed roof shelter that utilizes multi-wall polycarbonate or laminated safety glass. Perfect for commercial venues or homes wanting 24/7 patio usage without sacrificing natural light. Tested to withstand NZ's highest snow loads.",
+    id: "classic-louvre",
+    name: "Classic Louvre",
+    category: "louvre",
+    description: "Timeless Outdoor Comfort. Motorised Control with Warm & Cool Blade LEDs. Built for Every Season.",
     features: [
-      "99% UV block with heat reduction layers",
-      "Corrosion-free T6 grade aluminium",
-      "Integrated structural gutters",
-      "Supports side blind integrations",
+      "Motorised control",
+      "Warm & cool blade LEDs",
+      "Built for every season",
+      "Marine-grade aluminium",
+    ],
+    swatches: [
+      { name: "Matte Charcoal", hex: "#2D2E30" },
+      { name: "Slate Gray", hex: "#5A5D64" },
+      { name: "Arctic White", hex: "#F3F4F6" },
+    ],
+    image: "/images/product-louvre.png",
+    tags: ["Classic Series", "Warm/Cool LEDs", "All-Season"],
+  },
+  {
+    id: "pergo-vue",
+    name: "Pergo Vue Pergola",
+    category: "pergola",
+    description: "Panoramic glass and open-frame roof system delivering unobstructed natural sky views while maintaining 100% weather protection.",
+    features: [
+      "Panoramic sky views",
+      "Slimline post profiles",
+      "Integrated drainage",
+      "99% UV filtering",
     ],
     swatches: [
       { name: "Matte Charcoal", hex: "#2D2E30" },
       { name: "Sandstone", hex: "#C8BCA6" },
       { name: "Arctic White", hex: "#F3F4F6" },
     ],
+    image: "/images/product-louvre.png",
+    tags: ["Pergo Vue", "Panoramic Sky", "High Light"],
+  },
+  // {
+  //   id: "straight-pergola",
+  //   name: "Straight Pergola",
+  //   category: "pergola",
+  //   description: "Straight Pergola is a contemporary design providing a stunning extension for your patio, backyard, front of house, or balcony. Features a 7-degree slope angle, micro powder coated frames, and 2mm 99% UV protected poly-carbonate roofing.",
+  //   features: [
+  //     "7-degree slope angle",
+  //     "Micro powder coated frame",
+  //     "2mm poly-carbonate roofing",
+  //     "99% UV protected",
+  //   ],
+  //   swatches: [
+  //     { name: "Matte Charcoal", hex: "#2D2E30" },
+  //     { name: "Slate Gray", hex: "#5A5D64" },
+  //     { name: "Arctic White", hex: "#F3F4F6" },
+  //   ],
+  //   image: "/images/product-louvre.png",
+  //   tags: ["Straight Pergola", "7° Slope", "UV Protected"],
+  // },
+  // {
+  //   id: "curved-pergola",
+  //   name: "Curved Pergola",
+  //   category: "pergola",
+  //   description: "Curved Pergola provides a multi-functional role with an amazing curved finish. Mounted against the wall of the property with a curved angle at the end that blocks water and sun rays coming through in various weather conditions.",
+  //   features: [
+  //     "Curved water-blocking end",
+  //     "Wall mounted structure",
+  //     "Micro powder coated frame",
+  //     "2mm poly-carbonate roofing",
+  //   ],
+  //   swatches: [
+  //     { name: "Matte Charcoal", hex: "#2D2E30" },
+  //     { name: "Arctic White", hex: "#F3F4F6" },
+  //   ],
+  //   image: "/images/product-louvre.png",
+  //   tags: ["Curved Pergola", "Water Blocking", "Wall Mounted"],
+  // },
+
+  {
+    id: "straight-canopy",
+    name: "Straight Canopy",
+    category: "canopy",
+    description: "Straight Canopy is a contemporary design which provides a stunning extension for your outdoor space. This model Pergola is a perfect outdoor extension for your Patio, Backyard, Front of the house, Balcony. The perfect 7 degree angle of slope gives the Pergola an amazing finish. Use our beautiful straight pergola as shelter near the pool, barbecue area, and you can convert your patio into a sunroom with outdoor blinds. Frames are micro powder coated, and are available in different colors to match your property. Poly-carbonate sheet is used for roofing which is 2mm in thickness and is 99% UV protected.",
+    features: [
+      "Door & window protection",
+      "99.9% UV protected",
+      "2mm poly-carbonate roofing",
+      "Straight & curved options",
+    ],
+    swatches: [
+      { name: "Matte Charcoal", hex: "#2D2E30" },
+      { name: "Arctic White", hex: "#F3F4F6" },
+    ],
     image: "/images/product-canopy.png",
-    tags: ["High Light", "Snow Rated", "Zero Maintenance"],
+    tags: ["Window Guard", "99.9% UV Block", "Sun & Hail Protection"],
+  },
+
+  {
+    id: "curved-canopy",
+    name: "Curved Canopy",
+    category: "canopy",
+    description: "Curved Canopy is one of the most popular product in the market. The curved structure provides a multi functional role, as it provides an amazing finish for the product. The curved end blocks the water and sun rays coming through. It also provides a designer space to allow outdoor areas to be used all year around and can be customized according to the needs and design. Curved Pergola is mounted against the wall of the property with a curved angle at the end, which is stylish and will let you use your outdoor space in various weather conditions. Frames are micro powder coated, and are available in different colours to match your property. Poly-carbonate sheet is used for roofing which is 2mm in thickness.",
+    features: [
+      "Door & window protection",
+      "99.9% UV protected",
+      "2mm poly-carbonate roofing",
+      "Straight & curved options",
+    ],
+    swatches: [
+      { name: "Matte Charcoal", hex: "#2D2E30" },
+      { name: "Arctic White", hex: "#F3F4F6" },
+    ],
+    image: "/images/product-canopy.png",
+    tags: ["Window Guard", "99.9% UV Block", "Sun & Hail Protection"],
+  },
+  {
+    id: "window-canopy",
+    name: "Window Canopy",
+    category: "canopy",
+    description: "Window and door Canopy made of durable polycarbonate sheet and aluminum alloy material, functionality design is easy to install. Modern and simple appearance makes it perfect to match your home and outdoor decor, protect your doors and windows from the sun, rain and harmful UV rays. Window Pergola is the Perfect extension for your doors and window which gives protection for sun ,hail and wind. We got 2 designs of Window /Door Pergola , the curved at the end design and a straight design. Different varieties of color options are available to match your property. 2mm thickness poly-carbonate for the roofing which is 99.9% UV protected.",
+    features: [
+      "Door & window protection",
+      "99.9% UV protected",
+      "2mm poly-carbonate roofing",
+      "Straight & curved options",
+    ],
+    swatches: [
+      { name: "Matte Charcoal", hex: "#2D2E30" },
+      { name: "Arctic White", hex: "#F3F4F6" },
+    ],
+    image: "/images/product-canopy.png",
+    tags: ["Window Guard", "99.9% UV Block", "Sun & Hail Protection"],
   },
   {
     id: "ziptrak-blinds",
-    name: "Ziptrak Comfort Blinds",
+    name: "Ziptrak Outdoor Blinds",
     category: "blinds",
-    description: "Track-guided blind system that locks into custom side tracks. Eliminates flapping mesh, gaps, and traditional cords or cranks. Glides up and down smoothly and can be left at any height. Offers complete shelter from harsh Canterbury winds or coastal gales.",
+    description: "Patented track-guided outdoor blind system locking into side channels. Eliminates flapping mesh, gaps, and cumbersome ropes.",
     features: [
-      "Patented splash-proof track seal",
-      "Premium mesh or transparent Japanese PVC",
+      "Track-guided guidance",
+      "Zero gap side seal",
+      "Marine PVC or mesh",
       "Instant lock bottom bar",
-      "Complete insect and UV barrier",
     ],
     swatches: [
       { name: "Charcoal Mesh", hex: "#1A1A1A" },
       { name: "Stone Mesh", hex: "#8C8C8C" },
-      { name: "Cream Sunscreen", hex: "#E6E6D8" },
       { name: "Clear PVC", hex: "#FFFFFF" },
     ],
     image: "/images/product-blinds.png",
-    tags: ["Wind Resistant", "No Gaps", "Manual/Motorized"],
+    tags: ["Ziptrak System", "Zero Gap", "Wind Resistant"],
   },
   {
-    id: "metro-carport",
-    name: "Metro Cantilever Carport",
-    category: "carports",
-    description: "A minimalist vehicle cover featuring heavy-duty structural steel pillars on one side, keeping the other side open for effortless parking. Ideal for tight driveways or architectural properties looking for a high-end alternative to a traditional garage.",
+    id: "easychannel-blinds",
+    name: "EasyChannel Outdoor Blind",
+    category: "blinds",
+    description: "Canopy-Tech EasyChannel system offering smooth vertical guidance for patio and deck weather enclosures.",
     features: [
-      "Cantilever design maximizes space",
-      "150km/h wind speed certification",
-      "Anti-condensation structural ceiling",
-      "Polycarbonate panels block hail & UV",
+      "Precision side channels",
+      "Smooth spring tension",
+      "Heavy sunscreen mesh",
+      "Weather stripping seal",
+    ],
+    swatches: [
+      { name: "Charcoal Mesh", hex: "#1A1A1A" },
+      { name: "Stone Mesh", hex: "#8C8C8C" },
+    ],
+    image: "/images/product-blinds.png",
+    tags: ["EasyChannel", "Canopy-Tech", "Weather Seal"],
+  },
+  {
+    id: "easytrack-blinds",
+    name: "EasyTrack Outdoor Blind",
+    category: "blinds",
+    description: "Friction-guided outdoor blind providing custom height positioning and effortless insect and sun protection.",
+    features: [
+      "Friction-fit height lock",
+      "Marine grade parts",
+      "High UV resistance mesh",
+      "Custom powder coated",
+    ],
+    swatches: [
+      { name: "Charcoal Mesh", hex: "#1A1A1A" },
+      { name: "Cream Sunscreen", hex: "#E6E6D8" },
+    ],
+    image: "/images/product-blinds.png",
+    tags: ["EasyTrack", "Smooth Gliding", "Insect Barrier"],
+  },
+  {
+    id: "arch-carport",
+    name: "Arch Carport",
+    category: "carport",
+    description: "Arch carport is a stunning addition to any property. Arched structure provides more outdoor space for backyards, front of house, or car parking. Micro powder coated with 2mm poly-carbonate sheets protecting from sun, rain and hail, engineered for NZ wind speeds.",
+    features: [
+      "Arched high-clearance design",
+      "2mm poly-carbonate roofing",
+      "Sun, rain & hail protection",
+      "Engineered for NZ wind speeds",
     ],
     swatches: [
       { name: "Matte Charcoal", hex: "#2D2E30" },
       { name: "Arctic White", hex: "#F3F4F6" },
     ],
     image: "/images/product-carport.png",
-    tags: ["Space Saver", "Heavy Duty", "Minimalist"],
+    tags: ["Arch Carport", "Sun/Rain/Hail", "NZ Wind Speed Rated"],
+  },
+  {
+    id: "straight-carport",
+    name: "Straight Carport",
+    category: "carport",
+    description: "Straight carport is a stunning addition to any property. Arched structure provides more outdoor space for backyards, front of house, or car parking. Micro powder coated with 2mm poly-carbonate sheets protecting from sun, rain and hail, engineered for NZ wind speeds.",
+    features: [
+      "Clean straight-roof design",
+      "2mm poly-carbonate roofing",
+      "Sun, rain & hail protection",
+      "Engineered for NZ wind speeds",
+    ],
+    swatches: [
+      { name: "Matte Charcoal", hex: "#2D2E30" },
+      { name: "Arctic White", hex: "#F3F4F6" },
+    ],
+    image: "/images/product-carport.png",
+    tags: ["Straight Carport", "Sun/Rain/Hail", "NZ Wind Speed Rated"],
+  },
+  {
+    id: "outdoor-shutter",
+    name: "Outdoor Shutter",
+    category: "shutter",
+    description: "Heavy-duty aluminium louvre shutters designed for balcony privacy, wind buffering, and security on decks and patios.",
+    features: [
+      "Operable or fixed blades",
+      "Marine-grade powder coat",
+      "Wind lock safety latches",
+      "Custom site dimensions",
+    ],
+    swatches: [
+      { name: "Matte Charcoal", hex: "#2D2E30" },
+      { name: "Slate Gray", hex: "#5A5D64" },
+      { name: "Arctic White", hex: "#F3F4F6" },
+    ],
+    image: "/images/product-louvre.png",
+    tags: ["Aluminium Shutter", "Privacy Control", "Wind Barrier"],
+  },
+  {
+    id: "sunroom",
+    name: "Sunroom",
+    category: "sunroom",
+    description: "Fully enclosed outdoor room featuring double-glazed glass sliding doors and insulated roof panels for year-round indoor-outdoor living.",
+    features: [
+      "Double-glazed sliding doors",
+      "Insulated thermal roof panels",
+      "Integrated lighting & power",
+      "100% weather-sealed enclosure",
+    ],
+    swatches: [
+      { name: "Matte Charcoal", hex: "#2D2E30" },
+      { name: "Arctic White", hex: "#F3F4F6" },
+    ],
+    image: "/images/about-install.png",
+    tags: ["All-Weather Room", "Enclosed Sunroom", "Double Glazed"],
   },
 ];
 
 export const processData: ProcessItem[] = [
   {
-    step: "01",
-    title: "On-Site Consultation",
-    description: "We visit your property across New Zealand to measure your space, analyze wind zones, solar angles, and local micro-climates, aligning on a solution that complements your lifestyle.",
+    step: "1",
+    title: "Enquire",
+    description: "Begin your journey with a simple enquiry. Whether you're just exploring ideas or ready to build, our team is here to listen, answer your questions, and guide you through the possibilities. Share your needs and preferences, and we'll help you take the first step toward transforming your outdoor space.",
     icon: "ChatCircleText",
   },
   {
-    step: "02",
-    title: "3D Design & Precise Quote",
-    description: "Our design engineers create a realistic 3D model of your home with the proposed structure. We supply full structural designs along with a transparent, fixed-price quote.",
-    icon: "Desktop",
+    step: "2",
+    title: "Site Visit",
+    description: "We'll arrange a convenient time to visit your site and assess the location. This step is crucial for understanding the space, sun angles, wind exposure, and other key factors that influence the design and functionality of your louvre system.",
+    icon: "MapPin",
   },
   {
-    step: "03",
-    title: "NZ-Based Manufacture",
-    description: "Every pergola and blind is custom-crafted to your specific dimensions in our state-of-the-art facility, utilizing local structural engineering standards and premium materials.",
-    icon: "Factory",
+    step: "3",
+    title: "Design & Feasibility",
+    description: "Our experts will develop a custom design that suits your home and lifestyle. We'll evaluate structural requirements, spatial compatibility, and council guidelines (if applicable) to ensure your project is both stylish and achievable.",
+    icon: "PencilRuler",
   },
   {
-    step: "04",
-    title: "Certified Installation",
-    description: "Our professional installation crew fits the components, safely anchors the structure to withstand heavy gales, integrates smart electronics, and leaves the workspace spotless.",
-    icon: "ShieldCheck",
+    step: "4",
+    title: "Planning & Costing",
+    description: "With your design finalised, we'll provide a detailed proposal outlining timelines, materials, and pricing. You'll receive clear and transparent costing, so you know exactly what to expect—no surprises, just smart planning.",
+    icon: "Receipt",
+  },
+  {
+    step: "5",
+    title: "The Build",
+    description: "Once approved, our experienced installation team gets to work. We pride ourselves on quality craftsmanship and efficient project management. Every component is installed with precision to deliver a durable, functional, and beautiful result.",
+    icon: "Hammer",
+  },
+  {
+    step: "6",
+    title: "Project Completion",
+    description: "After final checks and walk-throughs, your louvre system is ready to enjoy. We ensure everything is finished to perfection and leave the site clean and tidy. Your dream outdoor living space is now a reality—built to last and ready for all seasons.",
+    icon: "CheckCircle",
+  },
+];
+
+export const performanceData: PerformanceItem[] = [
+  {
+    id: "all-weather",
+    title: "All-Weather Design",
+    description: "Rated for 140–170 km/hr wind speeds and heavy snow loads. Engineered for New Zealand's variable climate — high UV, wind, and unexpected downpours. Built tough, built to last decades.",
+    icon: "CloudRain",
+  },
+  {
+    id: "aesthetics",
+    title: "Architectural Aesthetics",
+    description: "Clean extruded aluminium profiles (6005 grade, powder-coated) and architectural-grade design make our louvre systems as beautiful as any interior feature.",
+    icon: "Buildings",
+  },
+  {
+    id: "custom-fitted",
+    title: "Custom-Fitted to Measure",
+    description: "Every outdoor structure is precision-manufactured to your exact site dimensions. No off-the-shelf compromise — ever. Four installation styles to suit any property.",
+    icon: "Ruler",
+  },
+  {
+    id: "smart-tech",
+    title: "Smart Technology",
+    description: "Remote and Tuya app control as standard. IP67 waterproof motorisation. Auto-close rain sensors. RGB LED gutter lighting with separate remote. Blade lighting in warm yellow or cool white.",
+    icon: "DeviceMobile",
+  },
+  {
+    id: "drainage",
+    title: "Integrated Drainage",
+    description: "Patented gutter-beam system channels rainwater off the louvres, down through hollow columns and away from your patio. No exposed pipes, no leaks — perfectly dry underneath.",
+    icon: "Drop",
+  },
+  {
+    id: "warranty",
+    title: "Warranty & Support",
+    description: "10-year manufacturer warranty and 2-year built warranty. 0% deposit and interest-free finance plans available. Local service teams and genuine replacement parts nationally.",
+    icon: "Headset",
   },
 ];
 
@@ -276,7 +536,7 @@ export const testimonialsData: TestimonialItem[] = [
 ];
 
 export const contactDetailsData: ContactDetails = {
-  phone: "+64 22 420 2266",
+  phone: "06 262 1147",
   email: "info@clusteroutdoor.co.nz",
   hours: "Monday - Friday: 8:00 AM - 5:00 PM | Saturday: 9:00 AM - 1:00 PM",
   regions: [

@@ -27,27 +27,22 @@ export default function Hero() {
       ref={containerRef}
       className="relative w-full h-screen overflow-hidden flex items-center justify-center bg-neutral-black"
     >
-      {/* 
-        DEVELOPER NOTE: Background Video Support
-        To replace the background image with a video, uncomment the video block below and comment out the image motion.div.
-      */}
-      {/* 
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        className="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none"
-      >
-        <source src="/videos/hero-loop.mp4" type="video/mp4" />
-      </video>
-      */}
-
-      {/* Parallax Background Image */}
+      {/* Parallax Background Video */}
       <motion.div
         style={{ y: bgY }}
-        className="absolute inset-0 w-full h-[120%] bg-[url('/images/hero-bg.png')] bg-cover bg-center z-0 pointer-events-none"
-      />
+        className="absolute inset-0 w-full h-[120%] z-0 pointer-events-none"
+      >
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          poster="/images/hero-bg.png"
+          className="w-full h-full object-cover"
+        >
+          <source src="/videos/hero-loop.mp4" type="video/mp4" />
+        </video>
+      </motion.div>
 
       {/* Animated Dark Overlay */}
       <motion.div
@@ -58,7 +53,7 @@ export default function Hero() {
       {/* Hero Content */}
       <motion.div
         style={{ y: contentY, opacity: contentOpacity }}
-        className="relative z-20 max-w-5xl mx-auto px-6 text-center text-white flex flex-col items-center justify-center h-full pt-16"
+        className="relative z-20 max-w-5xl mx-auto px-6 text-center text-white flex flex-col items-center justify-center h-full pt-28 sm:pt-32"
       >
         {/* Animated Headline */}
         <motion.h1
@@ -69,7 +64,7 @@ export default function Hero() {
         >
           Outdoor Living, <br className="hidden sm:inline" />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light via-white to-primary-light">
-            Engineered for NZ Weather
+            Redefined
           </span>
         </motion.h1>
 
@@ -78,9 +73,9 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.4 }}
-          className="mt-6 text-lg sm:text-xl md:text-2xl text-neutral-300 max-w-3xl font-light leading-relaxed"
+          className="mt-4 sm:mt-6 text-lg sm:text-xl md:text-2xl text-neutral-300 max-w-2xl font-light leading-relaxed"
         >
-          Custom designed and local built aluminium pergolas, fixed canopies, carports, and outdoor blinds. Engineered to survive heavy rain, coastal salt, and alpine wind.
+          Custom pergolas & canopies built for NZ weather.
         </motion.p>
 
         {/* Animated CTAs */}

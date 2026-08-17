@@ -1,129 +1,114 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import { List, X } from '@phosphor-icons/react';
+import { List, X, Phone, EnvelopeSimple } from '@phosphor-icons/react';
 
-const navLinks = [
-  { name: 'Home', href: '#home' },
+const topPills = [
   { name: 'About', href: '#about' },
-  { name: 'Services', href: '#services' },
-  { name: 'Products', href: '#products' },
-  { name: 'Process', href: '#process' },
-  { name: 'Testimonials', href: '#testimonials' },
   { name: 'Contact', href: '#contact' },
+  { name: 'Compare Louver', href: '#products' },
+];
+
+const categoryLinks = [
+  { name: 'Louvre', href: '#products' },
+  { name: 'Pergola', href: '#products' },
+  { name: 'Canopy', href: '#products' },
+  { name: 'Outdoor Blinds', href: '#products' },
+  { name: 'Carport', href: '#products' },
+  { name: 'Outdoor Shutter', href: '#products' },
+  { name: 'Sunroom', href: '#products' },
 ];
 
 export default function Header() {
-  const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const ctaRef = useRef<HTMLAnchorElement>(null);
-  
-  // Track scroll position to toggle header background
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 20) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
-    };
-    
-    window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Check initially
-    
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // Magnetic button effect logic
-  const handleMouseMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    const btn = ctaRef.current;
-    if (!btn) return;
-    
-    const rect = btn.getBoundingClientRect();
-    const x = e.clientX - rect.left - rect.width / 2;
-    const y = e.clientY - rect.top - rect.height / 2;
-    
-    // Smoothly shift the button 25% of the distance from the center
-    btn.style.transform = `translate(${x * 0.25}px, ${y * 0.25}px)`;
-  };
-
-  const handleMouseLeave = () => {
-    const btn = ctaRef.current;
-    if (!btn) return;
-    btn.style.transform = 'translate(0px, 0px)';
-  };
 
   return (
     <>
-      <motion.header
-        initial={{ y: -100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled
-            ? 'bg-white/95 backdrop-blur-md shadow-md py-3 border-b border-neutral-100'
-            : 'bg-transparent py-5'
-        }`}
-      >
-        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-md">
+        {/* Top Bar: Logo & Pill Action Buttons */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
           {/* Logo */}
           <a href="#home" className="flex items-center outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-md">
             <Image
               src="/logo-full.png"
               alt="Cluster Outdoor Solutions Logo"
-              width={320}
-              height={192}
-              className={`h-20 sm:h-24 w-auto object-contain transition-all duration-300 hover:scale-102 ${
-                scrolled ? '' : 'brightness-0 invert'
-              }`}
+              width={220}
+              height={70}
+              className="h-12 sm:h-14 md:h-16 w-auto object-contain transition-transform duration-200 hover:scale-102"
               priority
             />
           </a>
 
-          {/* Desktop Nav Links */}
-          <nav className="hidden md:flex items-center space-x-8">
-            {navLinks.map((link) => (
+          {/* Desktop Right Pill Actions */}
+          <div className="hidden lg:flex items-center space-x-2.5">
+            {topPills.map((pill) => (
               <a
-                key={link.name}
-                href={link.href}
-                className={`text-sm font-semibold tracking-wide transition-colors duration-300 outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-md px-2 py-1 ${
-                  scrolled 
-                    ? 'text-neutral-charcoal hover:text-primary' 
-                    : 'text-white hover:text-primary-light'
-                }`}
+                key={pill.name}
+                href={pill.href}
+                className="px-5 py-2 bg-primary hover:bg-primary-hover text-white text-sm font-semibold rounded-full transition-colors shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-primary"
               >
-                {link.name}
+                {pill.name}
               </a>
             ))}
-          </nav>
 
-          {/* Right side CTA Button */}
-          <div className="hidden md:block">
+            {/* Phone Pill Button */}
             <a
-              ref={ctaRef}
-              href="#contact"
-              onMouseMove={handleMouseMove}
-              onMouseLeave={handleMouseLeave}
-              className="relative inline-flex items-center justify-center px-6 py-3 bg-primary text-white font-bold text-sm tracking-wider uppercase rounded-full shadow-lg hover:shadow-primary/20 transition-all duration-300 outline-none focus-visible:ring-4 focus-visible:ring-primary-light active:scale-95"
+              href="tel:062621147"
+              className="flex items-center space-x-2 px-5 py-2 bg-primary hover:bg-primary-hover text-white text-sm font-semibold rounded-full transition-colors shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
-              Get a Free Quote
+              <Phone size={18} weight="fill" />
+              <span>06 262 1147</span>
+            </a>
+
+            {/* Email Pill Button */}
+            <a
+              href="mailto:info@clusteroutdoor.co.nz"
+              className="flex items-center space-x-2 px-5 py-2 bg-primary hover:bg-primary-hover text-white text-sm font-semibold rounded-full transition-colors shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            >
+              <EnvelopeSimple size={18} weight="fill" />
+              <span>info@clusteroutdoor.co.nz</span>
             </a>
           </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setMobileMenuOpen(true)}
-            className={`md:hidden p-2 transition-colors duration-300 outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-md ${
-              scrolled ? 'text-neutral-charcoal hover:text-primary' : 'text-white hover:text-primary-light'
-            }`}
-            aria-label="Open navigation menu"
-          >
-            <List size={28} weight="bold" />
-          </button>
+          {/* Mobile Right Quick Call + Menu Toggle */}
+          <div className="flex items-center space-x-2 lg:hidden">
+            <a
+              href="tel:062621147"
+              className="flex items-center space-x-1.5 px-3 py-1.5 bg-primary text-white text-xs font-semibold rounded-full shadow-sm"
+            >
+              <Phone size={15} weight="fill" />
+              <span>06 262 1147</span>
+            </a>
+
+            <button
+              onClick={() => setMobileMenuOpen(true)}
+              className="p-2 text-neutral-800 hover:text-primary transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-md"
+              aria-label="Open navigation menu"
+            >
+              <List size={28} weight="bold" />
+            </button>
+          </div>
         </div>
-      </motion.header>
+
+        {/* Bottom Bar: Full Width Brand Color Navigation Row */}
+        <div className="w-full bg-primary border-t border-primary-hover">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6">
+            <nav className="flex items-center justify-between overflow-x-auto py-2.5 scrollbar-none whitespace-nowrap gap-4 sm:gap-6 text-white text-sm font-medium">
+              {categoryLinks.map((cat) => (
+                <a
+                  key={cat.name}
+                  href={cat.href}
+                  className="hover:opacity-85 transition-opacity duration-150 px-1 py-0.5"
+                >
+                  {cat.name}
+                </a>
+              ))}
+            </nav>
+          </div>
+        </div>
+      </header>
 
       {/* Mobile Drawer Navigation Overlay */}
       <AnimatePresence>
@@ -133,7 +118,7 @@ export default function Header() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm md:hidden"
+            className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm lg:hidden"
           >
             {/* Slide in menu panel */}
             <motion.div
@@ -141,53 +126,73 @@ export default function Header() {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              className="absolute top-0 right-0 bottom-0 w-[80%] max-w-sm bg-white p-8 flex flex-col shadow-2xl justify-between"
+              className="absolute top-0 right-0 bottom-0 w-[85%] max-w-sm bg-white p-6 flex flex-col shadow-2xl overflow-y-auto"
             >
-              <div>
-                {/* Header inside drawer */}
-                <div className="flex items-center justify-between pb-8 border-b border-neutral-100">
-                  <Image
-                    src="/logo-icon.png"
-                    alt="Cluster Icon Mark"
-                    width={48}
-                    height={48}
-                    className="h-10 w-auto object-contain"
-                  />
-                  <button
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="p-2 text-neutral-charcoal hover:text-primary transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-md"
-                    aria-label="Close navigation menu"
-                  >
-                    <X size={28} weight="bold" />
-                  </button>
-                </div>
+              {/* Header inside drawer */}
+              <div className="flex items-center justify-between pb-6 border-b border-neutral-100">
+                <Image
+                  src="/logo-full.png"
+                  alt="Cluster Logo"
+                  width={150}
+                  height={50}
+                  className="h-10 w-auto object-contain"
+                />
+                <button
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-2 text-neutral-700 hover:text-primary transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-md"
+                  aria-label="Close navigation menu"
+                >
+                  <X size={26} weight="bold" />
+                </button>
+              </div>
 
-                {/* Mobile Links */}
-                <nav className="flex flex-col space-y-6 pt-10">
-                  {navLinks.map((link, idx) => (
-                    <motion.a
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: idx * 0.05 }}
+              {/* Quick Action Pills in Drawer */}
+              <div className="flex flex-wrap gap-2 py-6 border-b border-neutral-100">
+                {topPills.map((pill) => (
+                  <a
+                    key={pill.name}
+                    href={pill.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="px-4 py-2 bg-primary text-white text-xs font-semibold rounded-full"
+                  >
+                    {pill.name}
+                  </a>
+                ))}
+                <a
+                  href="tel:062621147"
+                  className="flex items-center space-x-1 px-4 py-2 bg-primary text-white text-xs font-semibold rounded-full"
+                >
+                  <Phone size={14} weight="fill" />
+                  <span>06 262 1147</span>
+                </a>
+              </div>
+
+              {/* Product Category Links */}
+              <div className="py-6 flex-1">
+                <p className="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-4">Product Categories</p>
+                <nav className="flex flex-col space-y-3">
+                  {categoryLinks.map((link) => (
+                    <a
                       key={link.name}
                       href={link.href}
                       onClick={() => setMobileMenuOpen(false)}
-                      className="text-lg font-bold text-neutral-black hover:text-primary transition-colors duration-200"
+                      className="text-base font-semibold text-neutral-800 hover:text-primary transition-colors"
                     >
                       {link.name}
-                    </motion.a>
+                    </a>
                   ))}
                 </nav>
               </div>
 
-              {/* Bottom Drawer CTA */}
-              <div className="pt-8 border-t border-neutral-100">
+              {/* Bottom CTA */}
+              <div className="pt-6 border-t border-neutral-100">
                 <a
-                  href="#contact"
+                  href="mailto:info@clusteroutdoor.co.nz"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full flex items-center justify-center py-4 bg-primary text-white font-bold tracking-wider uppercase text-center rounded-full shadow-lg"
+                  className="w-full flex items-center justify-center space-x-2 py-3.5 bg-primary text-white font-bold text-sm tracking-wider uppercase text-center rounded-full shadow-md hover:bg-primary-hover transition-colors"
                 >
-                  Get a Free Quote
+                  <EnvelopeSimple size={18} weight="fill" />
+                  <span>Email Us</span>
                 </a>
               </div>
             </motion.div>

@@ -43,6 +43,7 @@ export default function Contact() {
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [activeMapLocation, setActiveMapLocation] = useState<'np' | 'wh'>('np');
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -389,64 +390,71 @@ export default function Contact() {
               </div>
             </div>
 
-            {/* Stylized NZ Vector Map representing showroom nodes */}
-            <div className="mt-10 p-6 bg-cream-bg rounded-3xl border border-neutral-100 flex items-center justify-center aspect-[1.1] relative overflow-hidden w-full">
-              
-              {/* SVG Map of New Zealand (Stylized Silhouette) */}
-              <svg 
-                viewBox="0 0 300 400" 
-                className="w-full h-full max-h-[280px]"
-                aria-label="Stylized map showing New Zealand service hubs"
-              >
-                {/* Stylized North Island path */}
-                <path 
-                  d="M170,110 C180,95 200,90 220,105 C230,115 225,130 215,140 C190,165 175,185 160,210 C150,225 130,220 120,200 C110,180 125,150 145,135 Z" 
-                  fill="#E5E0DA" 
-                  stroke="#D3C9C1" 
-                  strokeWidth="1.5"
-                />
-                
-                {/* Stylized South Island path */}
-                <path 
-                  d="M110,230 C125,235 140,260 125,290 C110,320 85,340 70,360 C65,370 50,370 45,355 C40,340 55,310 70,290 C85,270 95,240 110,230 Z" 
-                  fill="#E5E0DA" 
-                  stroke="#D3C9C1" 
-                  strokeWidth="1.5"
-                />
+            {/* Interactive Google Map Container */}
+            <div className="mt-10 p-5 bg-cream-bg rounded-3xl border border-neutral-100 flex flex-col w-full shadow-sm">
+              <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-primary">
+                  Interactive Showroom & Service Map
+                </span>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setActiveMapLocation('np')}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                      activeMapLocation === 'np'
+                        ? 'bg-primary text-white shadow-sm'
+                        : 'bg-white text-neutral-charcoal hover:bg-neutral-50 border border-neutral-200'
+                    }`}
+                  >
+                    📍 New Plymouth
+                  </button>
+                  <button
+                    onClick={() => setActiveMapLocation('wh')}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                      activeMapLocation === 'wh'
+                        ? 'bg-primary text-white shadow-sm'
+                        : 'bg-white text-neutral-charcoal hover:bg-neutral-50 border border-neutral-200'
+                    }`}
+                  >
+                    📍 Whanganui
+                  </button>
+                </div>
+              </div>
 
-                {/* Radar Pulse Animation Styles */}
-                <style>{`
-                  @keyframes pulseRadar {
-                    0% { transform: scale(0.6); opacity: 0.9; }
-                    100% { transform: scale(2.5); opacity: 0; }
+              {/* Google Map iFrame Embed */}
+              <div className="relative w-full aspect-[4/3] min-h-[260px] rounded-2xl overflow-hidden shadow-inner border border-neutral-200/80 bg-neutral-100">
+                <iframe
+                  title="Cluster Outdoor Solutions Google Map Location"
+                  src={
+                    activeMapLocation === 'np'
+                      ? "https://maps.google.com/maps?q=Sunley+Street,+Westown,+New+Plymouth+4310,+New+Zealand&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                      : "https://maps.google.com/maps?q=Whanganui,+New+Zealand&t=&z=13&ie=UTF8&iwloc=&output=embed"
                   }
-                  .radar-pulse {
-                    transform-origin: center;
-                    animation: pulseRadar 2s infinite ease-out;
+                  className="w-full h-full border-0"
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
+              </div>
+
+              {/* Bottom Info Bar */}
+              <div className="mt-3 flex flex-col sm:flex-row sm:items-center justify-between text-xs text-neutral-gray px-1 gap-1 font-medium">
+                <span>
+                  {activeMapLocation === 'np'
+                    ? 'Main Showroom: Sunley Street, Westown, New Plymouth'
+                    : 'Service Region: Whanganui & Surrounding Districts'}
+                </span>
+                <a
+                  href={
+                    activeMapLocation === 'np'
+                      ? "https://maps.google.com/?q=Sunley+Street,+Westown,+New+Plymouth+4310,+New+Zealand"
+                      : "https://maps.google.com/?q=Whanganui,+New+Zealand"
                   }
-                `}</style>
-
-                {/* Pins and Radar Circles */}
-                
-                {/* New Plymouth Node (Main Office & Showroom) */}
-                <g transform="translate(135, 175)">
-                  <circle r="12" fill="rgba(134,90,51,0.2)" className="radar-pulse" />
-                  <circle r="4" fill="#865A33" />
-                </g>
-                <text x="50" y="170" fontSize="9" fontWeight="bold" fill="#1D1C1B">New Plymouth Showroom</text>
-
-                {/* Whanganui Node (Mobile Service Area) */}
-                <g transform="translate(148, 195)">
-                  <circle r="12" fill="rgba(134,90,51,0.2)" className="radar-pulse" style={{ animationDelay: '1s' }} />
-                  <circle r="4" fill="#865A33" />
-                </g>
-                <text x="158" y="199" fontSize="9" fontWeight="bold" fill="#1D1C1B">Whanganui Mobile Service</text>
-
-              </svg>
-
-              {/* Map floating labels */}
-              <div className="absolute bottom-4 left-4 bg-white/70 backdrop-blur-sm px-3 py-1.5 rounded-lg border border-neutral-100 text-[10px] text-neutral-charcoal font-bold">
-                🇳🇿 Servicing NZ-wide
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary font-bold hover:underline"
+                >
+                  Open in Google Maps ↗
+                </a>
               </div>
             </div>
           </div>
