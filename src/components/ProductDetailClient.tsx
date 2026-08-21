@@ -167,27 +167,9 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
               </h1>
             </div>
 
-            <p className="text-base sm:text-lg text-neutral-gray leading-relaxed mb-10 mt-6">
+            <p className="text-base sm:text-lg text-neutral-gray leading-relaxed mb-6 mt-4">
               {product.fullDescription || product.description}
             </p>
-
-            {/* Action CTAs (Positioned directly below title and description) */}
-            <div className="mt-10 mb-6 flex flex-col sm:flex-row gap-3">
-              <button
-                type="button"
-                onClick={() => setIsQuoteModalOpen(true)}
-                className="flex-1 py-4 bg-neutral-black text-white text-xs font-bold tracking-widest uppercase rounded-full hover:bg-primary transition-all duration-300 text-center shadow-lg hover:shadow-xl cursor-pointer"
-              >
-                Get a Free Onsite Quote
-              </button>
-              <a
-                href="tel:0224202266"
-                className="px-6 py-4 bg-white text-neutral-black border border-neutral-200 text-xs font-bold tracking-wider uppercase rounded-full hover:bg-neutral-50 transition-all duration-300 text-center flex items-center justify-center gap-2 shadow-sm"
-              >
-                <Phone size={16} className="text-primary" weight="fill" />
-                <span>Call 022 420 2266</span>
-              </a>
-            </div>
 
             {/* Configurable Option 1: Style / Option Type */}
             {product.typeOptions && product.typeOptions.length > 0 && (
@@ -264,6 +246,24 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
                 </div>
               </div>
             )}
+
+            {/* Action CTAs (Positioned below description and configurable options) */}
+            <div className="mt-6 flex flex-col sm:flex-row gap-3">
+              <button
+                type="button"
+                onClick={() => setIsQuoteModalOpen(true)}
+                className="flex-1 py-4 bg-primary text-white text-xs font-bold tracking-widest uppercase rounded-full hover:bg-neutral-black transition-all duration-300 text-center shadow-lg hover:shadow-xl cursor-pointer"
+              >
+                Get a Free Onsite Quote
+              </button>
+              <a
+                href="tel:0224202266"
+                className="px-6 py-4 bg-white text-neutral-black border border-neutral-200 text-xs font-bold tracking-wider uppercase rounded-full hover:bg-neutral-50 transition-all duration-300 text-center flex items-center justify-center gap-2 shadow-sm"
+              >
+                <Phone size={16} className="text-primary" weight="fill" />
+                <span>Call 022 420 2266</span>
+              </a>
+            </div>
           </div>
         </div>
 
