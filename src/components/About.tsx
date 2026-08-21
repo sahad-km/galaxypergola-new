@@ -135,7 +135,7 @@ export default function About() {
                   alt="Precision installation of aluminium outdoor pergola"
                   fill
                   className="object-cover"
-                  sizes="(max-w-768px) 100vw, 50vw"
+                  sizes="(max-width: 768px) 100vw, 50vw"
                 />
               </motion.div>
 

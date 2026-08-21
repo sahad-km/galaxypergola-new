@@ -338,7 +338,7 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
               fill
               className="object-cover transition-all duration-500"
               priority
-              sizes="(max-w-1024px) 100vw, 60vw"
+              sizes="(max-width: 1024px) 100vw, 60vw"
             />
           </div>
 
