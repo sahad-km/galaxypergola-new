@@ -15,23 +15,23 @@ function Counter({ value, suffix }: { value: number; suffix: string }) {
     if (isInView) {
       let startTime: number | null = null;
       const duration = 2000; // 2 seconds animation
-      
+
       const animate = (timestamp: number) => {
         if (!startTime) startTime = timestamp;
         const progress = Math.min((timestamp - startTime) / duration, 1);
-        
+
         // Easing out cubic: f(t) = 1 - (1-t)^3
         const easeProgress = 1 - Math.pow(1 - progress, 3);
-        
+
         setCount(Math.floor(easeProgress * value));
-        
+
         if (progress < 1) {
           requestAnimationFrame(animate);
         } else {
           setCount(value);
         }
       };
-      
+
       requestAnimationFrame(animate);
     }
   }, [isInView, value]);
@@ -52,7 +52,7 @@ export default function About() {
     target: imageContainerRef,
     offset: ['start end', 'end start'],
   });
-  
+
   const imageY = useTransform(scrollYProgress, [0, 1], ['-8%', '8%']);
 
   return (
@@ -69,7 +69,7 @@ export default function About() {
 
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-          
+
           {/* Left Column: Text Content */}
           <div className="lg:col-span-7 flex flex-col justify-center">
             <motion.div
@@ -131,26 +131,26 @@ export default function About() {
                 className="absolute inset-0 w-full h-[120%] -top-[10%] pointer-events-none"
               >
                 <Image
-                  src="/images/about-install.png"
+                  src="/images/about-us.webp"
                   alt="Precision installation of aluminium outdoor pergola"
                   fill
                   className="object-cover"
                   sizes="(max-w-768px) 100vw, 50vw"
                 />
               </motion.div>
-              
+
               {/* Image Overlay/Border Accent */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent pointer-events-none" />
-              
+
               {/* Small floating badge */}
-              <div className="absolute bottom-6 left-6 right-6 p-4 glass-panel rounded-xl shadow-lg border border-white/20">
+              {/* <div className="absolute bottom-6 left-6 right-6 p-4 glass-panel rounded-xl shadow-lg border border-white/20">
                 <p className="text-xs uppercase tracking-widest font-extrabold text-primary mb-1">
                   100% Quality Guaranteed
                 </p>
                 <p className="text-sm font-bold text-neutral-black leading-tight">
                   Certified Master Builders & Engineers
                 </p>
-              </div>
+              </div> */}
             </motion.div>
           </div>
 

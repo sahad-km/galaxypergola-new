@@ -12,10 +12,11 @@ import { contactDetailsData } from '@/data/siteData';
 const footerNavLinks = [
   { name: 'Home', href: '/' },
   { name: 'About Us', href: '/#about' },
-  { name: 'Services', href: '/#services' },
   { name: 'Products Catalog', href: '/products' },
-  { name: 'Our Process', href: '/#process' },
+  // { name: 'Services', href: '/#services' },
+  { name: 'Services', href: '/#products' },
   { name: 'Testimonials', href: '/#testimonials' },
+  { name: 'Our Process', href: '/#process' },
   { name: 'Contact Us', href: '/#contact' },
 ];
 

@@ -66,7 +66,16 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
   // FAQ Accordion active state
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
 
-  // Form submission state
+  // Current Page URL state for hidden field tracking
+  const [currentPageUrl, setCurrentPageUrl] = useState<string>('');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setCurrentPageUrl(window.location.href);
+    }
+  }, []);
+
+  // Modal Form submission state
   const [submitted, setSubmitted] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -76,17 +85,24 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
     message: '',
   });
 
-  // Keep form message auto-synced with configured options
-  useEffect(() => {
-    setFormData((prev) => ({
-      ...prev,
-      message: `Hi, I would like to request a free onsite quote and measure for the ${product.name}.\n\nConfiguration:\n- Type: ${selectedType}\n- Size: ${selectedSize}\n- Finish: ${selectedColor}`,
-    }));
-  }, [product.name, selectedType, selectedSize, selectedColor]);
+  // Inline Form submission state (below FAQ)
+  const [inlineSubmitted, setInlineSubmitted] = useState(false);
+  const [inlineFormData, setInlineFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    region: activeRegions[0],
+    message: '',
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitted(true);
+  };
+
+  const handleInlineSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setInlineSubmitted(true);
   };
 
   const relatedProducts = allProducts
@@ -139,88 +155,10 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
         </Link>
       </div>
 
-      {/* Hero Section: Gallery & Configurator */}
+      {/* Hero Section: Product Details on Left, Gallery & Badges on Right */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-16">
 
-        {/* Left Column: Image Gallery Viewer */}
-        <div className="lg:col-span-7 space-y-4">
-          <div className="relative aspect-[16/10] bg-white rounded-3xl overflow-hidden shadow-xl border border-neutral-100/90 group">
-            {/* Category Tag & Badges */}
-            <div className="absolute top-4 left-4 z-10 flex gap-2 flex-wrap max-w-[85%]">
-              {/* <span className="px-3 py-1 bg-primary text-white rounded-full text-[10px] font-extrabold uppercase tracking-widest shadow-md">
-                {getCategoryLabel(product.category)}
-              </span> */}
-              {product.tags.slice(0, 3).map((tag) => (
-                <span
-                  key={tag}
-                  className="px-3 py-1 bg-black/60 backdrop-blur-md text-white rounded-full text-[10px] font-bold uppercase tracking-wider border border-white/10"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-
-            {/* Expand Lightbox Button */}
-            <button
-              onClick={() => setLightboxImage(selectedImage)}
-              className="absolute top-4 right-4 z-10 p-2.5 bg-black/50 hover:bg-black/80 backdrop-blur-md text-white rounded-full transition-all shadow-md"
-              title="Zoom image"
-            >
-              <MagnifyingGlassPlus size={18} weight="bold" />
-            </button>
-
-            <Image
-              src={selectedImage}
-              alt={product.name}
-              fill
-              className="object-cover transition-all duration-500"
-              priority
-              sizes="(max-w-1024px) 100vw, 60vw"
-            />
-          </div>
-
-          {/* Gallery Thumbnail Selector */}
-          {galleryImages.length > 1 && (
-            <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none">
-              {galleryImages.map((img, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setSelectedImage(img)}
-                  className={`relative w-24 h-20 rounded-2xl overflow-hidden border-2 transition-all flex-shrink-0 ${selectedImage === img
-                    ? 'border-primary ring-2 ring-primary/20 shadow-md scale-102'
-                    : 'border-transparent opacity-75 hover:opacity-100'
-                    }`}
-                >
-                  <Image src={img} alt={`${product.name} thumbnail ${idx + 1}`} fill className="object-cover" />
-                </button>
-              ))}
-            </div>
-          )}
-
-          {/* Trust Badges Row (Numbers Standout, No Icons) */}
-          <div className="grid grid-cols-3 gap-3 pt-3">
-            {trustBadges.map((badge, idx) => {
-              const parts = badge.match(/^(\d+\s*(?:yr|%)?)\s*(.*)$/i);
-              const stat = parts ? parts[1] : '';
-              const label = parts ? parts[2] : badge;
-              return (
-                <div
-                  key={idx}
-                  className="p-3.5 bg-white rounded-2xl border border-neutral-100 shadow-sm flex flex-col justify-center text-center sm:text-left"
-                >
-                  <span className="text-xl sm:text-2xl font-black text-primary leading-none mb-1">
-                    {stat || badge}
-                  </span>
-                  <span className="text-[10px] sm:text-[11px] font-bold text-neutral-charcoal leading-tight">
-                    {label}
-                  </span>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Right Column: Product Details & Configurable Options */}
+        {/* Left Column: Product Details, Configurator & Action CTAs */}
         <div className="lg:col-span-5 flex flex-col justify-between space-y-6">
           <div>
             <div className="flex justify-between items-start mb-2 gap-4">
@@ -229,15 +167,27 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
               </h1>
             </div>
 
-            {/* {product.tagline && (
-              <p className="text-xs font-bold text-primary mb-4 leading-relaxed bg-primary-cream px-3.5 py-2 rounded-xl border border-primary/10">
-                "{product.tagline}"
-              </p>
-            )} */}
-
-            <p className="text-sm sm:text-base text-neutral-gray leading-relaxed mb-6">
+            <p className="text-base sm:text-lg text-neutral-gray leading-relaxed mb-10 mt-6">
               {product.fullDescription || product.description}
             </p>
+
+            {/* Action CTAs (Positioned directly below title and description) */}
+            <div className="mt-10 mb-6 flex flex-col sm:flex-row gap-3">
+              <button
+                type="button"
+                onClick={() => setIsQuoteModalOpen(true)}
+                className="flex-1 py-4 bg-neutral-black text-white text-xs font-bold tracking-widest uppercase rounded-full hover:bg-primary transition-all duration-300 text-center shadow-lg hover:shadow-xl cursor-pointer"
+              >
+                Get a Free Onsite Quote
+              </button>
+              <a
+                href="tel:0224202266"
+                className="px-6 py-4 bg-white text-neutral-black border border-neutral-200 text-xs font-bold tracking-wider uppercase rounded-full hover:bg-neutral-50 transition-all duration-300 text-center flex items-center justify-center gap-2 shadow-sm"
+              >
+                <Phone size={16} className="text-primary" weight="fill" />
+                <span>Call 022 420 2266</span>
+              </a>
+            </div>
 
             {/* Configurable Option 1: Style / Option Type */}
             {product.typeOptions && product.typeOptions.length > 0 && (
@@ -314,47 +264,89 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
                 </div>
               </div>
             )}
+          </div>
+        </div>
 
-            {/* Bullet Features summary */}
-            {/* <div className="space-y-2 mb-6 p-4 bg-white rounded-2xl border border-neutral-100">
-              <span className="text-[10px] font-extrabold uppercase tracking-widest text-neutral-400 block mb-2">
-                Standard Included Features
-              </span>
-              <div className="grid grid-cols-1 gap-2">
-                {product.features.map((feat) => (
-                  <div key={feat} className="flex items-center text-xs font-semibold text-neutral-charcoal">
-                    <CheckCircle size={15} className="text-primary mr-2 flex-shrink-0" weight="fill" />
-                    <span>{feat}</span>
-                  </div>
-                ))}
-              </div>
-            </div> */}
+        {/* Right Column: Image Gallery Viewer & Trust Badges */}
+        <div className="lg:col-span-7 space-y-4">
+          <div className="relative aspect-[16/10] bg-white rounded-3xl overflow-hidden shadow-xl border border-neutral-100/90 group">
+            {/* Category Tag & Badges */}
+            <div className="absolute top-4 left-4 z-10 flex gap-2 flex-wrap max-w-[85%]">
+              {product.tags.slice(0, 3).map((tag) => (
+                <span
+                  key={tag}
+                  className="px-3 py-1 bg-black/60 backdrop-blur-md text-white rounded-full text-[10px] font-bold uppercase tracking-wider border border-white/10"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+
+            {/* Expand Lightbox Button */}
+            <button
+              onClick={() => setLightboxImage(selectedImage)}
+              className="absolute top-4 right-4 z-10 p-2.5 bg-black/50 hover:bg-black/80 backdrop-blur-md text-white rounded-full transition-all shadow-md"
+              title="Zoom image"
+            >
+              <MagnifyingGlassPlus size={18} weight="bold" />
+            </button>
+
+            <Image
+              src={selectedImage}
+              alt={product.name}
+              fill
+              className="object-cover transition-all duration-500"
+              priority
+              sizes="(max-w-1024px) 100vw, 60vw"
+            />
           </div>
 
-          {/* Action CTAs */}
-          <div className="pt-4 border-t border-neutral-200/60 flex flex-col sm:flex-row gap-3">
-            <button
-              type="button"
-              onClick={() => setIsQuoteModalOpen(true)}
-              className="flex-1 py-4 bg-neutral-black text-white text-xs font-bold tracking-widest uppercase rounded-full hover:bg-primary transition-all duration-300 text-center shadow-lg hover:shadow-xl cursor-pointer"
-            >
-              Get a Free Onsite Quote
-            </button>
-            <a
-              href="tel:0224202266"
-              className="px-6 py-4 bg-white text-neutral-black border border-neutral-200 text-xs font-bold tracking-wider uppercase rounded-full hover:bg-neutral-50 transition-all duration-300 text-center flex items-center justify-center gap-2 shadow-sm"
-            >
-              <Phone size={16} className="text-primary" weight="fill" />
-              <span>Call 022 420 2266 / 06 262 1147</span>
-            </a>
+          {/* Gallery Thumbnail Selector */}
+          {galleryImages.length > 1 && (
+            <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none">
+              {galleryImages.map((img, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setSelectedImage(img)}
+                  className={`relative w-24 h-20 rounded-2xl overflow-hidden border-2 transition-all flex-shrink-0 ${selectedImage === img
+                    ? 'border-primary ring-2 ring-primary/20 shadow-md scale-102'
+                    : 'border-transparent opacity-75 hover:opacity-100'
+                    }`}
+                >
+                  <Image src={img} alt={`${product.name} thumbnail ${idx + 1}`} fill className="object-cover" />
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* Three Trust Badges Row (Positioned directly below the images) */}
+          <div className="grid grid-cols-3 gap-3 pt-2">
+            {trustBadges.map((badge, idx) => {
+              const parts = badge.match(/^(\d+\s*(?:yr|%)?)\s*(.*)$/i);
+              const stat = parts ? parts[1] : '';
+              const label = parts ? parts[2] : badge;
+              return (
+                <div
+                  key={idx}
+                  className="p-3.5 bg-white rounded-2xl border border-neutral-100 shadow-sm flex flex-col justify-center text-center sm:text-left"
+                >
+                  <span className="text-xl sm:text-2xl font-black text-primary leading-none mb-1">
+                    {stat || badge}
+                  </span>
+                  <span className="text-[10px] sm:text-[11px] font-bold text-neutral-charcoal leading-tight">
+                    {label}
+                  </span>
+                </div>
+              );
+            })}
           </div>
         </div>
 
       </div>
 
-      {/* Key to Perfect Outdoor Living / Content Sections */}
-      {product.contentSections && product.contentSections.length > 0 && (() => {
-        const sections = product.contentSections;
+      {/* Key to Perfect Outdoor Living / Overview & Content Sections */}
+      {((product.overviewTitle || product.overviewDescription) || (product.contentSections && product.contentSections.length > 0)) && (() => {
+        const sections = product.contentSections || [];
         const isOdd = sections.length % 2 !== 0;
         const firstSection = isOdd ? sections[0] : null;
         const gridSections = isOdd ? sections.slice(1) : sections;
@@ -364,14 +356,20 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
             {/* Main Section Header */}
             <div className="text-center max-w-3xl mx-auto">
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-neutral-black leading-tight mb-4">
-                {product.name}: <span className="font-extrabold text-primary">Your Key to Perfect Outdoor Living</span>
+                {product.overviewTitle ? (
+                  product.overviewTitle
+                ) : (
+                  <>
+                    {product.name}: <span className="font-extrabold text-primary">Your Key to Perfect Outdoor Living</span>
+                  </>
+                )}
               </h2>
-              <p className="text-neutral-gray text-xs sm:text-sm leading-relaxed max-w-2xl mx-auto">
-                {sections[0].description}
+              <p className="text-base sm:text-lg text-neutral-gray leading-relaxed max-w-2xl mx-auto">
+                {product.overviewDescription || product.description}
               </p>
             </div>
 
-            {/* If odd count: First Card is Full Width */}
+            {/* If odd count: First Card is Full Width Feature Card */}
             {isOdd && firstSection && (
               <div className="bg-white rounded-3xl p-8 sm:p-12 border border-neutral-100 shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-hidden">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
@@ -389,15 +387,15 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
 
                   {/* Right Column: Title & Description */}
                   <div className="lg:col-span-6 space-y-4">
-                    {/* {firstSection.subtitle && (
-                      <span className="text-[10px] font-extrabold tracking-widest text-primary uppercase block">
+                    {firstSection.subtitle && (
+                      <span className="text-xs font-extrabold tracking-widest text-primary uppercase block">
                         {firstSection.subtitle}
                       </span>
-                    )} */}
+                    )}
                     <h3 className="text-2xl sm:text-3xl font-extrabold text-neutral-black leading-tight">
                       {firstSection.title}
                     </h3>
-                    <p className="text-xs text-neutral-gray leading-relaxed whitespace-pre-line">
+                    <p className="text-sm sm:text-base text-neutral-gray leading-relaxed whitespace-pre-line">
                       {firstSection.description}
                     </p>
 
@@ -418,7 +416,7 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
               </div>
             )}
 
-            {/* 50/50 Grid for remaining cards (if odd) or all cards (if even) */}
+            {/* 50/50 2-Column Grid for remaining cards (if odd) or all cards (if even) */}
             {gridSections.length > 0 && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {gridSections.map((sec) => (
@@ -432,15 +430,15 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
                           <Image src={sec.image} alt={sec.title} fill className="object-contain p-2" />
                         </div>
                       )}
-                      {/* {sec.subtitle && (
-                        <span className="text-[10px] font-extrabold tracking-widest text-primary uppercase block mb-1">
+                      {sec.subtitle && (
+                        <span className="text-xs font-extrabold tracking-widest text-primary uppercase block mb-1">
                           {sec.subtitle}
                         </span>
-                      )} */}
+                      )}
                       <h3 className="text-xl sm:text-2xl font-extrabold text-neutral-black mb-3 leading-tight">
                         {sec.title}
                       </h3>
-                      <p className="text-xs text-neutral-gray leading-relaxed mb-4 whitespace-pre-line">
+                      <p className="text-sm sm:text-base text-neutral-gray leading-relaxed mb-4 whitespace-pre-line">
                         {sec.description}
                       </p>
                     </div>
@@ -611,7 +609,7 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
                     0{item.step}
                   </div>
                   <h3 className="text-base font-extrabold text-neutral-black mb-2">{item.title}</h3>
-                  <p className="text-xs text-neutral-gray leading-relaxed">{item.description}</p>
+                  <p className="text-sm text-neutral-gray leading-relaxed">{item.description}</p>
                 </div>
               </div>
             ))}
@@ -658,7 +656,7 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
                     {getIcon(card.icon)}
                   </div>
                   <h3 className="text-sm font-extrabold text-neutral-black mb-1.5">{card.title}</h3>
-                  <p className="text-xs text-neutral-gray leading-relaxed">{card.description}</p>
+                  <p className="text-sm text-neutral-gray leading-relaxed">{card.description}</p>
                 </div>
               );
             })}
@@ -703,7 +701,7 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
                         transition={{ duration: 0.3 }}
-                        className="px-6 pb-6 text-xs text-neutral-gray leading-relaxed border-t border-neutral-100/60 pt-4"
+                        className="px-6 pb-6 text-sm sm:text-base text-neutral-gray leading-relaxed border-t border-neutral-100/60 pt-4"
                       >
                         {faq.answer}
                       </motion.div>
@@ -715,6 +713,118 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
           </div>
         </div>
       )}
+
+      {/* Below FAQ Section: Inline Free Onsite Quote Request Form */}
+      <div id="product-quote-form" className="mb-20 max-w-4xl mx-auto bg-white rounded-3xl p-8 sm:p-12 border border-neutral-100 shadow-xl">
+        <div className="text-center max-w-2xl mx-auto mb-8">
+          <span className="text-[10px] font-extrabold tracking-widest text-primary uppercase mb-2 block bg-primary-cream px-3 py-1 rounded-full inline-block border border-primary/15">
+            Free Measure & Quote
+          </span>
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-neutral-black mt-2">
+            Request a Free Onsite Quote for {product.name}
+          </h2>
+          <p className="text-xs sm:text-sm text-neutral-gray mt-2">
+            Servicing Taranaki & Whanganui regions. Zero obligation.
+          </p>
+        </div>
+
+        {inlineSubmitted ? (
+          <div className="bg-primary-cream/60 border border-primary/20 p-8 rounded-2xl text-center space-y-3">
+            <CheckCircle size={44} className="text-primary mx-auto" weight="fill" />
+            <h3 className="text-xl font-extrabold text-neutral-black">Quote Request Received!</h3>
+            <p className="text-xs sm:text-sm text-neutral-gray leading-relaxed">
+              Thank you, <strong className="text-neutral-black">{inlineFormData.name}</strong>. Our local installation specialists in <strong className="text-neutral-black">{inlineFormData.region}</strong> will get back to you within 24 hours.
+            </p>
+          </div>
+        ) : (
+          <form onSubmit={handleInlineSubmit} className="space-y-4">
+            {/* Hidden field capturing full current page URL */}
+            <input type="hidden" name="pageUrl" value={currentPageUrl} />
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-500 mb-1">
+                  Full Name <span className="text-primary">*</span>
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={inlineFormData.name}
+                  onChange={(e) => setInlineFormData({ ...inlineFormData, name: e.target.value })}
+                  placeholder="e.g. John Smith"
+                  className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl text-xs font-semibold text-neutral-black focus:outline-none focus:border-primary focus:bg-white transition-all placeholder:text-neutral-400"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-500 mb-1">
+                  Phone Number <span className="text-primary">*</span>
+                </label>
+                <input
+                  type="tel"
+                  required
+                  value={inlineFormData.phone}
+                  onChange={(e) => setInlineFormData({ ...inlineFormData, phone: e.target.value })}
+                  placeholder="e.g. 022 123 4567"
+                  className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl text-xs font-semibold text-neutral-black focus:outline-none focus:border-primary focus:bg-white transition-all placeholder:text-neutral-400"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-500 mb-1">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  value={inlineFormData.email}
+                  onChange={(e) => setInlineFormData({ ...inlineFormData, email: e.target.value })}
+                  placeholder="e.g. john@example.co.nz"
+                  className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl text-xs font-semibold text-neutral-black focus:outline-none focus:border-primary focus:bg-white transition-all placeholder:text-neutral-400"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-500 mb-1">
+                  Location / Active Region
+                </label>
+                <select
+                  value={inlineFormData.region}
+                  onChange={(e) => setInlineFormData({ ...inlineFormData, region: e.target.value })}
+                  className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl text-xs font-semibold text-neutral-black focus:outline-none focus:border-primary focus:bg-white transition-all"
+                >
+                  {activeRegions.map((reg) => (
+                    <option key={reg} value={reg}>
+                      {reg}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-500 mb-1">
+                Project Notes / Details (Optional)
+              </label>
+              <textarea
+                rows={3}
+                value={inlineFormData.message}
+                onChange={(e) => setInlineFormData({ ...inlineFormData, message: e.target.value })}
+                placeholder="Dimensions, patio layout, or questions..."
+                className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl text-xs font-semibold text-neutral-black focus:outline-none focus:border-primary focus:bg-white transition-all placeholder:text-neutral-400 resize-none"
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="w-full py-4 bg-primary hover:bg-primary-hover text-white text-xs font-extrabold uppercase tracking-widest rounded-full shadow-lg shadow-primary/25 transition-all duration-300 cursor-pointer mt-2"
+            >
+              Request Free Onsite Quote
+            </button>
+          </form>
+        )}
+      </div>
 
       {/* Quote Enquiry Form Overlay Modal */}
       <AnimatePresence>
@@ -774,6 +884,7 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
                   </motion.div>
                 ) : (
                   <form onSubmit={handleSubmit} className="space-y-4">
+                    <input type="hidden" name="pageUrl" value={currentPageUrl} />
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-[10px] font-bold uppercase tracking-wider text-neutral-400 mb-1.5">

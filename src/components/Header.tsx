@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { List, X, Phone, Envelope, DeviceMobile } from '@phosphor-icons/react';
+import { List, X, PhoneCall, EnvelopeSimple } from '@phosphor-icons/react';
 
 const topPills = [
   { name: 'About', href: '/#about' },
@@ -129,21 +129,21 @@ export default function Header() {
               </a>
             ))}
 
-            {/* Mobile Pill Button */}
+            {/* Phone Pill Button */}
             <a
               href="tel:0224202266"
-              className="flex items-center space-x-2 px-5 py-2 bg-primary hover:bg-primary-hover text-white text-sm font-semibold rounded-full transition-colors shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              className="flex items-center space-x-2 px-4 py-2 bg-primary hover:bg-primary-hover text-white text-xs sm:text-sm font-semibold rounded-full transition-all shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
-              <DeviceMobile size={18} weight="bold" />
+              <PhoneCall size={16} weight="fill" className="flex-shrink-0 opacity-90" />
               <span>022 420 2266</span>
             </a>
 
             {/* Email Pill Button */}
             <a
               href="mailto:info@clusteroutdoor.co.nz"
-              className="flex items-center space-x-2 px-5 py-2 bg-primary hover:bg-primary-hover text-white text-sm font-semibold rounded-full transition-colors shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              className="flex items-center space-x-2 px-4 py-2 bg-primary hover:bg-primary-hover text-white text-xs sm:text-sm font-semibold rounded-full transition-all shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
-              <Envelope size={18} weight="bold" />
+              <EnvelopeSimple size={16} weight="fill" className="flex-shrink-0 opacity-90" />
               <span>info@clusteroutdoor.co.nz</span>
             </a>
           </div>
@@ -154,7 +154,7 @@ export default function Header() {
               href="tel:0224202266"
               className="flex items-center space-x-1.5 px-3 py-1.5 bg-primary text-white text-xs font-semibold rounded-full shadow-sm"
             >
-              <Phone size={15} weight="fill" />
+              <PhoneCall size={14} weight="fill" className="flex-shrink-0" />
               <span>022 420 2266</span>
             </a>
 
@@ -242,7 +242,7 @@ export default function Header() {
                   href="tel:0224202266"
                   className="flex items-center space-x-1 px-4 py-2 bg-primary text-white text-xs font-semibold rounded-full"
                 >
-                  <Phone size={14} weight="fill" />
+                  <PhoneCall size={14} weight="fill" />
                   <span>022 420 2266</span>
                 </a>
               </div>
@@ -275,7 +275,7 @@ export default function Header() {
                   onClick={() => setMobileMenuOpen(false)}
                   className="w-full flex items-center justify-center space-x-2 py-3.5 bg-primary text-white font-bold text-sm tracking-wider uppercase text-center rounded-full shadow-md hover:bg-primary-hover transition-colors"
                 >
-                  <Envelope size={18} weight="bold" />
+                  <EnvelopeSimple size={18} weight="fill" />
                   <span>Email Us</span>
                 </a>
               </div>

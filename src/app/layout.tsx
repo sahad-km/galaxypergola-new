@@ -33,6 +33,8 @@ export const metadata: Metadata = {
   },
 };
 
+import FloatingQuoteModal from "@/components/FloatingQuoteModal";
+
 export default function RootLayout({
   children,
 }: {
@@ -49,6 +51,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col antialiased">
         <LenisProvider>
           {children}
+          <FloatingQuoteModal />
         </LenisProvider>
       </body>
     </html>
