@@ -43,7 +43,6 @@ export default function Contact() {
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [activeMapLocation, setActiveMapLocation] = useState<'np' | 'wh'>('np');
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -347,7 +346,7 @@ export default function Contact() {
                 Cluster Hubs
               </span>
               <h3 className="text-2xl font-extrabold text-neutral-black mb-6">
-                Nationwide Design & Install
+                Taranaki & Whanganui Design & Install
               </h3>
               
               {/* Showroom Details List */}
@@ -358,9 +357,17 @@ export default function Contact() {
                   </div>
                   <div>
                     <h4 className="text-xs font-black uppercase text-neutral-black tracking-widest mb-1">
-                      Freephone Contact
+                      Phone & Mobile Contact
                     </h4>
-                    <p className="text-sm font-bold text-primary">{contactDetailsData.phone}</p>
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 text-sm font-bold text-primary">
+                      <a href={`tel:${contactDetailsData.phone.replace(/\s+/g, '')}`} className="hover:underline">
+                        Landline: {contactDetailsData.phone}
+                      </a>
+                      <span className="hidden sm:inline text-neutral-300">|</span>
+                      <a href={`tel:${contactDetailsData.mobile.replace(/\s+/g, '')}`} className="hover:underline">
+                        Mobile: {contactDetailsData.mobile}
+                      </a>
+                    </div>
                   </div>
                 </div>
 
@@ -387,6 +394,18 @@ export default function Contact() {
                     <p className="text-xs text-neutral-gray leading-normal font-medium">{contactDetailsData.hours}</p>
                   </div>
                 </div>
+
+                <div className="flex gap-4">
+                  <div className="p-3 bg-neutral-cream rounded-xl text-primary flex-shrink-0 h-11 w-11 flex items-center justify-center">
+                    <MapPin size={20} weight="bold" />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-black uppercase text-neutral-black tracking-widest mb-1">
+                      Main Office & Showroom
+                    </h4>
+                    <p className="text-xs text-neutral-charcoal font-semibold">{contactDetailsData.locations[0].address}</p>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -394,41 +413,18 @@ export default function Contact() {
             <div className="mt-10 p-5 bg-cream-bg rounded-3xl border border-neutral-100 flex flex-col w-full shadow-sm">
               <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
                 <span className="text-xs font-bold uppercase tracking-wider text-primary">
-                  Interactive Showroom & Service Map
+                  Office & Showroom Location Map
                 </span>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => setActiveMapLocation('np')}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
-                      activeMapLocation === 'np'
-                        ? 'bg-primary text-white shadow-sm'
-                        : 'bg-white text-neutral-charcoal hover:bg-neutral-50 border border-neutral-200'
-                    }`}
-                  >
-                    📍 New Plymouth
-                  </button>
-                  <button
-                    onClick={() => setActiveMapLocation('wh')}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
-                      activeMapLocation === 'wh'
-                        ? 'bg-primary text-white shadow-sm'
-                        : 'bg-white text-neutral-charcoal hover:bg-neutral-50 border border-neutral-200'
-                    }`}
-                  >
-                    📍 Whanganui
-                  </button>
-                </div>
+                <span className="px-3 py-1.5 rounded-xl text-xs font-bold bg-primary text-white shadow-sm flex items-center gap-1.5">
+                  <MapPin size={14} weight="bold" /> New Plymouth Office
+                </span>
               </div>
 
               {/* Google Map iFrame Embed */}
               <div className="relative w-full aspect-[4/3] min-h-[260px] rounded-2xl overflow-hidden shadow-inner border border-neutral-200/80 bg-neutral-100">
                 <iframe
                   title="Cluster Outdoor Solutions Google Map Location"
-                  src={
-                    activeMapLocation === 'np'
-                      ? "https://maps.google.com/maps?q=Sunley+Street,+Westown,+New+Plymouth+4310,+New+Zealand&t=&z=15&ie=UTF8&iwloc=&output=embed"
-                      : "https://maps.google.com/maps?q=Whanganui,+New+Zealand&t=&z=13&ie=UTF8&iwloc=&output=embed"
-                  }
+                  src="https://maps.google.com/maps?q=Unit+2,+1B+Sunley+Street,+Westown,+New+Plymouth+4310,+New+Zealand&t=&z=15&ie=UTF8&iwloc=&output=embed"
                   className="w-full h-full border-0"
                   allowFullScreen
                   loading="lazy"
@@ -439,16 +435,10 @@ export default function Contact() {
               {/* Bottom Info Bar */}
               <div className="mt-3 flex flex-col sm:flex-row sm:items-center justify-between text-xs text-neutral-gray px-1 gap-1 font-medium">
                 <span>
-                  {activeMapLocation === 'np'
-                    ? 'Main Showroom: Sunley Street, Westown, New Plymouth'
-                    : 'Service Region: Whanganui & Surrounding Districts'}
+                  Main Showroom: Unit 2, 1B Sunley Street, Westown, New Plymouth 4310
                 </span>
                 <a
-                  href={
-                    activeMapLocation === 'np'
-                      ? "https://maps.google.com/?q=Sunley+Street,+Westown,+New+Plymouth+4310,+New+Zealand"
-                      : "https://maps.google.com/?q=Whanganui,+New+Zealand"
-                  }
+                  href="https://maps.google.com/?q=Unit+2,+1B+Sunley+Street,+Westown,+New+Plymouth+4310,+New+Zealand"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-primary font-bold hover:underline"

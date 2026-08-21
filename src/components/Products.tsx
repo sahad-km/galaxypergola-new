@@ -41,7 +41,7 @@ export default function Products() {
     : productsData.filter((p) => p.category === activeCategory);
 
   return (
-    <section id="products" className="py-24 bg-cream-bg/100 relative">
+    <section id="products" className="py-24 bg-white relative">
       <div className="max-w-7xl mx-auto px-6">
 
         {/* Section Header */}
@@ -65,8 +65,8 @@ export default function Products() {
                 key={cat.id}
                 onClick={() => setActiveCategory(cat.id)}
                 className={`px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 relative ${activeCategory === cat.id
-                    ? 'text-white'
-                    : 'bg-white hover:bg-neutral-50 text-neutral-charcoal border border-neutral-200'
+                  ? 'text-white'
+                  : 'bg-white hover:bg-neutral-50 text-neutral-charcoal border border-neutral-200'
                   }`}
               >
                 {activeCategory === cat.id && (
@@ -168,8 +168,8 @@ export default function Products() {
                               key={swatch.name}
                               onClick={() => handleSwatchSelect(product.id, swatch.name)}
                               className={`w-6 h-6 rounded-full border transition-all duration-300 ${currentActive === swatch.name
-                                  ? 'border-primary scale-110 shadow-sm'
-                                  : 'border-neutral-200 hover:scale-105'
+                                ? 'border-primary scale-110 shadow-sm'
+                                : 'border-neutral-200 hover:scale-105'
                                 }`}
                               style={{ backgroundColor: swatch.hex }}
                               aria-label={`Select ${swatch.name} color swatch`}

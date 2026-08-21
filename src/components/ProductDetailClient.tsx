@@ -80,7 +80,7 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
   useEffect(() => {
     setFormData((prev) => ({
       ...prev,
-      message: `Hi, I would like to request a quote and free site measure for the ${product.name}.\n\nConfiguration:\n- Type: ${selectedType}\n- Size: ${selectedSize}\n- Finish: ${selectedColor}`,
+      message: `Hi, I would like to request a free onsite quote and measure for the ${product.name}.\n\nConfiguration:\n- Type: ${selectedType}\n- Size: ${selectedSize}\n- Finish: ${selectedColor}`,
     }));
   }, [product.name, selectedType, selectedSize, selectedColor]);
 
@@ -338,16 +338,14 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
               onClick={() => setIsQuoteModalOpen(true)}
               className="flex-1 py-4 bg-neutral-black text-white text-xs font-bold tracking-widest uppercase rounded-full hover:bg-primary transition-all duration-300 text-center shadow-lg hover:shadow-xl cursor-pointer"
             >
-              {product.typeOptions && product.typeOptions.length > 0
-                ? "Get Free Site Measure & Quote"
-                : "Book Now for Free Quote"}
+              Get a Free Onsite Quote
             </button>
             <a
-              href="tel:062621147"
+              href="tel:0224202266"
               className="px-6 py-4 bg-white text-neutral-black border border-neutral-200 text-xs font-bold tracking-wider uppercase rounded-full hover:bg-neutral-50 transition-all duration-300 text-center flex items-center justify-center gap-2 shadow-sm"
             >
               <Phone size={16} className="text-primary" weight="fill" />
-              <span>06 262 1147</span>
+              <span>Call 022 420 2266 / 06 262 1147</span>
             </a>
           </div>
         </div>
@@ -747,10 +745,10 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
 
               <div className="max-w-2xl">
                 <span className="text-[10px] font-extrabold tracking-widest text-primary uppercase mb-1.5 block">
-                  Free Site Measure & Quote
+                  Free Onsite Measure & Quote
                 </span>
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-white mb-2">
-                  Request a Free Measure & Quote for {product.name}
+                  Request a Free Onsite Measure & Quote for {product.name}
                 </h2>
                 <p className="text-xs text-neutral-300 leading-relaxed mb-6">
                   Our local installation specialists will consult on your site dimensions, structural requirements, and custom finishes with zero obligation.
@@ -855,7 +853,7 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
                       type="submit"
                       className="w-full py-4 bg-primary text-white font-extrabold text-xs uppercase tracking-widest rounded-full hover:bg-primary/90 transition-all shadow-lg cursor-pointer"
                     >
-                      Send Free Quote Request
+                      Send Free Onsite Quote Request
                     </button>
                   </form>
                 )}

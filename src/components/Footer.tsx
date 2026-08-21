@@ -104,16 +104,16 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* NZ Hub Locations Column (2 columns) */}
+          {/* Office Location Column (2 columns) */}
           <div className="lg:col-span-2">
             <h4 className="text-xs font-black uppercase tracking-widest text-white mb-6">
-              Showrooms
+              Main Office
             </h4>
             <div className="space-y-4">
               {contactDetailsData.locations.map((loc) => (
                 <div key={loc.name}>
                   <p className="text-[10px] font-black uppercase text-neutral-cream/90 mb-1 leading-normal">
-                    {loc.name.split(" ")[0]} Hub
+                    {loc.name}
                   </p>
                   <p className="text-[10px] text-neutral-cream/60 leading-normal font-semibold">
                     {loc.address}

@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { List, X, Phone, EnvelopeSimple } from '@phosphor-icons/react';
+import { List, X, Phone, Envelope, DeviceMobile } from '@phosphor-icons/react';
 
 const topPills = [
   { name: 'About', href: '/#about' },
@@ -22,6 +23,63 @@ const categoryLinks = [
   { name: 'Sunroom', href: '/products?category=sunroom' },
 ];
 
+function CategoryNav() {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const currentCategory = searchParams?.get('category')?.toLowerCase();
+
+  return (
+    <nav className="flex items-center justify-between overflow-x-auto py-2 scrollbar-none whitespace-nowrap gap-2 sm:gap-4 text-white text-sm font-semibold">
+      {categoryLinks.map((cat) => {
+        const catKey = cat.href.split('category=')[1]?.toLowerCase();
+        const isActive = pathname === '/products' && currentCategory === catKey;
+
+        return (
+          <Link
+            key={cat.name}
+            href={cat.href}
+            className={`px-4 py-1.5 rounded-full font-bold tracking-wide transition-all duration-300 transform active:translate-y-0 ${isActive
+                ? 'bg-white text-primary shadow-md scale-105'
+                : 'text-white/95 hover:text-primary hover:bg-white hover:shadow-md hover:-translate-y-0.5'
+              }`}
+          >
+            {cat.name}
+          </Link>
+        );
+      })}
+    </nav>
+  );
+}
+
+function MobileCategoryNav({ onClose }: { onClose: () => void }) {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const currentCategory = searchParams?.get('category')?.toLowerCase();
+
+  return (
+    <nav className="flex flex-col space-y-2">
+      {categoryLinks.map((link) => {
+        const catKey = link.href.split('category=')[1]?.toLowerCase();
+        const isActive = pathname === '/products' && currentCategory === catKey;
+
+        return (
+          <Link
+            key={link.name}
+            href={link.href}
+            onClick={onClose}
+            className={`px-4 py-2.5 rounded-xl font-semibold transition-all duration-200 ${isActive
+                ? 'bg-primary text-white font-bold shadow-sm'
+                : 'text-neutral-800 hover:bg-primary-cream hover:text-primary'
+              }`}
+          >
+            {link.name}
+          </Link>
+        );
+      })}
+    </nav>
+  );
+}
+
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -37,7 +95,7 @@ export default function Header() {
               alt="Cluster Outdoor Solutions Logo"
               width={220}
               height={70}
-              className="h-12 sm:h-14 md:h-16 w-auto object-contain transition-transform duration-200 hover:scale-102"
+              className="h-12 sm:h-14 md:h-20 w-auto object-contain transition-transform duration-200 hover:scale-102"
               priority
             />
           </Link>
@@ -54,21 +112,21 @@ export default function Header() {
               </a>
             ))}
 
-            {/* Phone Pill Button */}
-            {/* <a
-              href="tel:062621147"
+            {/* Mobile Pill Button */}
+            <a
+              href="tel:0224202266"
               className="flex items-center space-x-2 px-5 py-2 bg-primary hover:bg-primary-hover text-white text-sm font-semibold rounded-full transition-colors shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
-              <Phone size={18} weight="fill" />
-              <span>06 262 1147</span>
-            </a> */}
+              <DeviceMobile size={18} weight="bold" />
+              <span>022 420 2266</span>
+            </a>
 
             {/* Email Pill Button */}
             <a
               href="mailto:info@clusteroutdoor.co.nz"
               className="flex items-center space-x-2 px-5 py-2 bg-primary hover:bg-primary-hover text-white text-sm font-semibold rounded-full transition-colors shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
-              <EnvelopeSimple size={18} weight="fill" />
+              <Envelope size={18} weight="bold" />
               <span>info@clusteroutdoor.co.nz</span>
             </a>
           </div>
@@ -76,11 +134,11 @@ export default function Header() {
           {/* Mobile Right Quick Call + Menu Toggle */}
           <div className="flex items-center space-x-2 lg:hidden">
             <a
-              href="tel:062621147"
+              href="tel:0224202266"
               className="flex items-center space-x-1.5 px-3 py-1.5 bg-primary text-white text-xs font-semibold rounded-full shadow-sm"
             >
               <Phone size={15} weight="fill" />
-              <span>06 262 1147</span>
+              <span>022 420 2266</span>
             </a>
 
             <button
@@ -93,20 +151,24 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Bottom Bar: Full Width Brand Color Navigation Row (Hidden on mobile as it's in drawer) */}
-        <div className="hidden sm:block w-full bg-primary border-t border-primary-hover">
+        {/* Bottom Bar: Full Width Brand Color Navigation Row */}
+        <div className="hidden sm:block w-full bg-primary border-t border-primary-hover shadow-inner">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
-            <nav className="flex items-center justify-between overflow-x-auto py-2.5 scrollbar-none whitespace-nowrap gap-4 sm:gap-6 text-white text-sm font-medium">
-              {categoryLinks.map((cat) => (
-                <Link
-                  key={cat.name}
-                  href={cat.href}
-                  className="hover:opacity-85 transition-opacity duration-150 px-1 py-0.5"
-                >
-                  {cat.name}
-                </Link>
-              ))}
-            </nav>
+            <Suspense fallback={
+              <nav className="flex items-center justify-between overflow-x-auto py-2 scrollbar-none whitespace-nowrap gap-2 sm:gap-4 text-white text-sm font-semibold">
+                {categoryLinks.map((cat) => (
+                  <Link
+                    key={cat.name}
+                    href={cat.href}
+                    className="px-4 py-1.5 rounded-full text-white/95 font-bold tracking-wide"
+                  >
+                    {cat.name}
+                  </Link>
+                ))}
+              </nav>
+            }>
+              <CategoryNav />
+            </Suspense>
           </div>
         </div>
       </header>
@@ -160,29 +222,33 @@ export default function Header() {
                   </a>
                 ))}
                 <a
-                  href="tel:062621147"
+                  href="tel:0224202266"
                   className="flex items-center space-x-1 px-4 py-2 bg-primary text-white text-xs font-semibold rounded-full"
                 >
                   <Phone size={14} weight="fill" />
-                  <span>06 262 1147</span>
+                  <span>022 420 2266</span>
                 </a>
               </div>
 
               {/* Product Category Links */}
               <div className="py-6 flex-1">
                 <p className="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-4">Product Categories</p>
-                <nav className="flex flex-col space-y-3">
-                  {categoryLinks.map((link) => (
-                    <Link
-                      key={link.name}
-                      href={link.href}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="text-base font-semibold text-neutral-800 hover:text-primary transition-colors"
-                    >
-                      {link.name}
-                    </Link>
-                  ))}
-                </nav>
+                <Suspense fallback={
+                  <nav className="flex flex-col space-y-3">
+                    {categoryLinks.map((link) => (
+                      <Link
+                        key={link.name}
+                        href={link.href}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="text-base font-semibold text-neutral-800"
+                      >
+                        {link.name}
+                      </Link>
+                    ))}
+                  </nav>
+                }>
+                  <MobileCategoryNav onClose={() => setMobileMenuOpen(false)} />
+                </Suspense>
               </div>
 
               {/* Bottom CTA */}
@@ -192,7 +258,7 @@ export default function Header() {
                   onClick={() => setMobileMenuOpen(false)}
                   className="w-full flex items-center justify-center space-x-2 py-3.5 bg-primary text-white font-bold text-sm tracking-wider uppercase text-center rounded-full shadow-md hover:bg-primary-hover transition-colors"
                 >
-                  <EnvelopeSimple size={18} weight="fill" />
+                  <Envelope size={18} weight="bold" />
                   <span>Email Us</span>
                 </a>
               </div>

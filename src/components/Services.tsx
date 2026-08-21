@@ -2,14 +2,14 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Sun, 
-  CloudRain, 
-  Car, 
-  Sliders, 
-  Compass, 
+import {
+  Sun,
+  CloudRain,
+  Car,
+  Sliders,
+  Compass,
   Wrench,
-  House, 
+  House,
   ArrowRight,
   Drop,
   Sparkle
@@ -62,7 +62,7 @@ export default function Services() {
   return (
     <section id="services" className="py-24 bg-white relative">
       <div className="max-w-7xl mx-auto px-6">
-        
+
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-20">
           <motion.span
@@ -85,7 +85,7 @@ export default function Services() {
         </div>
 
         {/* Services Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {servicesData.map((service, idx) => (
             <motion.div
               key={service.id}
@@ -127,12 +127,10 @@ export default function Services() {
         </div>
 
         {/* Signature Feature: Interactive Configurator */}
-        <div className="p-8 md:p-12 rounded-3xl bg-neutral-cream/60 border border-neutral-200/60 shadow-inner grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          
-          {/* Configurator Visualizer (SVG) */}
+        {/* <div className="p-8 md:p-12 rounded-3xl bg-neutral-cream/60 border border-neutral-200/60 shadow-inner grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+
           <div className="lg:col-span-7 bg-white/80 backdrop-blur rounded-2xl border border-neutral-100 p-6 shadow-lg flex flex-col items-center justify-center relative overflow-hidden aspect-[4/3] w-full">
-            
-            {/* Weather Indicators / Alert */}
+
             <div className="absolute top-4 left-4 z-10 flex flex-col gap-2">
               <AnimatePresence>
                 {rainActive && (
@@ -162,21 +160,18 @@ export default function Services() {
               </AnimatePresence>
             </div>
 
-            {/* Configurator SVG Wireframe */}
-            <svg 
-              viewBox="0 0 600 400" 
+            <svg
+              viewBox="0 0 600 400"
               className="w-full h-full max-h-[300px]"
               aria-label="Interactive 3D model of pergola structure"
             >
               <defs>
-                {/* Ground Shadow */}
                 <radialGradient id="ground-shadow" cx="50%" cy="50%" r="50%">
                   <stop offset="0%" stopColor="#000000" stopOpacity="0.15" />
                   <stop offset="100%" stopColor="#000000" stopOpacity="0" />
                 </radialGradient>
               </defs>
 
-              {/* Rain Drops Simulation Layer */}
               {rainActive && Array.from({ length: 24 }).map((_, i) => {
                 const xVal = 100 + (i * 18);
                 const delay = (i % 5) * 0.2;
@@ -207,10 +202,8 @@ export default function Services() {
                 }
               `}</style>
 
-              {/* Floor / Deck Shadow */}
               <ellipse cx="300" cy="335" rx="240" ry="25" fill="url(#ground-shadow)" />
 
-              {/* Ziptrak Side Blind Screen (Front Post area) */}
               <AnimatePresence>
                 {blindsDown && (
                   <motion.polygon
@@ -219,7 +212,6 @@ export default function Services() {
                     exit={{ scaleY: 0 }}
                     style={{ originY: 0 }}
                     transition={{ duration: 1.2, ease: 'easeInOut' }}
-                    // Left front (150,150) to Right front (450,150) downwards to (450,330) and (150,330)
                     points="150,150 450,150 450,330 150,330"
                     fill="rgba(29, 28, 27, 0.45)"
                     stroke="rgba(134, 90, 51, 0.4)"
@@ -229,7 +221,6 @@ export default function Services() {
                 )}
               </AnimatePresence>
 
-              {/* Ziptrak Side Blind Side Mesh (Left Side) */}
               <AnimatePresence>
                 {blindsDown && (
                   <motion.polygon
@@ -238,7 +229,6 @@ export default function Services() {
                     exit={{ scaleY: 0 }}
                     style={{ originY: 0 }}
                     transition={{ duration: 1.2, ease: 'easeInOut' }}
-                    // Back left (220,110) to Front left (150,150) downwards to (150,330) and (220,290)
                     points="220,110 150,150 150,330 220,290"
                     fill="rgba(29, 28, 27, 0.3)"
                     stroke="none"
@@ -246,35 +236,24 @@ export default function Services() {
                 )}
               </AnimatePresence>
 
-              {/* PERGOLA POSTS (Behind blinds or layered) */}
-              {/* Back Left Post */}
               <line x1="220" y1="110" x2="220" y2="290" stroke={frameColor.hex} strokeWidth="6" strokeLinecap="round" />
-              {/* Back Right Post */}
               <line x1="380" y1="110" x2="380" y2="290" stroke={frameColor.hex} strokeWidth="6" strokeLinecap="round" />
-              {/* Front Left Post */}
               <line x1="150" y1="150" x2="150" y2="330" stroke={frameColor.hex} strokeWidth="10" strokeLinecap="round" />
-              {/* Front Right Post */}
               <line x1="450" y1="150" x2="450" y2="330" stroke={frameColor.hex} strokeWidth="10" strokeLinecap="round" />
 
-              {/* ROOF LOUVRES SYSTEM */}
-              {/* Renders 12 louvre blades that animate their visual thickness/slant based on state */}
               {Array.from({ length: 12 }).map((_, i) => {
-                // Interpolate position from back roof beam to front roof beam
                 const t = i / 11;
-                const lx1 = 220 + t * (150 - 220); // left point x
-                const ly1 = 110 + t * (150 - 110); // left point y
-                const rx2 = 380 + t * (450 - 380); // right point x
-                const ry2 = 110 + t * (150 - 110); // right point y
+                const lx1 = 220 + t * (150 - 220);
+                const ly1 = 110 + t * (150 - 110);
+                const rx2 = 380 + t * (450 - 380);
+                const ry2 = 110 + t * (150 - 110);
 
-                // Compute normal vector projection for the louvre blade orientation
-                // Closed (0 deg) -> wide height (flat ceiling). Open (90 deg) -> thin lines.
                 const factor = Math.cos((louvreAngle * Math.PI) / 180);
-                const heightOffset = 6 - factor * 6; // 0 when open (vertical), 6 when closed (flat)
+                const heightOffset = 6 - factor * 6;
                 const rotOffset = factor * 4;
 
                 return (
                   <g key={i}>
-                    {/* The Slat blade */}
                     <line
                       x1={lx1}
                       y1={ly1 + rotOffset}
@@ -285,7 +264,6 @@ export default function Services() {
                       strokeLinecap="square"
                       className="transition-all duration-500 ease-out"
                     />
-                    {/* Shadow detailing on blades */}
                     <line
                       x1={lx1 + 2}
                       y1={ly1 + rotOffset + 1}
@@ -299,25 +277,18 @@ export default function Services() {
                 );
               })}
 
-              {/* MAIN TOP BEAMS (Framing the roof) */}
-              {/* Back Roof Beam */}
               <line x1="220" y1="110" x2="380" y2="110" stroke={frameColor.hex} strokeWidth="8" strokeLinecap="square" />
-              {/* Left Side Beam */}
               <line x1="220" y1="110" x2="150" y2="150" stroke={frameColor.hex} strokeWidth="10" strokeLinecap="square" />
-              {/* Right Side Beam */}
               <line x1="380" y1="110" x2="450" y2="150" stroke={frameColor.hex} strokeWidth="10" strokeLinecap="square" />
-              {/* Front Main Beam */}
               <line x1="150" y1="150" x2="450" y2="150" stroke={frameColor.hex} strokeWidth="12" strokeLinecap="square" />
 
             </svg>
 
-            {/* Interactive watermark tag */}
             <span className="absolute bottom-3 right-4 text-[10px] tracking-wider text-neutral-400 font-mono">
               Live Custom SVG Visualizer
             </span>
           </div>
 
-          {/* Configurator Controls Panel */}
           <div className="lg:col-span-5 flex flex-col justify-center">
             <span className="text-xs font-bold text-primary tracking-widest uppercase mb-1 block">
               Signature Innovation
@@ -329,7 +300,6 @@ export default function Services() {
               Configure our motorized louvre pergola system. Toggle side screens, adjust sunlight levels, or simulate a rainfall downpour to see the smart automation close the roof dynamically.
             </p>
 
-            {/* Control: Frame Color Select */}
             <div className="mb-6">
               <label className="text-xs font-extrabold uppercase tracking-wider text-neutral-black mb-2.5 block">
                 Structure Frame Color: <span className="text-primary normal-case font-normal">{frameColor.name}</span>
@@ -339,9 +309,8 @@ export default function Services() {
                   <button
                     key={color.name}
                     onClick={() => setFrameColor(color)}
-                    className={`w-8 h-8 rounded-full border-2 transition-all duration-300 relative ${
-                      frameColor.name === color.name ? 'border-primary scale-110' : 'border-transparent hover:scale-105'
-                    }`}
+                    className={`w-8 h-8 rounded-full border-2 transition-all duration-300 relative ${frameColor.name === color.name ? 'border-primary scale-110' : 'border-transparent hover:scale-105'
+                      }`}
                     style={{ backgroundColor: color.hex }}
                     aria-label={`Select frame color ${color.name}`}
                   >
@@ -355,7 +324,6 @@ export default function Services() {
               </div>
             </div>
 
-            {/* Control: Louvre Roof Slider */}
             <div className="mb-6">
               <div className="flex justify-between items-center mb-2">
                 <label className="text-xs font-extrabold uppercase tracking-wider text-neutral-black block">
@@ -371,7 +339,6 @@ export default function Services() {
                 onChange={(e) => {
                   setLouvreAngle(Number(e.target.value));
                   if (rainActive && Number(e.target.value) > 0) {
-                    // Turn off rain simulation if user manually forces open
                     setRainActive(false);
                   }
                 }}
@@ -384,29 +351,24 @@ export default function Services() {
               </div>
             </div>
 
-            {/* Control: Blinds Toggle */}
             <div className="flex flex-col sm:flex-row gap-4">
-              
-              {/* Ziptrak Blinds */}
+
               <button
                 onClick={() => setBlindsDown(!blindsDown)}
-                className={`flex-1 py-3 px-4 rounded-xl border font-bold text-xs uppercase tracking-wider transition-all duration-300 ${
-                  blindsDown 
-                    ? 'bg-primary text-white border-primary shadow-md' 
+                className={`flex-1 py-3 px-4 rounded-xl border font-bold text-xs uppercase tracking-wider transition-all duration-300 ${blindsDown
+                    ? 'bg-primary text-white border-primary shadow-md'
                     : 'bg-white text-charcoal border-neutral-200 hover:bg-neutral-50'
-                }`}
+                  }`}
               >
                 {blindsDown ? 'Roll Up Ziptrak Blinds' : 'Drop Ziptrak Blinds'}
               </button>
 
-              {/* Rain Simulator */}
               <button
                 onClick={() => setRainActive(!rainActive)}
-                className={`flex-1 py-3 px-4 rounded-xl border font-bold text-xs uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-1.5 ${
-                  rainActive 
-                    ? 'bg-blue-600 text-white border-blue-600 shadow-md animate-pulse' 
+                className={`flex-1 py-3 px-4 rounded-xl border font-bold text-xs uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-1.5 ${rainActive
+                    ? 'bg-blue-600 text-white border-blue-600 shadow-md animate-pulse'
                     : 'bg-white text-blue-600 border-blue-200 hover:bg-blue-50/50'
-                }`}
+                  }`}
               >
                 <Drop size={16} weight={rainActive ? 'fill' : 'bold'} />
                 {rainActive ? 'Stop Rain Sim' : 'Simulate Rain'}
@@ -416,7 +378,7 @@ export default function Services() {
 
           </div>
 
-        </div>
+        </div> */}
 
       </div>
     </section>

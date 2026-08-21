@@ -85,7 +85,7 @@ export default function About() {
                 Designed for the kiwi lifestyle. Engineered for local conditions.
               </h2>
               <p className="text-base sm:text-lg text-charcoal leading-relaxed mb-6">
-                At Cluster Outdoor Solutions, we believe that New Zealanders deserve spaces that blur the boundaries between indoors and outdoors, regardless of the season. From our intense summer UV rays in Tauranga to the heavy snowfalls of Queenstown, our structures are built to endure.
+                At Cluster Outdoor Solutions, we believe that New Zealanders deserve spaces that blur the boundaries between indoors and outdoors, regardless of the season. From coastal Taranaki winds to variable Whanganui weather, our structures are engineered to endure.
               </p>
               <p className="text-base text-neutral-gray leading-relaxed mb-8">
                 We custom-engineer every pergola, canopy, carport, and blind system in our local facility, using premium marine-grade aluminium and stainless steel fixtures. Our structural standards exceed local building codes, ensuring your investment stands rock-solid for decades.

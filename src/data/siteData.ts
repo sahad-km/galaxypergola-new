@@ -70,11 +70,8 @@ export const categoryLabels: Record<string, string> = {
 };
 
 export const activeRegions = [
-  "Taranaki Region (Local Base)",
-  "Whanganui Region (Mobile Consultations)",
-  "Manawatu & Palmerston North",
-  "Waikato & King Country",
-  "Wellington & Lower North Island",
+  "Taranaki Region",
+  "Whanganui Region",
 ];
 
 export function getCategoryLabel(category: string): string {
@@ -107,6 +104,7 @@ export interface TestimonialItem {
 
 export interface ContactDetails {
   phone: string;
+  mobile: string;
   email: string;
   hours: string;
   regions: string[];
@@ -126,7 +124,7 @@ export const statsData: StatItem[] = [
     value: 1000,
     suffix: "+",
     label: "Projects Completed",
-    description: "Custom pergolas, canopies, and blinds installed nationwide.",
+    description: "Custom pergolas, canopies, and blinds installed across Taranaki & Whanganui.",
   },
   {
     id: "satisfaction",
@@ -708,7 +706,7 @@ Instant comfort, any weather — like a remote control for the sky.`,
       "Smooth gear-driven crank handle mechanism",
       "Heavy-duty bottom bar with quick locking pins",
       "Precision side channels eliminate breeze blow-outs",
-      "Custom manufactured in Auckland, New Zealand",
+      "Custom manufactured in New Zealand",
       "High UV resistance solar shading mesh",
     ],
     specifications: {
@@ -1335,40 +1333,40 @@ export const testimonialsData: TestimonialItem[] = [
   {
     id: "test-1",
     name: "Sarah & David K.",
-    location: "Auckland (St Heliers)",
-    quote: "Our Apex Louvre Pergola has completely changed our family routine. We can sit outside even when a sudden Auckland downpour rolls in. The rain sensor works like magic, automatically closing the slats. The service from the installation team was exceptional.",
+    location: "New Plymouth (Oakura)",
+    quote: "Our Apex Louvre Pergola has completely changed our family routine. We can sit outside even when a sudden Taranaki downpour rolls in. The rain sensor works like magic, automatically closing the slats. The service from the installation team was exceptional.",
     rating: 5,
     project: "Apex Louvre Pergola",
   },
   {
     id: "test-2",
     name: "Mark Thomson",
-    location: "Christchurch (Fendalton)",
-    quote: "The Canterbury winds used to blow right through our patio, making it unusable for half the year. The Ziptrak outdoor blinds installed by Cluster have solved this completely. They are incredibly sturdy, easy to roll, and seal the space tightly.",
+    location: "Whanganui (Otamatea)",
+    quote: "The coastal winds used to blow right through our patio, making it unusable for half the year. The Ziptrak outdoor blinds installed by Cluster have solved this completely. They are incredibly sturdy, easy to roll, and seal the space tightly.",
     rating: 5,
     project: "Ziptrak Blinds",
   },
   {
     id: "test-3",
     name: "Liam O'Connor",
-    location: "Queenstown",
-    quote: "I was worried about the heavy snow loads here in Central Otago, but Cluster engineered a fixed Horizon Canopy that handles the snow and looks absolutely stunning. The sleek dark charcoal frame perfectly complements our cedar home.",
+    location: "Hawera (Taranaki)",
+    quote: "I was worried about the strong wind loads here in Taranaki, but Cluster engineered a fixed Horizon Canopy that handles the gusts and looks absolutely stunning. The sleek dark charcoal frame perfectly complements our cedar home.",
     rating: 5,
     project: "Horizon Fixed Canopy",
   },
   {
     id: "test-4",
     name: "Aroha & Wiremu",
-    location: "Tauranga",
-    quote: "Our new deck canopy has become the main room of the house! It filters the intense Bay of Plenty summer UV rays, keeping the kids safe while let's us dine outside every evening. Outstanding workmanship and great communication throughout.",
+    location: "New Plymouth (Bell Block)",
+    quote: "Our new deck canopy has become the main room of the house! It filters the intense Taranaki summer UV rays, keeping the kids safe while letting us dine outside every evening. Outstanding workmanship and great communication throughout.",
     rating: 5,
     project: "Horizon Fixed Canopy",
   },
   {
     id: "test-5",
     name: "Eleanor Vance",
-    location: "Wellington (Khandallah)",
-    quote: "We needed a carport for a very steep and narrow driveway where regular supports would get in the way of opening doors. The Metro Cantilever Carport is engineering at its finest. It stands rock-solid against Wellington winds.",
+    location: "Whanganui (Eastbrook)",
+    quote: "We needed a carport for a very steep and narrow driveway where regular supports would get in the way of opening doors. The Metro Cantilever Carport is engineering at its finest. It stands rock-solid against Whanganui winds.",
     rating: 5,
     project: "Metro Cantilever Carport",
   },
@@ -1376,23 +1374,17 @@ export const testimonialsData: TestimonialItem[] = [
 
 export const contactDetailsData: ContactDetails = {
   phone: "06 262 1147",
+  mobile: "022 420 2266",
   email: "info@clusteroutdoor.co.nz",
   hours: "Monday - Friday: 8:00 AM - 5:00 PM | Saturday: 9:00 AM - 1:00 PM",
   regions: [
     "Taranaki Region (Local Base)",
     "Whanganui Region (Mobile Consultations)",
-    "Manawatu & Palmerston North",
-    "Waikato & King Country",
-    "Wellington & Lower North Island",
   ],
   locations: [
     {
       name: "Main Office & Showroom",
-      address: "Sunley Street, Westown, New Plymouth 4310, New Zealand",
-    },
-    {
-      name: "Whanganui Mobile Service Area",
-      address: "Mobile Onsite Consultations, Free Measures, & Local Installers",
+      address: "Unit 2, 1B Sunley Street, Westown, New Plymouth 4310, New Zealand",
     },
   ],
 };

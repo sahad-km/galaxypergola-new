@@ -47,47 +47,24 @@ export default function Hero() {
       {/* Hero Content: Scrolls up naturally over the fixed video */}
       <motion.div
         style={{ y: contentY, opacity: contentOpacity }}
-        className="relative z-20 max-w-5xl mx-auto px-6 text-center text-white flex flex-col items-center justify-center h-full pt-28 sm:pt-32"
+        className="relative z-20 max-w-5xl mx-auto px-6 text-center text-white flex flex-col items-center justify-end h-full pb-28 sm:pb-36"
       >
-        {/* Animated Headline */}
-        <motion.h1
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-          className="text-white text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-tight sm:leading-none"
-        >
-          Outdoor Living, <br className="hidden sm:inline" />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light via-white to-primary-light">
-            Redefined
-          </span>
-        </motion.h1>
-
-        {/* Animated Subheadline */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.4 }}
-          className="mt-4 sm:mt-6 text-lg sm:text-xl md:text-2xl text-neutral-300 max-w-2xl font-light leading-relaxed"
-        >
-          Custom pergolas & canopies built for NZ weather.
-        </motion.p>
-
-        {/* Animated CTAs */}
+        {/* Animated CTAs - Larger & Standout */}
         <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.6 }}
-          className="mt-10 flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center w-full sm:w-auto"
+          initial={{ opacity: 0, scale: 0.9, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+          className="flex flex-col sm:flex-row gap-5 sm:gap-8 justify-center items-center w-full sm:w-auto"
         >
           <a
             href="#contact"
-            className="px-8 py-4 bg-primary text-white text-base font-bold tracking-wider uppercase rounded-full shadow-xl hover:bg-primary-hover hover:shadow-primary/30 transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 focus:outline-none focus:ring-4 focus:ring-primary-light"
+            className="w-full sm:w-auto px-10 py-5 sm:px-12 sm:py-6 bg-primary text-white text-lg sm:text-xl font-extrabold tracking-wider uppercase rounded-full shadow-2xl hover:bg-primary-hover hover:shadow-primary/40 hover:scale-105 transition-all duration-300 transform active:scale-100 focus:outline-none focus:ring-4 focus:ring-primary-light"
           >
-            Get a Free Quote
+            Get a Free Onsite Quote
           </a>
           <a
             href="#products"
-            className="px-8 py-4 bg-white/10 hover:bg-white/20 text-white text-base font-bold tracking-wider uppercase rounded-full border border-white/30 backdrop-blur-sm transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 focus:outline-none focus:ring-4 focus:ring-white/50"
+            className="w-full sm:w-auto px-10 py-5 sm:px-12 sm:py-6 bg-white/15 hover:bg-white/25 text-white text-lg sm:text-xl font-extrabold tracking-wider uppercase rounded-full border-2 border-white/40 backdrop-blur-md shadow-2xl hover:border-white hover:scale-105 transition-all duration-300 transform active:scale-100 focus:outline-none focus:ring-4 focus:ring-white/50"
           >
             Explore Products
           </a>
