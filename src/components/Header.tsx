@@ -15,13 +15,30 @@ const topPills = [
 
 const categoryLinks = [
   { name: 'Louvre', href: '/products?category=louvre' },
-  { name: 'Pergola', href: '/products?category=pergola' },
-  { name: 'Canopy', href: '/products?category=canopy' },
+  { name: 'Pergola', href: '/products/pergo-vue' },
+  { name: 'Canopy', href: '/products/canopy' },
   { name: 'Outdoor Blinds', href: '/products?category=blinds' },
-  { name: 'Carport', href: '/products?category=carport' },
-  { name: 'Outdoor Shutter', href: '/products?category=shutter' },
-  { name: 'Sunroom', href: '/products?category=sunroom' },
+  { name: 'Carport', href: '/products/carport' },
+  { name: 'Outdoor Shutter', href: '/products/outdoor-shutter' },
+  { name: 'Sunroom', href: '/products/sunroom' },
 ];
+
+function isCategoryItemActive(catKey: string, pathname: string, currentCategoryParam?: string | null) {
+  if (pathname === '/products') {
+    return currentCategoryParam === catKey;
+  }
+  if (pathname.startsWith('/products/')) {
+    const slug = pathname.replace('/products/', '').toLowerCase();
+    if (catKey === 'louvre' && slug.includes('louvre')) return true;
+    if (catKey === 'pergola' && (slug.includes('pergola') || slug === 'pergo-vue')) return true;
+    if (catKey === 'canopy' && slug.includes('canopy')) return true;
+    if (catKey === 'blinds' && (slug.includes('blinds') || slug.includes('ziptrak') || slug.includes('easy'))) return true;
+    if (catKey === 'carport' && slug.includes('carport')) return true;
+    if (catKey === 'shutter' && slug.includes('shutter')) return true;
+    if (catKey === 'sunroom' && slug.includes('sunroom')) return true;
+  }
+  return false;
+}
 
 function CategoryNav() {
   const pathname = usePathname();
@@ -32,7 +49,7 @@ function CategoryNav() {
     <nav className="flex items-center justify-between overflow-x-auto py-2 scrollbar-none whitespace-nowrap gap-2 sm:gap-4 text-white text-sm font-semibold">
       {categoryLinks.map((cat) => {
         const catKey = cat.href.split('category=')[1]?.toLowerCase();
-        const isActive = pathname === '/products' && currentCategory === catKey;
+        const isActive = isCategoryItemActive(catKey, pathname, currentCategory);
 
         return (
           <Link
@@ -60,7 +77,7 @@ function MobileCategoryNav({ onClose }: { onClose: () => void }) {
     <nav className="flex flex-col space-y-2">
       {categoryLinks.map((link) => {
         const catKey = link.href.split('category=')[1]?.toLowerCase();
-        const isActive = pathname === '/products' && currentCategory === catKey;
+        const isActive = isCategoryItemActive(catKey, pathname, currentCategory);
 
         return (
           <Link

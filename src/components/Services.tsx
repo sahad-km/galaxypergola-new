@@ -103,12 +103,12 @@ export default function Services() {
                 <h3 className="text-xl font-bold text-neutral-black mb-3">
                   {service.title}
                 </h3>
-                <p className="text-sm text-neutral-gray leading-relaxed mb-6">
+                <p className="text-base text-neutral-gray leading-relaxed mb-6">
                   {service.description}
                 </p>
                 <ul className="space-y-2 mb-8">
                   {service.features.map((feat) => (
-                    <li key={feat} className="flex items-center text-xs text-charcoal font-medium">
+                    <li key={feat} className="flex items-center text-sm text-charcoal font-medium">
                       <span className="w-1.5 h-1.5 rounded-full bg-primary mr-2" />
                       {feat}
                     </li>
@@ -117,7 +117,7 @@ export default function Services() {
               </div>
               <a
                 href="#contact"
-                className="inline-flex items-center text-xs font-bold uppercase tracking-wider text-primary hover:text-primary-hover group transition-colors"
+                className="inline-flex items-center text-sm font-bold uppercase tracking-wider text-primary hover:text-primary-hover group transition-colors"
               >
                 Learn More
                 <ArrowRight size={14} className="ml-2 transform group-hover:translate-x-1 transition-transform" />

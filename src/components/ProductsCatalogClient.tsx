@@ -31,6 +31,13 @@ export default function ProductsCatalogClient() {
   useEffect(() => {
     if (categoryParam) {
       setActiveCategory(categoryParam);
+      // Smooth scroll down to catalog filter/grid section when category param is present
+      const targetElement = document.getElementById('catalog-filter');
+      if (targetElement) {
+        setTimeout(() => {
+          targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+      }
     } else {
       setActiveCategory('all');
     }
@@ -101,7 +108,7 @@ export default function ProductsCatalogClient() {
       </div>
 
       {/* Search & Category Filter Controls */}
-      <div className="bg-white rounded-3xl p-5 sm:p-7 shadow-lg shadow-black/[0.03] border border-neutral-100 mb-14 space-y-6">
+      <div id="catalog-filter" className="bg-white rounded-3xl p-5 sm:p-7 shadow-lg shadow-black/[0.03] border border-neutral-100 mb-14 space-y-6 scroll-mt-36">
         
         {/* Top Bar: Search Input & Results Indicator */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
@@ -168,7 +175,7 @@ export default function ProductsCatalogClient() {
                   onClick={() => handleCategorySelect(cat.id)}
                   className={`px-4 py-2.5 rounded-2xl text-xs font-bold transition-all duration-300 flex items-center gap-2 ${
                     isActive
-                      ? 'bg-neutral-black text-white shadow-md shadow-black/10 scale-[1.02]'
+                      ? 'bg-primary text-white shadow-md shadow-primary/20 scale-[1.02]'
                       : 'bg-neutral-50 hover:bg-neutral-100 text-neutral-charcoal border border-neutral-200/80 hover:border-neutral-300'
                   }`}
                 >
@@ -260,14 +267,14 @@ export default function ProductsCatalogClient() {
                       </p>
                     )}
 
-                    <p className="text-xs text-neutral-gray leading-relaxed mb-6 line-clamp-3">
+                    <p className="text-sm text-neutral-gray leading-relaxed mb-6 line-clamp-3">
                       {product.description}
                     </p>
 
                     {/* Features Preview */}
                     <div className="space-y-2 mb-6 border-t border-neutral-100 pt-4">
                       {product.features.slice(0, 3).map((feat) => (
-                        <div key={feat} className="flex items-center text-[11px] font-medium text-neutral-charcoal">
+                        <div key={feat} className="flex items-center text-xs font-medium text-neutral-charcoal">
                           <Shield size={14} className="text-primary mr-2 flex-shrink-0" />
                           <span className="truncate">{feat}</span>
                         </div>
@@ -280,7 +287,7 @@ export default function ProductsCatalogClient() {
                 <div className="p-6 pt-0 flex items-center gap-3">
                   <Link
                     href={`/products/${product.id}`}
-                    className="flex-1 px-4 py-3 bg-neutral-black text-white text-xs font-bold tracking-wider uppercase rounded-full hover:bg-primary transition-all duration-300 text-center flex items-center justify-center gap-2 group/btn"
+                    className="flex-1 px-4 py-3 bg-primary hover:bg-neutral-black text-white text-xs font-bold tracking-wider uppercase rounded-full transition-all duration-300 text-center flex items-center justify-center gap-2 group/btn shadow-sm shadow-primary/20"
                   >
                     <span>View Product</span>
                     <ArrowRight size={14} className="transition-transform group-hover/btn:translate-x-1" />

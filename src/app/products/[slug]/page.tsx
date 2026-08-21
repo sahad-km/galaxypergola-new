@@ -10,14 +10,30 @@ interface PageProps {
 }
 
 export async function generateStaticParams() {
-  return productsData.map((product) => ({
-    slug: product.id,
-  }));
+  const extraSlugs = ['canopy', 'carport', 'blinds', 'outdoor-blinds', 'pergola'];
+  const allSlugs = [...productsData.map((product) => product.id), ...extraSlugs];
+  return Array.from(new Set(allSlugs)).map((slug) => ({ slug }));
+}
+
+function resolveProduct(slug: string) {
+  let product = productsData.find((p) => p.id === slug);
+  if (!product) {
+    if (slug === 'straight-canopy' || slug === 'curved-canopy' || slug === 'window-canopy' || slug === 'canopy') {
+      product = productsData.find((p) => p.id === 'canopy' || p.id === 'straight-canopy');
+    } else if (slug === 'arch-carport' || slug === 'straight-carport' || slug === 'carport') {
+      product = productsData.find((p) => p.id === 'carport' || p.id === 'arch-carport');
+    } else if (slug === 'easychannel-blinds' || slug === 'easytrack-blinds' || slug === 'outdoor-blinds' || slug === 'blinds') {
+      product = productsData.find((p) => p.id === 'ziptrak-blinds');
+    } else if (slug === 'pergola') {
+      product = productsData.find((p) => p.id === 'pergo-vue');
+    }
+  }
+  return product;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const product = productsData.find((p) => p.id === slug);
+  const product = resolveProduct(slug);
 
   if (!product) {
     return {
@@ -38,7 +54,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function ProductDetailPage({ params }: PageProps) {
   const { slug } = await params;
-  const product = productsData.find((p) => p.id === slug);
+  const product = resolveProduct(slug);
 
   if (!product) {
     notFound();

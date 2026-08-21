@@ -235,24 +235,24 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
               </p>
             )} */}
 
-            <p className="text-xs text-neutral-gray leading-relaxed mb-6">
+            <p className="text-sm sm:text-base text-neutral-gray leading-relaxed mb-6">
               {product.fullDescription || product.description}
             </p>
 
-            {/* Configurable Option 1: Installation Type */}
+            {/* Configurable Option 1: Style / Option Type */}
             {product.typeOptions && product.typeOptions.length > 0 && (
               <div className="mb-5">
                 <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-400 mb-2">
-                  Installation Type: <span className="text-neutral-black">{selectedType}</span>
+                  Select Style / Option: <span className="text-neutral-black font-extrabold">{selectedType}</span>
                 </label>
-                <div className="grid grid-cols-2 gap-2.5">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
                   {product.typeOptions.map((typeOption) => (
                     <button
                       key={typeOption}
                       type="button"
                       onClick={() => setSelectedType(typeOption)}
                       className={`py-3 px-4 rounded-2xl border text-xs font-bold transition-all text-center ${selectedType === typeOption
-                        ? 'border-primary bg-primary text-white shadow-md shadow-primary/20'
+                        ? 'border-primary bg-primary text-white shadow-md shadow-primary/20 scale-102'
                         : 'border-neutral-200 bg-white text-neutral-charcoal hover:border-neutral-300'
                         }`}
                     >

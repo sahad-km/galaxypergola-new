@@ -1,207 +1,182 @@
 'use client';
 
-import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Shield, ArrowRight } from '@phosphor-icons/react';
+import { motion } from 'framer-motion';
+import { ArrowRight } from '@phosphor-icons/react';
 import { productsData } from '@/data/siteData';
 
-const categories = [
-  { id: 'all', name: 'All Products' },
-  { id: 'louvre', name: 'Louvre' },
-  { id: 'pergola', name: 'Pergola' },
-  { id: 'canopy', name: 'Canopy' },
-  { id: 'blinds', name: 'Outdoor Blinds' },
-  { id: 'carport', name: 'Carport' },
-  { id: 'shutter', name: 'Outdoor Shutter' },
-  { id: 'sunroom', name: 'Sunroom' },
+interface HomeProduct {
+  id: string;
+  name: string;
+  category: string;
+  description: string;
+  image: string;
+  tags: string[];
+  href: string;
+}
+
+const homeProducts: HomeProduct[] = [
+  {
+    id: 'louvre',
+    name: 'Louvre',
+    category: 'louvre',
+    description: 'Motorised aluminium louvre systems built with integrated gutter channels, rain sensors, and warm/cool LED lighting for all-weather patio climate control.',
+    image: '/images/product-louvre.png',
+    tags: ['Motorised', 'Rain Sensor'],
+    href: '/products?category=louvre',
+  },
+  {
+    id: 'pergola',
+    name: 'Pergola',
+    category: 'pergola',
+    description: 'Panoramic glass and open-frame roof system delivering unobstructed natural sky views while maintaining complete weather protection.',
+    image: '/images/product-louvre.png',
+    tags: ['Panoramic Sky', 'Glass Roof'],
+    href: '/products/pergo-vue',
+  },
+  {
+    id: 'canopy',
+    name: 'Canopy',
+    category: 'canopy',
+    description: 'Custom architectural canopy solutions engineered for New Zealand weather. Built with micro powder-coated aluminium frames and 2mm 99.9% UV protected solid polycarbonate roofing.',
+    image: '/images/product-canopy.png',
+    tags: ['3 Styles Available', '99.9% UV Block'],
+    href: '/products/canopy',
+  },
+  {
+    id: 'blinds',
+    name: 'Outdoor Blinds',
+    category: 'blinds',
+    description: 'Track-guided and side channel outdoor blind systems locking tightly against wind, rain, and insects. Turn any patio into a protected outdoor room.',
+    image: '/images/product-blinds.png',
+    tags: ['3 Systems Available', 'Zero Gap'],
+    href: '/products?category=blinds',
+  },
+  {
+    id: 'carport',
+    name: 'Carport',
+    category: 'carport',
+    description: 'High-grade aluminium alloy carport structures protecting vehicles, caravans, and boats from UV solar heat, heavy rain, and severe hail damage.',
+    image: '/images/product-carport.png',
+    tags: ['2 Styles Available', '120 km/h Wind Rated'],
+    href: '/products/carport',
+  },
+  {
+    id: 'shutter',
+    name: 'Outdoor Shutter',
+    category: 'shutter',
+    description: 'Architectural aluminium louvre shutters engineered for deck privacy, wind buffering, airflow control, and security across balconies and patios.',
+    image: '/images/product-louvre.png',
+    tags: ['Privacy Control', 'Wind Barrier'],
+    href: '/products/outdoor-shutter',
+  },
+  {
+    id: 'sunroom',
+    name: 'Sunroom',
+    category: 'sunroom',
+    description: 'Fully enclosed 365-day sunroom featuring double-glazed glass sliding doors, thermal insulated roof panels, and complete weather-sealed protection.',
+    image: '/images/about-install.png',
+    tags: ['All-Weather Enclosure', 'Double Glazed'],
+    href: '/products/sunroom',
+  },
 ];
 
 export default function Products() {
-  const [activeCategory, setActiveCategory] = useState('all');
-
-  // Track selected swatches per product by product ID
-  const [selectedSwatches, setSelectedSwatches] = useState<Record<string, string>>({
-    'apex-louvre': 'Matte Charcoal',
-    'horizon-canopy': 'Matte Charcoal',
-    'ziptrak-blinds': 'Charcoal Mesh',
-    'metro-carport': 'Matte Charcoal',
-  });
-
-  const handleSwatchSelect = (productId: string, swatchName: string) => {
-    setSelectedSwatches((prev) => ({
-      ...prev,
-      [productId]: swatchName,
-    }));
-  };
-
-  const filteredProducts = activeCategory === 'all'
-    ? productsData
-    : productsData.filter((p) => p.category === activeCategory);
-
   return (
     <section id="products" className="py-24 bg-white relative">
       <div className="max-w-7xl mx-auto px-6">
 
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
-          <div className="max-w-xl">
-            <span className="text-sm font-bold tracking-widest text-primary uppercase mb-3 block">
-              Our Products
-            </span>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-off-black leading-tight">
-              NZ-Engineered Structures
-            </h2>
-            <p className="text-sm text-neutral-gray mt-4">
-              Explore our core product lines, precision built to your home's exact dimensions. Crafted with marine-grade coatings and structural steel reinforcements.
-            </p>
-          </div>
-
-          {/* Categories Tab Bar */}
-          <div className="flex flex-wrap gap-2 md:self-end">
-            {categories.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => setActiveCategory(cat.id)}
-                className={`px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 relative ${activeCategory === cat.id
-                  ? 'text-white'
-                  : 'bg-white hover:bg-neutral-50 text-neutral-charcoal border border-neutral-200'
-                  }`}
-              >
-                {activeCategory === cat.id && (
-                  <motion.span
-                    layoutId="activeCategoryBg"
-                    className="absolute inset-0 bg-primary rounded-full z-0"
-                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                  />
-                )}
-                <span className="relative z-10">{cat.name}</span>
-              </button>
-            ))}
-          </div>
+        <div className="text-center max-w-2xl mx-auto mb-16">
+          <span className="text-sm font-bold tracking-widest text-primary uppercase mb-3 block">
+            Our Products
+          </span>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-off-black leading-tight">
+            NZ-Engineered Outdoor Solutions
+          </h2>
+          <p className="text-base sm:text-lg text-neutral-gray mt-4">
+            Explore our seven core architectural product lines, custom engineered to your property's exact site dimensions.
+          </p>
         </div>
 
-        {/* Products Grid */}
-        <motion.div
-          layout
-          className="grid grid-cols-1 md:grid-cols-2 gap-10"
-        >
-          <AnimatePresence mode="popLayout">
-            {filteredProducts.map((product) => (
-              <motion.div
-                layout
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.5 }}
-                key={product.id}
-                className="bg-white rounded-3xl overflow-hidden border border-neutral-100/80 shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
-              >
-                {/* Product Image Area */}
-                <div className="relative aspect-[16/10] overflow-hidden group bg-neutral-100">
+        {/* Products Grid - 3 cards per row */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {homeProducts.map((product, idx) => (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: idx * 0.08 }}
+              key={product.id}
+              className="bg-white rounded-3xl overflow-hidden border border-neutral-100/80 shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
+            >
+              {/* Product Image Area */}
+              <div className="relative aspect-[16/10] overflow-hidden group bg-neutral-100">
 
-                  {/* Floating Weather Icon Badge */}
-                  <div className="absolute top-4 left-4 z-10 flex gap-1.5 flex-wrap">
-                    {product.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="px-3 py-1 bg-black/45 backdrop-blur-md text-white rounded-full text-[10px] font-bold uppercase tracking-wider border border-white/10"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-
-                  <Image
-                    src={product.image}
-                    alt={product.name}
-                    fill
-                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                    sizes="(max-w-768px) 100vw, 50vw"
-                  />
-
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
+                {/* Floating Tags */}
+                <div className="absolute top-4 left-4 z-10 flex gap-1.5 flex-wrap">
+                  {product.tags.slice(0, 2).map((tag) => (
+                    <span
+                      key={tag}
+                      className="px-3 py-1 bg-black/45 backdrop-blur-md text-white rounded-full text-[10px] font-bold uppercase tracking-wider border border-white/10"
+                    >
+                      {tag}
+                    </span>
+                  ))}
                 </div>
 
-                {/* Product Content Details */}
-                <div className="p-8 flex-1 flex flex-col justify-between">
-                  <div>
-                    <div className="flex justify-between items-start mb-4 gap-4">
-                      <h3 className="text-2xl font-extrabold text-neutral-black hover:text-primary transition-colors">
-                        <Link href={`/products/${product.id}`}>
-                          {product.name}
-                        </Link>
-                      </h3>
-                      <span className="text-[10px] font-extrabold tracking-widest text-primary bg-primary-cream px-3 py-1 rounded-full uppercase">
-                        {product.category}
-                      </span>
-                    </div>
+                <Image
+                  src={product.image}
+                  alt={product.name}
+                  fill
+                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  sizes="(max-w-768px) 100vw, (max-w-1200px) 50vw, 33vw"
+                />
 
-                    <p className="text-sm text-neutral-gray leading-relaxed mb-6">
-                      {product.description}
-                    </p>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
+              </div>
 
-                    {/* Bullet Features */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
-                      {product.features.map((feat) => (
-                        <div key={feat} className="flex items-center text-xs font-semibold text-charcoal">
-                          <Shield size={16} className="text-primary mr-2 flex-shrink-0" />
-                          {feat}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Swatches & CTA */}
-                  <div className="pt-6 border-t border-neutral-100 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-                    {/* Swatches selector */}
-                    <div>
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-neutral-400 block mb-2">
-                        Finish: <span className="text-neutral-charcoal">{selectedSwatches[product.id] || product.swatches[0]?.name}</span>
-                      </span>
-                      <div className="flex gap-2">
-                        {product.swatches.map((swatch) => {
-                          const currentActive = selectedSwatches[product.id] || product.swatches[0]?.name;
-                          return (
-                            <button
-                              key={swatch.name}
-                              onClick={() => handleSwatchSelect(product.id, swatch.name)}
-                              className={`w-6 h-6 rounded-full border transition-all duration-300 ${currentActive === swatch.name
-                                ? 'border-primary scale-110 shadow-sm'
-                                : 'border-neutral-200 hover:scale-105'
-                                }`}
-                              style={{ backgroundColor: swatch.hex }}
-                              aria-label={`Select ${swatch.name} color swatch`}
-                            />
-                          );
-                        })}
-                      </div>
-                    </div>
-
-                    {/* CTA Buttons */}
-                    <div className="flex items-center gap-2">
-                      <Link
-                        href={`/products/${product.id}`}
-                        className="px-5 py-3 bg-neutral-black text-white text-xs font-bold tracking-wider uppercase rounded-full hover:bg-primary transition-all duration-300 text-center flex items-center gap-1.5"
-                      >
-                        <span>View Details</span>
-                        <ArrowRight size={14} />
+              {/* Product Content Details */}
+              <div className="p-6 flex-1 flex flex-col justify-between">
+                <div>
+                  <div className="flex justify-between items-start mb-3 gap-2">
+                    <h3 className="text-xl font-extrabold text-neutral-black hover:text-primary transition-colors">
+                      <Link href={product.href}>
+                        {product.name}
                       </Link>
-                      <a
-                        href="#contact"
-                        className="px-4 py-3 bg-neutral-100 text-neutral-charcoal text-xs font-bold tracking-wider uppercase rounded-full hover:bg-neutral-200 transition-all duration-300 text-center"
-                      >
-                        Quote
-                      </a>
-                    </div>
+                    </h3>
+                    <span className="text-[10px] font-extrabold tracking-widest text-primary bg-primary-cream px-2.5 py-1 rounded-full uppercase flex-shrink-0">
+                      {product.category}
+                    </span>
                   </div>
+
+                  <p className="text-sm text-neutral-gray leading-relaxed mb-6 line-clamp-3">
+                    {product.description}
+                  </p>
                 </div>
 
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </motion.div>
+                {/* Action Buttons */}
+                <div className="pt-5 border-t border-neutral-100 flex items-center justify-between gap-3">
+                  <Link
+                    href={product.href}
+                    className="flex-1 py-3 bg-primary hover:bg-neutral-black text-white text-xs font-bold tracking-wider uppercase rounded-full transition-all duration-300 text-center flex items-center justify-center gap-1.5 shadow-sm shadow-primary/20"
+                  >
+                    <span>{product.href.includes('category=') ? 'Explore Range' : 'View Details'}</span>
+                    <ArrowRight size={14} />
+                  </Link>
+                  <a
+                    href="#contact"
+                    className="px-5 py-3 bg-neutral-100 hover:bg-neutral-200 text-neutral-charcoal text-xs font-bold tracking-wider uppercase rounded-full transition-all duration-300 text-center"
+                  >
+                    Quote
+                  </a>
+                </div>
+              </div>
+
+            </motion.div>
+          ))}
+        </div>
 
       </div>
     </section>

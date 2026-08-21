@@ -51,7 +51,7 @@ export default function Footer() {
                 className="h-24 sm:h-28 w-auto object-contain brightness-0 invert"
               />
             </a>
-            <p className="text-xs text-neutral-cream/70 leading-relaxed mb-6 max-w-sm font-medium">
+            <p className="text-sm text-neutral-cream/80 leading-relaxed mb-6 max-w-sm font-medium">
               Cluster Outdoor Solutions designs, manufactures, and installs premium architectural outdoor shelters. Engineered locally in New Zealand to withstand local wind, heavy rain, and harsh sunlight.
             </p>
             {/* Social Icons */}
@@ -81,7 +81,7 @@ export default function Footer() {
                 <a
                   key={link.name}
                   href={link.href}
-                  className="text-xs text-neutral-cream/70 hover:text-primary-light hover:underline transition-colors duration-300 font-semibold"
+                  className="text-sm text-neutral-cream/80 hover:text-primary-light hover:underline transition-colors duration-300 font-semibold"
                 >
                   {link.name}
                 </a>
@@ -96,7 +96,7 @@ export default function Footer() {
             </h4>
             <ul className="flex flex-col space-y-3">
               {contactDetailsData.regions.map((reg) => (
-                <li key={reg} className="text-xs text-neutral-cream/70 font-semibold flex items-center">
+                <li key={reg} className="text-sm text-neutral-cream/80 font-semibold flex items-center">
                   <span className="w-1.5 h-1.5 rounded-full bg-primary-light mr-2.5 flex-shrink-0" />
                   {reg}
                 </li>
@@ -112,10 +112,10 @@ export default function Footer() {
             <div className="space-y-4">
               {contactDetailsData.locations.map((loc) => (
                 <div key={loc.name}>
-                  <p className="text-[10px] font-black uppercase text-neutral-cream/90 mb-1 leading-normal">
+                  <p className="text-xs font-black uppercase text-neutral-cream/90 mb-1 leading-normal">
                     {loc.name}
                   </p>
-                  <p className="text-[10px] text-neutral-cream/60 leading-normal font-semibold">
+                  <p className="text-xs text-neutral-cream/70 leading-normal font-semibold">
                     {loc.address}
                   </p>
                 </div>

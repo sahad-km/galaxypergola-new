@@ -88,7 +88,7 @@ export default function Process() {
                     {item.title}
                   </h3>
 
-                  <p className="text-xs sm:text-sm text-neutral-gray leading-relaxed font-medium">
+                  <p className="text-sm sm:text-base text-neutral-gray leading-relaxed font-medium">
                     {item.description}
                   </p>
                 </div>
@@ -106,7 +106,7 @@ export default function Process() {
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-off-black leading-tight">
               Engineered for Performance
             </h2>
-            <p className="text-sm text-neutral-gray mt-4 max-w-2xl">
+            <p className="text-base sm:text-lg text-neutral-gray mt-4 max-w-2xl">
               Every structure is locally crafted with marine-grade materials, smart motorisation technology, and wind-tested structural engineering.
             </p>
           </div>
