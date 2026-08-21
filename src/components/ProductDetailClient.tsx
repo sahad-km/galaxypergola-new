@@ -77,6 +77,7 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
 
   // Modal Form submission state
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmittingModal, setIsSubmittingModal] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -87,6 +88,7 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
 
   // Inline Form submission state (below FAQ)
   const [inlineSubmitted, setInlineSubmitted] = useState(false);
+  const [isSubmittingInline, setIsSubmittingInline] = useState(false);
   const [inlineFormData, setInlineFormData] = useState({
     name: '',
     email: '',
@@ -95,14 +97,46 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
     message: '',
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setIsSubmittingModal(true);
+    try {
+      await fetch('/api/quote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...formData,
+          product: `${product.name} (Style: ${selectedType}, Size: ${selectedSize}, Color: ${selectedColor})`,
+          pageUrl: currentPageUrl || (typeof window !== 'undefined' ? window.location.href : ''),
+        }),
+      });
+    } catch (err) {
+      console.error('Error submitting quote:', err);
+    } finally {
+      setIsSubmittingModal(false);
+      setSubmitted(true);
+    }
   };
 
-  const handleInlineSubmit = (e: React.FormEvent) => {
+  const handleInlineSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setInlineSubmitted(true);
+    setIsSubmittingInline(true);
+    try {
+      await fetch('/api/quote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...inlineFormData,
+          product: `${product.name} (Style: ${selectedType}, Size: ${selectedSize}, Color: ${selectedColor})`,
+          pageUrl: currentPageUrl || (typeof window !== 'undefined' ? window.location.href : ''),
+        }),
+      });
+    } catch (err) {
+      console.error('Error submitting inline quote:', err);
+    } finally {
+      setIsSubmittingInline(false);
+      setInlineSubmitted(true);
+    }
   };
 
   const relatedProducts = allProducts
@@ -198,18 +232,25 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
             {/* Configurable Option 2: Size Dimensions (Matching Active Style) */}
             {product.sizeOptions && product.sizeOptions.length > 0 && (
               <div className="mb-5">
-                <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-400 mb-2">
-                  Select Size Dimensions: <span className="text-neutral-black">{selectedSize}</span>
-                </label>
-                <div className="grid grid-cols-4 gap-2">
+                <div className="flex justify-between items-center mb-2">
+                  <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-400">
+                    Select Width / Size: <span className="text-neutral-black font-extrabold">{selectedSize}</span>
+                  </label>
+                  {product.id === 'pergo-vue' && (
+                    <span className="text-[10px] font-semibold text-primary bg-primary/10 px-2 py-0.5 rounded-full">
+                      Lengths: 2m – 6m available
+                    </span>
+                  )}
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
                   {product.sizeOptions.map((sz) => (
                     <button
                       key={sz}
                       type="button"
                       onClick={() => setSelectedSize(sz)}
-                      className={`py-2.5 rounded-xl border text-xs font-extrabold transition-all text-center ${selectedSize === sz
-                        ? 'border-primary bg-primary text-white shadow-md shadow-primary/20'
-                        : 'border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50'
+                      className={`px-3 py-3 rounded-2xl border text-xs font-bold transition-all text-center ${selectedSize === sz
+                        ? 'border-primary bg-primary text-white shadow-md shadow-primary/20 scale-102'
+                        : 'border-neutral-200 bg-white text-neutral-charcoal hover:border-neutral-300'
                         }`}
                     >
                       {sz}

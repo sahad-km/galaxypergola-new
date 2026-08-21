@@ -2,11 +2,11 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Phone, 
-  Envelope, 
-  Clock, 
-  MapPin, 
+import {
+  Phone,
+  Envelope,
+  Clock,
+  MapPin,
   CheckCircle,
   PaperPlaneTilt
 } from '@phosphor-icons/react';
@@ -58,7 +58,7 @@ export default function Contact() {
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
     if (!form.name.trim()) newErrors.name = 'Full name is required';
-    
+
     if (!form.email.trim()) {
       newErrors.email = 'Email address is required';
     } else if (!/\S+@\S+\.\S+/.test(form.email)) {
@@ -76,17 +76,26 @@ export default function Contact() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) return;
 
     setIsSubmitting(true);
 
-    // Simulate submission delay
-    setTimeout(() => {
+    try {
+      await fetch('/api/quote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...form,
+          pageUrl: typeof window !== 'undefined' ? window.location.href : '',
+        }),
+      });
+    } catch (err) {
+      console.error('Error submitting form:', err);
+    } finally {
       setIsSubmitting(false);
       setIsSubmitted(true);
-      // Reset form
       setForm({
         name: '',
         email: '',
@@ -95,17 +104,17 @@ export default function Contact() {
         service: '',
         message: '',
       });
-    }, 1500);
+    }
   };
 
   return (
     <section id="contact" className="py-24 bg-white relative">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
-          
+
           {/* Left Column: Interactive Contact Form */}
           <div className="lg:col-span-7 bg-neutral-cream/40 border border-neutral-100 rounded-3xl p-8 sm:p-10 shadow-lg relative overflow-hidden flex flex-col justify-center">
-            
+
             <AnimatePresence mode="wait">
               {!isSubmitted ? (
                 <motion.div
@@ -126,7 +135,7 @@ export default function Contact() {
                   </p>
 
                   <form onSubmit={handleSubmit} className="space-y-5">
-                    
+
                     {/* Floating Label: Full Name */}
                     <div className="relative">
                       <input
@@ -136,11 +145,10 @@ export default function Contact() {
                         value={form.name}
                         onChange={handleInputChange}
                         placeholder=" "
-                        className={`peer block w-full px-4 pt-6 pb-2 bg-white border rounded-2xl text-sm text-neutral-black placeholder-transparent focus:outline-none focus:ring-1 transition-all ${
-                          errors.name
+                        className={`peer block w-full px-4 pt-6 pb-2 bg-white border rounded-2xl text-sm text-neutral-black placeholder-transparent focus:outline-none focus:ring-1 transition-all ${errors.name
                             ? 'border-red-500 focus:ring-red-500'
                             : 'border-neutral-200 focus:border-primary focus:ring-primary'
-                        }`}
+                          }`}
                       />
                       <label
                         htmlFor="name"
@@ -162,11 +170,10 @@ export default function Contact() {
                           value={form.email}
                           onChange={handleInputChange}
                           placeholder=" "
-                          className={`peer block w-full px-4 pt-6 pb-2 bg-white border rounded-2xl text-sm text-neutral-black placeholder-transparent focus:outline-none focus:ring-1 transition-all ${
-                            errors.email
+                          className={`peer block w-full px-4 pt-6 pb-2 bg-white border rounded-2xl text-sm text-neutral-black placeholder-transparent focus:outline-none focus:ring-1 transition-all ${errors.email
                               ? 'border-red-500 focus:ring-red-500'
                               : 'border-neutral-200 focus:border-primary focus:ring-primary'
-                          }`}
+                            }`}
                         />
                         <label
                           htmlFor="email"
@@ -186,11 +193,10 @@ export default function Contact() {
                           value={form.phone}
                           onChange={handleInputChange}
                           placeholder=" "
-                          className={`peer block w-full px-4 pt-6 pb-2 bg-white border rounded-2xl text-sm text-neutral-black placeholder-transparent focus:outline-none focus:ring-1 transition-all ${
-                            errors.phone
+                          className={`peer block w-full px-4 pt-6 pb-2 bg-white border rounded-2xl text-sm text-neutral-black placeholder-transparent focus:outline-none focus:ring-1 transition-all ${errors.phone
                               ? 'border-red-500 focus:ring-red-500'
                               : 'border-neutral-200 focus:border-primary focus:ring-primary'
-                          }`}
+                            }`}
                         />
                         <label
                           htmlFor="phone"
@@ -211,11 +217,10 @@ export default function Contact() {
                           id="region"
                           value={form.region}
                           onChange={handleInputChange}
-                          className={`block w-full px-4 pt-6 pb-2 bg-white border rounded-2xl text-sm text-neutral-black focus:outline-none focus:ring-1 transition-all appearance-none ${
-                            errors.region
+                          className={`block w-full px-4 pt-6 pb-2 bg-white border rounded-2xl text-sm text-neutral-black focus:outline-none focus:ring-1 transition-all appearance-none ${errors.region
                               ? 'border-red-500 focus:ring-red-500'
                               : 'border-neutral-200 focus:border-primary focus:ring-primary'
-                          }`}
+                            }`}
                         >
                           <option value="" disabled hidden></option>
                           {contactDetailsData.regions.map((reg) => (
@@ -224,11 +229,10 @@ export default function Contact() {
                         </select>
                         <label
                           htmlFor="region"
-                          className={`absolute left-4 duration-200 pointer-events-none text-xs font-semibold text-neutral-400 origin-[0] ${
-                            form.region 
-                              ? 'scale-75 translate-y-[-10px]' 
+                          className={`absolute left-4 duration-200 pointer-events-none text-xs font-semibold text-neutral-400 origin-[0] ${form.region
+                              ? 'scale-75 translate-y-[-10px]'
                               : 'scale-100 translate-y-0'
-                          }`}
+                            }`}
                         >
                           Select Region
                         </label>
@@ -242,26 +246,27 @@ export default function Contact() {
                           id="service"
                           value={form.service}
                           onChange={handleInputChange}
-                          className={`block w-full px-4 pt-6 pb-2 bg-white border rounded-2xl text-sm text-neutral-black focus:outline-none focus:ring-1 transition-all appearance-none ${
-                            errors.service
+                          className={`block w-full px-4 pt-6 pb-2 bg-white border rounded-2xl text-sm text-neutral-black focus:outline-none focus:ring-1 transition-all appearance-none ${errors.service
                               ? 'border-red-500 focus:ring-red-500'
                               : 'border-neutral-200 focus:border-primary focus:ring-primary'
-                          }`}
+                            }`}
                         >
                           <option value="" disabled hidden></option>
-                          <option value="Pergola">Apex Motorized Louvre Pergola</option>
-                          <option value="Canopy">Horizon Fixed Roof Canopy</option>
-                          <option value="Blinds">Ziptrak Comfort Blinds</option>
-                          <option value="Carport">Metro Cantilever Carport</option>
-                          <option value="Custom Design">Custom Design & Build</option>
+                          <option value="Louvre">Louvre</option>
+                          <option value="Pergola">Pergola</option>
+                          <option value="Canopy">Canopy</option>
+                          <option value="Outdoor Blinds">Outdoor Blinds</option>
+                          <option value="Carport">Carport</option>
+                          <option value="Outdoor Shutter">Outdoor Shutter</option>
+                          <option value="Sunroom">Sunroom</option>
+                          <option value="Custom Design and Build">Custom Design and Build</option>
                         </select>
                         <label
                           htmlFor="service"
-                          className={`absolute left-4 duration-200 pointer-events-none text-xs font-semibold text-neutral-400 origin-[0] ${
-                            form.service 
-                              ? 'scale-75 translate-y-[-10px]' 
+                          className={`absolute left-4 duration-200 pointer-events-none text-xs font-semibold text-neutral-400 origin-[0] ${form.service
+                              ? 'scale-75 translate-y-[-10px]'
                               : 'scale-100 translate-y-0'
-                          }`}
+                            }`}
                         >
                           Interested Service
                         </label>
@@ -348,7 +353,7 @@ export default function Contact() {
               <h3 className="text-2xl font-extrabold text-neutral-black mb-6">
                 Taranaki & Whanganui Design & Install
               </h3>
-              
+
               {/* Showroom Details List */}
               <div className="space-y-6">
                 <div className="flex gap-4">

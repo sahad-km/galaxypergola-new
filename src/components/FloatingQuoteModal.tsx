@@ -40,15 +40,26 @@ export default function FloatingQuoteModal() {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.name || !form.phone) return;
 
     setIsSubmitting(true);
-    setTimeout(() => {
+    try {
+      await fetch('/api/quote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...form,
+          pageUrl: typeof window !== 'undefined' ? window.location.href : '',
+        }),
+      });
+    } catch (err) {
+      console.error('Error submitting form:', err);
+    } finally {
       setIsSubmitting(false);
       setIsSubmitted(true);
-    }, 1200);
+    }
   };
 
   const closeModal = () => {
@@ -237,6 +248,7 @@ export default function FloatingQuoteModal() {
                           <option value="Carport">Carport</option>
                           <option value="Outdoor Shutter">Outdoor Shutter</option>
                           <option value="Sunroom">Sunroom</option>
+                          <option value="Custom Design and Build">Custom Design and Build</option>
                         </select>
                       </div>
                     </div>
