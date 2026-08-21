@@ -54,17 +54,17 @@ export default function Hero() {
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-          className="flex flex-col sm:flex-row gap-5 sm:gap-8 justify-center items-center w-full sm:w-auto"
+          className="flex flex-col sm:flex-row gap-3 sm:gap-8 justify-center items-center w-full sm:w-auto px-4 sm:px-0"
         >
           <a
             href="#contact"
-            className="w-full sm:w-auto px-10 py-5 sm:px-12 sm:py-6 bg-primary text-white text-lg sm:text-xl font-extrabold tracking-wider uppercase rounded-full shadow-2xl hover:bg-primary-hover hover:shadow-primary/40 hover:scale-105 transition-all duration-300 transform active:scale-100 focus:outline-none focus:ring-4 focus:ring-primary-light"
+            className="w-full max-w-[280px] sm:max-w-none sm:w-auto px-6 py-3.5 sm:px-12 sm:py-6 bg-primary text-white text-xs sm:text-xl font-extrabold tracking-wider uppercase rounded-full shadow-2xl hover:bg-primary-hover hover:shadow-primary/40 hover:scale-105 transition-all duration-300 transform active:scale-100 focus:outline-none focus:ring-4 focus:ring-primary-light text-center"
           >
             Get a Free Onsite Quote
           </a>
           <a
             href="#products"
-            className="w-full sm:w-auto px-10 py-5 sm:px-12 sm:py-6 bg-white/15 hover:bg-white/25 text-white text-lg sm:text-xl font-extrabold tracking-wider uppercase rounded-full border-2 border-white/40 backdrop-blur-md shadow-2xl hover:border-white hover:scale-105 transition-all duration-300 transform active:scale-100 focus:outline-none focus:ring-4 focus:ring-white/50"
+            className="w-full max-w-[280px] sm:max-w-none sm:w-auto px-6 py-3.5 sm:px-12 sm:py-6 bg-white/15 hover:bg-white/25 text-white text-xs sm:text-xl font-extrabold tracking-wider uppercase rounded-full border-2 border-white/40 backdrop-blur-md shadow-2xl hover:border-white hover:scale-105 transition-all duration-300 transform active:scale-100 focus:outline-none focus:ring-4 focus:ring-white/50 text-center"
           >
             Explore Products
           </a>

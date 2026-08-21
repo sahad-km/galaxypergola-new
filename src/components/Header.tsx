@@ -10,7 +10,7 @@ import { List, X, PhoneCall, EnvelopeSimple } from '@phosphor-icons/react';
 const topPills = [
   { name: 'About', href: '/#about' },
   { name: 'Contact', href: '/#contact' },
-  { name: 'All Products', href: '/products' },
+  { name: 'Products', href: '/products' },
 ];
 
 const categoryLinks = [
@@ -56,8 +56,8 @@ function CategoryNav() {
             key={cat.name}
             href={cat.href}
             className={`px-4 py-1.5 rounded-full font-bold tracking-wide transition-all duration-300 transform active:translate-y-0 ${isActive
-                ? 'bg-white text-primary shadow-md scale-105'
-                : 'text-white/95 hover:text-primary hover:bg-white hover:shadow-md hover:-translate-y-0.5'
+              ? 'bg-white text-primary shadow-md scale-105'
+              : 'text-white/95 hover:text-primary hover:bg-white hover:shadow-md hover:-translate-y-0.5'
               }`}
           >
             {cat.name}
@@ -85,8 +85,8 @@ function MobileCategoryNav({ onClose }: { onClose: () => void }) {
             href={link.href}
             onClick={onClose}
             className={`px-4 py-2.5 rounded-xl font-semibold transition-all duration-200 ${isActive
-                ? 'bg-primary text-white font-bold shadow-sm'
-                : 'text-neutral-800 hover:bg-primary-cream hover:text-primary'
+              ? 'bg-primary text-white font-bold shadow-sm'
+              : 'text-neutral-800 hover:bg-primary-cream hover:text-primary'
               }`}
           >
             {link.name}

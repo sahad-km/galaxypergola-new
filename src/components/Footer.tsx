@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import {
   FacebookLogo,
   InstagramLogo,
@@ -130,8 +131,8 @@ export default function Footer() {
         <div className="flex flex-col sm:flex-row items-center justify-between pt-8 text-[10px] text-neutral-cream/40 font-semibold gap-4">
           <p>© {currentYear} Cluster Outdoor Solutions. All rights reserved.</p>
           <div className="flex gap-6">
-            <a href="#" className="hover:text-primary-light transition-colors duration-200">Privacy Policy</a>
-            <a href="#" className="hover:text-primary-light transition-colors duration-200">Terms of Trade</a>
+            <Link href="/privacy-policy" className="hover:text-primary-light transition-colors duration-200">Privacy Policy</Link>
+            <Link href="/terms-of-trade" className="hover:text-primary-light transition-colors duration-200">Terms of Trade</Link>
             <a href="#" className="hover:text-primary-light transition-colors duration-200">NZ Engineering Standards</a>
           </div>
         </div>
