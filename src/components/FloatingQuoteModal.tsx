@@ -42,6 +42,7 @@ export default function FloatingQuoteModal() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmitting) return;
     if (!form.name || !form.phone) return;
 
     setIsSubmitting(true);
@@ -272,9 +273,16 @@ export default function FloatingQuoteModal() {
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full py-4 bg-primary hover:bg-primary-hover text-white text-xs font-extrabold uppercase tracking-widest rounded-full shadow-lg shadow-primary/25 transition-all duration-300 disabled:opacity-50 mt-2"
+                      className="w-full py-4 bg-primary hover:bg-primary-hover text-white text-xs font-extrabold uppercase tracking-widest rounded-full shadow-lg shadow-primary/25 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed mt-2 flex items-center justify-center gap-2 cursor-pointer"
                     >
-                      {isSubmitting ? 'Submitting Quote Request...' : 'Request Free Onsite Quote'}
+                      {isSubmitting ? (
+                        <>
+                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                          <span>Submitting Quote Request...</span>
+                        </>
+                      ) : (
+                        <span>Request Free Onsite Quote</span>
+                      )}
                     </button>
                   </form>
                 </div>

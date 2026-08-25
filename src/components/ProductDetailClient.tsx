@@ -99,6 +99,7 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmittingModal) return;
     setIsSubmittingModal(true);
     try {
       await fetch('/api/quote', {
@@ -120,6 +121,7 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
 
   const handleInlineSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmittingInline) return;
     setIsSubmittingInline(true);
     try {
       await fetch('/api/quote', {
@@ -859,9 +861,17 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
 
             <button
               type="submit"
-              className="w-full py-4 bg-primary hover:bg-primary-hover text-white text-xs font-extrabold uppercase tracking-widest rounded-full shadow-lg shadow-primary/25 transition-all duration-300 cursor-pointer mt-2"
+              disabled={isSubmittingInline}
+              className="w-full py-4 bg-primary hover:bg-primary-hover text-white text-xs font-extrabold uppercase tracking-widest rounded-full shadow-lg shadow-primary/25 transition-all duration-300 cursor-pointer mt-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
-              Request Free Onsite Quote
+              {isSubmittingInline ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <span>Submitting Request...</span>
+                </>
+              ) : (
+                <span>Request Free Onsite Quote</span>
+              )}
             </button>
           </form>
         )}
@@ -1003,9 +1013,17 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
 
                     <button
                       type="submit"
-                      className="w-full py-4 bg-primary text-white font-extrabold text-xs uppercase tracking-widest rounded-full hover:bg-primary/90 transition-all shadow-lg cursor-pointer"
+                      disabled={isSubmittingModal}
+                      className="w-full py-4 bg-primary text-white font-extrabold text-xs uppercase tracking-widest rounded-full hover:bg-primary/90 transition-all shadow-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                     >
-                      Send Free Onsite Quote Request
+                      {isSubmittingModal ? (
+                        <>
+                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                          <span>Submitting Request...</span>
+                        </>
+                      ) : (
+                        <span>Send Free Onsite Quote Request</span>
+                      )}
                     </button>
                   </form>
                 )}
